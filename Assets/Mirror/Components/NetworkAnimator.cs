@@ -35,6 +35,7 @@ namespace Mirror
         float[] lastFloatParameters;
         bool[] lastBoolParameters;
         AnimatorControllerParameter[] parameters;
+        int parametersLength;
 
         int[] animationHash; // multiple layers
         int[] transitionHash;
@@ -67,9 +68,10 @@ namespace Mirror
             // store the animator parameters in a variable - the "Animator.parameters" getter allocates
             // a new parameter array every time it is accessed so we should avoid doing it in a loop
             parameters = animator.parameters;
-            lastIntParameters = new int[parameters.Length];
-            lastFloatParameters = new float[parameters.Length];
-            lastBoolParameters = new bool[parameters.Length];
+            parametersLength = AnimatorHelper.FilterParametersWithoutCurves(animator, parameters);
+            lastIntParameters = new int[parametersLength];
+            lastFloatParameters = new float[parametersLength];
+            lastBoolParameters = new bool[parametersLength];
 
             animationHash = new int[animator.layerCount];
             transitionHash = new int[animator.layerCount];
@@ -209,7 +211,7 @@ namespace Mirror
         ulong NextDirtyBits()
         {
             ulong dirtyBits = 0;
-            for (int i = 0; i < parameters.Length; i++)
+            for (int i = 0; i < parametersLength; i++)
             {
                 AnimatorControllerParameter par = parameters[i];
                 bool changed = false;
@@ -252,7 +254,7 @@ namespace Mirror
         {
             ulong dirtyBits = forceAll ? (~0ul) : NextDirtyBits();
             writer.WritePackedUInt64(dirtyBits);
-            for (int i = 0; i < parameters.Length; i++)
+            for (int i = 0; i < parametersLength; i++)
             {
                 if ((dirtyBits & (1ul << i)) == 0)
                     continue;
@@ -280,7 +282,7 @@ namespace Mirror
         void ReadParameters(NetworkReader reader)
         {
             ulong dirtyBits = reader.ReadPackedUInt64();
-            for (int i = 0; i < parameters.Length; i++)
+            for (int i = 0; i < parametersLength; i++)
             {
                 if ((dirtyBits & (1ul << i)) == 0)
                     continue;
@@ -534,5 +536,47 @@ namespace Mirror
         }
 
         #endregion
+    }
+    public static class AnimatorHelper
+    {
+        /// <summary>
+        /// Removes Parameters that are Controlled By Curves and returns the new length
+        /// </summary>
+        /// <param name="parameters">Array that will be filtered</param>
+        /// <returns>number of non null elements</returns>
+        public static int FilterParametersWithoutCurves(Animator animator, AnimatorControllerParameter[] parameters)
+        {
+            // remove parameters 
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                if (animator.IsParameterControlledByCurve(parameters[i].nameHash))
+                {
+                    parameters[i] = null;
+                }
+            }
+
+            int next = moveParmetersToStartOfArray(parameters);
+
+            return next;
+        }
+
+        static int moveParmetersToStartOfArray(AnimatorControllerParameter[] parameters)
+        {
+            int next = 0;
+            for (int current = 0; current < parameters.Length; current++)
+            {
+                if (parameters[current] != null)
+                {
+                    if (current != next)
+                    {   // move element to next 
+                        parameters[next] = parameters[current];
+                        parameters[current] = null;
+                    }
+                    next++;
+                }
+            }
+
+            return next;
+        }
     }
 }
