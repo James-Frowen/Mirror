@@ -57,14 +57,8 @@ namespace Mirror.Weaver
 
                     switch (attributeName)
                     {
-                        case "Mirror.ServerAttribute":
-                            Weaver.Error($"[Server] {md} must be declared inside a NetworkBehaviour");
-                            break;
                         case "Mirror.ServerCallbackAttribute":
                             Weaver.Error($"[ServerCallback] {md} must be declared inside a NetworkBehaviour");
-                            break;
-                        case "Mirror.ClientAttribute":
-                            Weaver.Error($"[Client] {md} must be declared inside a NetworkBehaviour");
                             break;
                         case "Mirror.ClientCallbackAttribute":
                             Weaver.Error($"[ClientCallback] {md} must be declared inside a NetworkBehaviour");
