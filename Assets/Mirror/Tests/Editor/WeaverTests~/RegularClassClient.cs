@@ -5,7 +5,7 @@ using Mirror;
 
 namespace MirrorTest
 {
-     class MirrorTestPlayer 
+    class MirrorTestPlayer 
     {
         [Client]
         void ClientOnlyMethod() {}

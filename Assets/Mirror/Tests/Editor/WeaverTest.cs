@@ -6,6 +6,8 @@ using Mirror.Weaver;
 using Mono.CecilX;
 using Mono.CecilX.Cil;
 using Mirror.Weaver;
+using Mono.CecilX;
+using Mono.CecilX.Cil;
 using NUnit.Framework;
 
 namespace Mirror.Tests
@@ -580,24 +582,10 @@ namespace Mirror.Tests
         }
 
         [Test]
-        public void MonoBehaviourServer()
-        {
-            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
-            Assert.That(weaverErrors, Is.Empty);
-        }
-
-        [Test]
         public void MonoBehaviourServerCallback()
         {
             Assert.That(CompilationFinishedHook.WeaveFailed, Is.True);
             Assert.That(weaverErrors, Contains.Item("Mirror.Weaver error: [ServerCallback] System.Void MirrorTest.MirrorTestPlayer::ThisCantBeOutsideNetworkBehaviour() must be declared inside a NetworkBehaviour"));
-        }
-
-        [Test]
-        public void MonoBehaviourClient()
-        {
-            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
-            Assert.That(weaverErrors, Is.Empty);
         }
 
         [Test]
@@ -671,28 +659,72 @@ namespace Mirror.Tests
         }
 
         [Test]
+        public void NetworkBehaviourServer()
+        {
+            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
+            Assert.That(weaverErrors, Is.Empty);
+            CheckAddedCodeServer();
+        }
+
+        [Test] 
+        public void NetworkBehaviourClient()
+        {
+            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
+            Assert.That(weaverErrors, Is.Empty);
+            CheckAddedCodeClient();
+        }
+
+        [Test]
+        public void MonoBehaviourServer()
+        {
+            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
+            Assert.That(weaverErrors, Is.Empty);
+            CheckAddedCodeServer();
+        }
+
+
+        [Test]
+        public void MonoBehaviourClient()
+        {
+            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
+            Assert.That(weaverErrors, Is.Empty);
+            CheckAddedCodeClient();
+        }
+        [Test]
         public void StaticClassServer()
         {
             Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
             Assert.That(weaverErrors, Is.Empty);
+            CheckAddedCodeServer();
         }
         [Test]
         public void StaticClassClient()
         {
             Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
             Assert.That(weaverErrors, Is.Empty);
+            CheckAddedCodeClient();
         }
         [Test]
         public void RegularClassServer()
         {
             Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
             Assert.That(weaverErrors, Is.Empty);
+            CheckAddedCodeServer();
         }
         [Test]
         public void RegularClassClient()
         {
             Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
             Assert.That(weaverErrors, Is.Empty);
+            CheckAddedCodeClient();
+        }
+
+        [Test]
+        public void MonoBehaviourServerWithNetworkBehaviour()
+        {
+            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
+            Assert.That(weaverErrors, Is.Empty);
+            CheckAddedCodeServer();
         }
 
         static void CheckAddedCodeServer()
