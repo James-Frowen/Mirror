@@ -581,8 +581,8 @@ namespace Mirror.Tests
         [Test]
         public void MonoBehaviourServer()
         {
-            Assert.That(CompilationFinishedHook.WeaveFailed, Is.True);
-            Assert.That(weaverErrors, Contains.Item("Mirror.Weaver error: [Server] System.Void MirrorTest.MirrorTestPlayer::ThisCantBeOutsideNetworkBehaviour() must be declared inside a NetworkBehaviour"));
+            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
+            Assert.That(weaverErrors, Is.Empty);
         }
 
         [Test]
@@ -595,8 +595,8 @@ namespace Mirror.Tests
         [Test]
         public void MonoBehaviourClient()
         {
-            Assert.That(CompilationFinishedHook.WeaveFailed, Is.True);
-            Assert.That(weaverErrors, Contains.Item("Mirror.Weaver error: [Client] System.Void MirrorTest.MirrorTestPlayer::ThisCantBeOutsideNetworkBehaviour() must be declared inside a NetworkBehaviour"));
+            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
+            Assert.That(weaverErrors, Is.Empty);
         }
 
         [Test]
