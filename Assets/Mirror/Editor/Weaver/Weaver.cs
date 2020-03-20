@@ -389,6 +389,53 @@ namespace Mirror.Weaver
             return didWork;
         }
 
+        static bool CheckMethodAttributes(TypeDefinition td)
+        {
+            if (!td.IsClass)
+                return false;
+
+            // process this and base classes from parent to child order
+
+            List<TypeDefinition> typeDefs = new List<TypeDefinition>();
+
+            TypeDefinition parent = td;
+            while (parent != null)
+            {
+                if (parent.FullName == NetworkBehaviourType.FullName)
+                {
+                    break;
+                }
+                try
+                {
+                    typeDefs.Insert(0, parent);
+                    parent = parent.BaseType.Resolve();
+                }
+                catch (AssemblyResolutionException)
+                {
+                    // this can happen for plugins.
+                    //Console.WriteLine("AssemblyResolutionException: "+ ex.ToString());
+                    break;
+                }
+            }
+
+            foreach (TypeDefinition typeDef in typeDefs)
+            {
+                foreach (MethodDefinition md in typeDef.Methods)
+                {
+                    foreach (CustomAttribute attr in md.CustomAttributes)
+                    {
+                        switch (attr.Constructor.DeclaringType.ToString())
+                        {
+                            case "Mirror.ServerAttribute":
+                            case "Mirror.ClientAttribute":
+                                return true; // stop once one is found
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
         static bool CheckMessageBase(TypeDefinition td)
         {
             if (!td.IsClass)
@@ -508,6 +555,7 @@ namespace Mirror.Weaver
                                 {
                                     didWork |= CheckNetworkBehaviour(td);
                                     didWork |= CheckMessageBase(td);
+                                    didWork |= CheckMethodAttributes(td);
                                 }
                             }
                             catch (Exception ex)
