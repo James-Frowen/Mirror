@@ -5,6 +5,7 @@ using System.Linq;
 using Mirror.Weaver;
 using Mono.CecilX;
 using Mono.CecilX.Cil;
+using Mirror.Weaver;
 using NUnit.Framework;
 
 namespace Mirror.Tests
@@ -669,6 +670,31 @@ namespace Mirror.Tests
             CheckAddedCodeClient();
         }
 
+        [Test]
+        public void StaticClassServer()
+        {
+            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
+            Assert.That(weaverErrors, Is.Empty);
+        }
+        [Test]
+        public void StaticClassClient()
+        {
+            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
+            Assert.That(weaverErrors, Is.Empty);
+        }
+        [Test]
+        public void RegularClassServer()
+        {
+            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
+            Assert.That(weaverErrors, Is.Empty);
+        }
+        [Test]
+        public void RegularClassClient()
+        {
+            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
+            Assert.That(weaverErrors, Is.Empty);
+        }
+
         static void CheckAddedCodeServer()
         {
             string networkServerGetActive = Weaver.Weaver.NetworkServerGetActive.ToString();
@@ -705,7 +731,7 @@ namespace Mirror.Tests
         }
         #endregion
 
-         [Test]
+        [Test]
         public void TestingScriptableObjectArraySerialization()
         {
             UnityEngine.Debug.Log(string.Join("\n",weaverErrors));
