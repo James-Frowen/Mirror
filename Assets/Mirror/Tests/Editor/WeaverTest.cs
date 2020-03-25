@@ -5,9 +5,6 @@ using System.Linq;
 using Mirror.Weaver;
 using Mono.CecilX;
 using Mono.CecilX.Cil;
-using Mirror.Weaver;
-using Mono.CecilX;
-using Mono.CecilX.Cil;
 using NUnit.Framework;
 
 namespace Mirror.Tests
@@ -642,22 +639,6 @@ namespace Mirror.Tests
         #endregion
 
         #region Server Client Attribute Tests 
-        [Test]
-        public void NetworkBehaviourServer()
-        {
-            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
-            Assert.That(weaverErrors, Is.Empty);
-            CheckAddedCodeServer();
-        }
-
-        [Test] 
-        public void NetworkBehaviourClient()
-        {
-            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
-            Assert.That(weaverErrors, Is.Empty);
-            CheckAddedCodeClient();
-        }
-
         [Test]
         public void NetworkBehaviourServer()
         {
