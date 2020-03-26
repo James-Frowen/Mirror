@@ -477,8 +477,8 @@ namespace Mirror.Tests
         [Test]
         public void ClientRpcStartsWithRpc()
         {
-            Assert.That(CompilationFinishedHook.WeaveFailed, Is.True);
-            Assert.That(weaverErrors, Contains.Item("Mirror.Weaver error: System.Void MirrorTest.MirrorTestPlayer::DoesntStartWithRpc() must start with Rpc.  Consider renaming it to RpcDoesntStartWithRpc"));
+            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
+            Assert.That(weaverErrors, Is.Empty);
         }
 
         [Test]
@@ -661,7 +661,7 @@ namespace Mirror.Tests
             CheckAddedCodeServer();
         }
 
-        [Test] 
+        [Test]
         public void NetworkBehaviourClient()
         {
             Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
@@ -689,7 +689,7 @@ namespace Mirror.Tests
         static void CheckAddedCode(string addedString, string methodName)
         {
             string className = "MirrorTest.MirrorTestPlayer";
-            
+
             string assemblyName = WeaverAssembler.OutputDirectory + WeaverAssembler.OutputFile;
             using (AssemblyDefinition assembly = AssemblyDefinition.ReadAssembly(assemblyName))
             {
@@ -705,10 +705,10 @@ namespace Mirror.Tests
         }
         #endregion
 
-         [Test]
+        [Test]
         public void TestingScriptableObjectArraySerialization()
         {
-            UnityEngine.Debug.Log(string.Join("\n",weaverErrors));
+            UnityEngine.Debug.Log(string.Join("\n", weaverErrors));
             Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
         }
     }
