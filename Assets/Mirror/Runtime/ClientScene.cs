@@ -52,6 +52,7 @@ namespace Mirror
         // spawn handlers
         static readonly Dictionary<Guid, SpawnHandlerDelegate> spawnHandlers = new Dictionary<Guid, SpawnHandlerDelegate>();
         static readonly Dictionary<Guid, UnSpawnDelegate> unspawnHandlers = new Dictionary<Guid, UnSpawnDelegate>();
+        static readonly Dictionary<Guid, SpawnAsyncHandlerDelegate> spawnAsyncHandlers = new Dictionary<Guid, SpawnAsyncHandlerDelegate>();
 
         internal static void Shutdown()
         {
@@ -339,9 +340,57 @@ namespace Mirror
                 return;
             }
 
+            if (spawnAsyncHandlers.ContainsKey(identity.assetId))
+            {
+                Debug.LogError("RegisterPrefab async spawn handler already exists for " + prefab.name);
+                return;
+            }
+
             if (LogFilter.Debug) Debug.Log("Registering custom prefab '" + prefab.name + "' as asset:" + identity.assetId + " " + spawnHandler.GetMethodName() + "/" + unspawnHandler.GetMethodName());
 
             spawnHandlers[identity.assetId] = spawnHandler;
+            unspawnHandlers[identity.assetId] = unspawnHandler;
+        }
+
+        /// <summary>
+        /// Registers a prefab with the spawning system.
+        /// <para>When a NetworkIdentity object is spawned on a server with NetworkServer.SpawnObject(), and the prefab that the object was created from was registered with RegisterPrefab(), the client will use that prefab to instantiate a corresponding client object with the same netId.</para>
+        /// <para>The NetworkManager has a list of spawnable prefabs, it uses this function to register those prefabs with the ClientScene.</para>
+        /// <para>The set of current spawnable object is available in the ClientScene static member variable ClientScene.prefabs, which is a dictionary of NetworkAssetIds and prefab references.</para>
+        /// </summary>
+        /// <param name="prefab">A Prefab that will be spawned.</param>
+        /// <param name="spawnHandler">A method to use as a custom spawnhandler on clients.</param>
+        /// <param name="unspawnHandler">A method to use as a custom un-spawnhandler on clients.</param>
+        public static void RegisterPrefab(GameObject prefab, SpawnAsyncHandlerDelegate spawnAsyncHandler, UnSpawnDelegate unspawnHandler)
+        {
+            NetworkIdentity identity = prefab.GetComponent<NetworkIdentity>();
+            if (identity == null)
+            {
+                Debug.LogError("Could not register '" + prefab.name + "' since it contains no NetworkIdentity component");
+                return;
+            }
+
+            if (spawnAsyncHandler == null || unspawnHandler == null)
+            {
+                Debug.LogError("RegisterPrefab custom spawn function null for " + identity.assetId);
+                return;
+            }
+
+            if (identity.assetId == Guid.Empty)
+            {
+                Debug.LogError("RegisterPrefab game object " + prefab.name + " has no prefab. Use RegisterSpawnHandler() instead?");
+                return;
+            }
+
+            if (spawnHandlers.ContainsKey(identity.assetId))
+            {
+                Debug.LogError("RegisterPrefab non-async custom spawn function already exists for " + prefab.name);
+                return;
+            }
+
+            if (LogFilter.Debug) Debug.Log("Registering custom prefab '" + prefab.name + "' as asset:" + identity.assetId + " " + spawnAsyncHandler.GetMethodName() + "/" + unspawnHandler.GetMethodName());
+
+            spawnAsyncHandlers[identity.assetId] = spawnAsyncHandler;
             unspawnHandlers[identity.assetId] = unspawnHandler;
         }
 
@@ -357,8 +406,8 @@ namespace Mirror
                 Debug.LogError("Could not unregister '" + prefab.name + "' since it contains no NetworkIdentity component");
                 return;
             }
-            spawnHandlers.Remove(identity.assetId);
-            unspawnHandlers.Remove(identity.assetId);
+
+            UnregisterSpawnHandler(identity.assetId);
         }
 
         /// <summary>
@@ -388,9 +437,41 @@ namespace Mirror
                 return;
             }
 
+            if (spawnAsyncHandlers.ContainsKey(assetId))
+            {
+                Debug.LogError("RegisterSpawnHandler async custom spawn function already exists for " + assetId);
+                return;
+            }
+
             if (LogFilter.Debug) Debug.Log("RegisterSpawnHandler asset '" + assetId + "' " + spawnHandler.GetMethodName() + "/" + unspawnHandler.GetMethodName());
 
             spawnHandlers[assetId] = spawnHandler;
+            unspawnHandlers[assetId] = unspawnHandler;
+        }
+
+        /// <summary>
+        /// This is an advanced spawning function that registers a custom assetId with the UNET spawning system.
+        /// <para>This can be used to register custom spawning methods for an assetId - instead of the usual method of registering spawning methods for a prefab. This should be used when no prefab exists for the spawned objects - such as when they are constructed dynamically at runtime from configuration data.</para>
+        /// </summary>
+        /// <param name="assetId">Custom assetId string.</param>
+        /// <param name="spawnHandler">A method to use as a custom spawnhandler on clients.</param>
+        /// <param name="unspawnHandler">A method to use as a custom un-spawnhandler on clients.</param>
+        public static void RegisterSpawnHandler(Guid assetId, SpawnAsyncHandlerDelegate spawnAsyncHandler, UnSpawnDelegate unspawnHandler)
+        {
+            if (spawnAsyncHandler == null || unspawnHandler == null)
+            {
+                Debug.LogError("RegisterSpawnHandler custom spawn function null for " + assetId);
+                return;
+            }
+
+            if (spawnHandlers.ContainsKey(assetId))
+            {
+                Debug.LogError("RegisterSpawnHandler non-async custom spawn function already exists for " + assetId);
+            }
+
+            if (LogFilter.Debug) Debug.Log("RegisterSpawnHandler asset '" + assetId + "' " + spawnAsyncHandler.GetMethodName() + "/" + unspawnHandler.GetMethodName());
+
+            spawnAsyncHandlers[assetId] = spawnAsyncHandler;
             unspawnHandlers[assetId] = unspawnHandler;
         }
 
@@ -401,6 +482,7 @@ namespace Mirror
         public static void UnregisterSpawnHandler(Guid assetId)
         {
             spawnHandlers.Remove(assetId);
+            spawnAsyncHandlers.Remove(assetId);
             unspawnHandlers.Remove(assetId);
         }
 
@@ -506,6 +588,13 @@ namespace Mirror
             // was the object already spawned?
             NetworkIdentity identity = GetExistingObject(msg.netId);
 
+            if (HasAsyncSpawnHandler(msg))
+            {
+                SpawnPrefabAsync(msg);
+                // return earlier because we apply spawn payload after async as finished
+                return;
+            }
+
             if (identity == null)
             {
                 identity = msg.sceneId == 0 ? SpawnPrefab(msg) : SpawnSceneObject(msg);
@@ -550,6 +639,35 @@ namespace Mirror
             }
             Debug.LogError("Failed to spawn server object, did you forget to add it to the NetworkManager? assetId=" + msg.assetId + " netId=" + msg.netId);
             return null;
+        }
+
+        static bool HasAsyncSpawnHandler(SpawnMessage msg)
+        {
+            return spawnAsyncHandlers.ContainsKey(msg.assetId);
+        }
+
+        static void SpawnPrefabAsync(SpawnMessage msg)
+        {
+            SpawnAsyncHandlerDelegate asyncHandler = spawnAsyncHandlers[msg.assetId];
+            asyncHandler.Invoke(msg, SpawnPrefabAsyncOnFinish);
+        }
+        static void SpawnPrefabAsyncOnFinish(GameObject spawnedObject, SpawnMessage msg)
+        {
+            if (spawnedObject == null)
+            {
+                Debug.LogWarning("Client spawn handler for " + msg.assetId + " returned null");
+                return;
+            }
+
+            NetworkIdentity identity = spawnedObject.GetComponent<NetworkIdentity>();
+
+            if (identity == null)
+            {
+                Debug.LogError($"Could not spawn assetId={msg.assetId} scene={msg.sceneId} netId={msg.netId}");
+                return;
+            }
+
+            ApplySpawnPayload(identity, msg);
         }
 
         static NetworkIdentity SpawnSceneObject(SpawnMessage msg)

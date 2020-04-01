@@ -11,6 +11,8 @@ namespace Mirror
     public delegate GameObject SpawnDelegate(Vector3 position, Guid assetId);
 
     public delegate GameObject SpawnHandlerDelegate(SpawnMessage msg);
+    public delegate void SpawnAsyncHandlerDelegate(SpawnMessage msg, SpawnAsyncOnFinishDelegate onFinish);
+    public delegate void SpawnAsyncOnFinishDelegate(GameObject spawnedObject, SpawnMessage msg);
 
     // Handles requests to unspawn objects on the client
     public delegate void UnSpawnDelegate(GameObject spawned);
