@@ -113,7 +113,7 @@ namespace Mirror
             }
             else
             {
-                if (LogFilter.Debug) { Debug.LogWarning("NetworkReaderPool.Recycle, Pool was full leaving extra reader for GC"); }
+                if (LogFilter.Debug) { MirrorLog.LogWarning("NetworkReaderPool.Recycle, Pool was full leaving extra reader for GC"); }
             }
         }
 

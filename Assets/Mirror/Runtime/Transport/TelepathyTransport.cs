@@ -40,10 +40,10 @@ namespace Mirror
 
         void Awake()
         {
-            // tell Telepathy to use Unity's Debug.Log
-            Telepathy.Logger.Log = Debug.Log;
-            Telepathy.Logger.LogWarning = Debug.LogWarning;
-            Telepathy.Logger.LogError = Debug.LogError;
+            // tell Telepathy to use Unity's MirrorLog.Log
+            Telepathy.Logger.Log = MirrorLog.Log;
+            Telepathy.Logger.LogWarning = MirrorLog.LogWarning;
+            Telepathy.Logger.LogError = MirrorLog.LogError;
 
             // configure
             client.NoDelay = NoDelay;
@@ -51,7 +51,7 @@ namespace Mirror
             server.NoDelay = NoDelay;
             server.MaxMessageSize = serverMaxMessageSize;
 
-            Debug.Log("TelepathyTransport initialized!");
+            MirrorLog.Log("TelepathyTransport initialized!");
         }
 
         public override bool Available()
@@ -195,7 +195,7 @@ namespace Mirror
         // common
         public override void Shutdown()
         {
-            Debug.Log("TelepathyTransport Shutdown()");
+            MirrorLog.Log("TelepathyTransport Shutdown()");
             client.Disconnect();
             server.Stop();
         }

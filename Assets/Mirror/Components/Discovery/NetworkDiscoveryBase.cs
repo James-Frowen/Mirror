@@ -204,7 +204,7 @@ namespace Mirror.Discovery
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogException(ex, this);
+                    MirrorLog.LogException(ex, this);
                 }
             }
         }
@@ -283,7 +283,7 @@ namespace Mirror.Discovery
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogException(ex);
+                    MirrorLog.LogException(ex);
                 }
             }
         }
