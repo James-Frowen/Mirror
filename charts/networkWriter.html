@@ -41,18 +41,18 @@ function toggleCanvasWithNoFailures() {
 	    }
 	}
 }
-var testRuns = [['mirror_master','04/09/2020','10:32:39'], ['mirror_networkwriter-performance','04/09/2020','10:32:08'], ['mirror_networkwriter-performance-3','04/09/2020','10:32:23']];
-var Tests_NetworkWriterPerformance_WritePackedInt32_Time_Aggregated_Values = ['0.99', '0.55', '0.61'];
-var Tests_NetworkWriterPerformance_WritePackedInt32_Time_Median_Values = ['0.99', '0.55', '0.61'];
-var Tests_NetworkWriterPerformance_WritePackedInt32_Time_Min_Values = ['0.94', '0.53', '0.58'];
-var Tests_NetworkWriterPerformance_WritePackedInt32_Time_Max_Values = ['1.27' ,'0.80' ,'0.86'];
-var Tests_NetworkWriterPerformance_WritePackedInt32_Time_Average_Values = ['1.00' ,'0.56' ,'0.62'];
-var Tests_NetworkWriterPerformance_WritePackedInt32_Time_Stdev_Values = ['0.05' ,'0.04' ,'0.04'];
-var Tests_NetworkWriterPerformance_WritePackedInt32_Time_Baseline_Values = ['0.99' ,'0.99' ,'0.99'];
+var testRuns = [['mirror_master','04/09/2020','16:08:07'], ['mirror_networkwriter-performance','04/09/2020','16:07:18'], ['mirror_networkwriter-performance-3','04/09/2020','16:07:34'], ['mirror_networkwriter-performance-4','04/09/2020','16:07:50']];
+var Tests_NetworkWriterPerformance_WritePackedInt32_Time_Aggregated_Values = ['0.99', '0.57', '0.62', '0.76'];
+var Tests_NetworkWriterPerformance_WritePackedInt32_Time_Median_Values = ['0.99', '0.57', '0.62', '0.76'];
+var Tests_NetworkWriterPerformance_WritePackedInt32_Time_Min_Values = ['0.93', '0.53', '0.58', '0.69'];
+var Tests_NetworkWriterPerformance_WritePackedInt32_Time_Max_Values = ['1.44' ,'1.24' ,'1.05' ,'1.68'];
+var Tests_NetworkWriterPerformance_WritePackedInt32_Time_Average_Values = ['1.03' ,'0.60' ,'0.64' ,'0.80'];
+var Tests_NetworkWriterPerformance_WritePackedInt32_Time_Stdev_Values = ['0.10' ,'0.10' ,'0.07' ,'0.15'];
+var Tests_NetworkWriterPerformance_WritePackedInt32_Time_Baseline_Values = ['0.99' ,'0.99' ,'0.99' ,'0.99'];
 var Tests_NetworkWriterPerformance_WritePackedInt32_Time_data = {
 	labels: testRuns,
 	datasets: [{
-backgroundColor: [passColor, passColor, passColor],
+backgroundColor: [passColor, passColor, passColor, passColor],
 borderWidth: 1,
 label: "Millisecond",
 legend: {
