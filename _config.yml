@@ -1,0 +1,5 @@
+defaults:
+  - scope:
+      path: "charts/*.html"
+    values:
+      chart: true

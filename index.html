@@ -1,0 +1,11 @@
+---
+layout: default
+---
+<h1>Performance Charts</h1>
+
+<ul>
+  {% assign chart_files = site.static_files | where: "chart", true %}
+  {% for chart in chart_files %}
+  <li><a href="{{ chart.path | relative_url }}">{{ chart.name }}</a></li>
+  {% endfor %}
+</ul>
