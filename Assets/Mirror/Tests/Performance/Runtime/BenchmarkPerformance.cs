@@ -1,16 +1,50 @@
+using System;
 using System.Collections;
 using System.Diagnostics;
-using Mirror;
-using Mirror.Examples;
+//using Mirror.Examples;
 using NUnit.Framework;
 using Unity.PerformanceTesting;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace Mirror.Tests.Performance
 {
+    public class BenchmarkNetworkManager : NetworkManager
+    {
+        /// <summary>
+        /// hook for benchmarking
+        /// </summary>
+        public Action BeforeLateUpdate;
+        /// <summary>
+        /// hook for benchmarking
+        /// </summary>
+        public Action AfterLateUpdate;
+
+        public override void Awake()
+        {
+            transport = gameObject.AddComponent<TelepathyTransport>();
+            playerPrefab = new GameObject("testPlayerPrefab", typeof(NetworkIdentity));
+            base.Awake();
+        }
+
+        public override void LateUpdate()
+        {
+            BeforeLateUpdate?.Invoke();
+            base.LateUpdate();
+            AfterLateUpdate?.Invoke();
+        }
+    }
+    public class BenchmarkNetworkBehaviour : NetworkBehaviour
+    {
+        [SyncVar] public int health = 10;
+
+        [ServerCallback]
+        public void Update()
+        {
+            health = (health + 1) % 10;
+        }
+    }
+
     [Category("Performance")]
     [Category("Benchmark")]
     public class BenchmarkPerformance
@@ -40,32 +74,42 @@ namespace Tests
             stopwatch.Reset();
         }
 
-
+        BenchmarkNetworkManager networkManager;
+        BenchmarkNetworkBehaviour[] behaviours;
 
         [UnitySetUp]
         public IEnumerator SetUp()
         {
             captureMeasurement = false;
             // load scene
-            yield return EditorSceneManager.LoadSceneAsyncInPlayMode(ScenePath, new LoadSceneParameters { loadSceneMode = LoadSceneMode.Additive });
-            Scene scene = SceneManager.GetSceneByPath(ScenePath);
-            SceneManager.SetActiveScene(scene);
+            //yield return EditorSceneManager.LoadSceneAsyncInPlayMode(ScenePath, new LoadSceneParameters { loadSceneMode = LoadSceneMode.Additive });
+            //Scene scene = SceneManager.GetSceneByPath(ScenePath);
+            //SceneManager.SetActiveScene(scene);
+
+            GameObject netManagerObject = new GameObject("BenchmarkNetMan");
+            networkManager = netManagerObject.AddComponent<BenchmarkNetworkManager>();
 
             // wait for NetworkManager awake
             yield return null;
             // load host
-            NetworkManager.singleton.StartHost();
+            networkManager.StartHost();
 
-            BenchmarkNetworkManager benchmarker = NetworkManager.singleton as BenchmarkNetworkManager;
-            if (benchmarker == null)
+            networkManager.BeforeLateUpdate = BeforeLateUpdate;
+            networkManager.AfterLateUpdate = AfterLateUpdate;
+
+            // wait for host to fully start
+            yield return null;
+
+
+            const int behaviourCount10k = 10000;
+            behaviours = new BenchmarkNetworkBehaviour[behaviourCount10k];
+            for (int i = 0; i < behaviourCount10k; i++)
             {
-                Assert.Fail("Could not find Benchmarker");
-                yield break;
+                GameObject go = new GameObject("Behaviour" + i);
+                go.AddComponent<NetworkIdentity>();
+                behaviours[i] = go.AddComponent<BenchmarkNetworkBehaviour>();
+                NetworkServer.Spawn(go);
             }
-
-
-            benchmarker.BeforeLateUpdate = BeforeLateUpdate;
-            benchmarker.AfterLateUpdate = AfterLateUpdate;
         }
 
         [UnityTearDown]
@@ -75,23 +119,23 @@ namespace Tests
             yield return Measure.Frames().MeasurementCount(MeasureCount).Run();
 
             // shutdown
-            GameObject go = NetworkManager.singleton.gameObject;
             NetworkManager.Shutdown();
-            // unload scene
-            Scene scene = SceneManager.GetSceneByPath(ScenePath);
-            yield return SceneManager.UnloadSceneAsync(scene);
-            if (go != null)
+
+            // destroy scene Objects
+
+            GameObject.Destroy(networkManager.gameObject);
+            for (int i = 0; i < behaviours.Length; i++)
             {
-                UnityEngine.Object.Destroy(go);
+                GameObject.Destroy(behaviours[i].gameObject);
             }
+
         }
 
-        static void EnableHealth(bool value)
+        void EnableHealth(bool value)
         {
-            Health[] all = Health.FindObjectsOfType<Health>();
-            foreach (Health health in all)
+            foreach (BenchmarkNetworkBehaviour behaviour in behaviours)
             {
-                health.enabled = value;
+                behaviour.enabled = value;
             }
         }
 
