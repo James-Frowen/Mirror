@@ -41,78 +41,14 @@ function toggleCanvasWithNoFailures() {
 	    }
 	}
 }
-var testRuns = [['mirror_master','04/13/2020','12:57:07'], ['mirror_id-dirty-1','04/13/2020','12:56:51']];
-var Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_Aggregated_Values = ['1.28', '1.29'];
-var Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_Median_Values = ['1.28', '1.29'];
-var Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_Min_Values = ['1.23', '1.25'];
-var Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_Max_Values = ['1.74' ,'1.48'];
-var Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_Average_Values = ['1.31' ,'1.30'];
-var Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_Stdev_Values = ['0.07' ,'0.04'];
-var Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_Baseline_Values = ['1.28' ,'1.28'];
-var Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_Aggregated_Values = ['0.66', '0.63'];
-var Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_Median_Values = ['0.66', '0.63'];
-var Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_Min_Values = ['0.62', '0.62'];
-var Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_Max_Values = ['0.93' ,'0.70'];
-var Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_Average_Values = ['0.67' ,'0.64'];
-var Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_Stdev_Values = ['0.04' ,'0.01'];
-var Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_Baseline_Values = ['0.66' ,'0.66'];
-var Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Aggregated_Values = ['0.74', '0.74'];
-var Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Median_Values = ['0.74', '0.74'];
-var Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Min_Values = ['0.71', '0.73'];
-var Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Max_Values = ['1.05' ,'3.04'];
-var Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Average_Values = ['0.77' ,'0.82'];
-var Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Stdev_Values = ['0.06' ,'0.28'];
-var Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Baseline_Values = ['0.74' ,'0.74'];
-var Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_data = {
-	labels: testRuns,
-	datasets: [{
-backgroundColor: [passColor, passColor],
-borderWidth: 1,
-label: "Millisecond",
-legend: {
-display: true,
-},
-data: Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_Aggregated_Values
-	}
-	,{
-borderColor: baselineColor,
-backgroundColor: baselineColor,
-borderWidth: 2,
-fill: false,
-pointStyle: 'line',
-label: "Baseline Millisecond",
-legend: {
-display: true,
-},
-data: Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_Baseline_Values,
-type: 'line'}
-	]
-};
-var Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_data = {
-	labels: testRuns,
-	datasets: [{
-backgroundColor: [passColor, passColor],
-borderWidth: 1,
-label: "Millisecond",
-legend: {
-display: true,
-},
-data: Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_Aggregated_Values
-	}
-	,{
-borderColor: baselineColor,
-backgroundColor: baselineColor,
-borderWidth: 2,
-fill: false,
-pointStyle: 'line',
-label: "Baseline Millisecond",
-legend: {
-display: true,
-},
-data: Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_Baseline_Values,
-type: 'line'}
-	]
-};
+var testRuns = [['mirror_master','04/13/2020','13:26:10'], ['mirror_id-dirty-1','04/13/2020','13:25:55']];
+var Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Aggregated_Values = ['0.73', '0.73'];
+var Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Median_Values = ['0.73', '0.73'];
+var Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Min_Values = ['0.69', '0.71'];
+var Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Max_Values = ['1.08' ,'1.32'];
+var Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Average_Values = ['0.76' ,'0.77'];
+var Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Stdev_Values = ['0.08' ,'0.08'];
+var Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Baseline_Values = ['0.73' ,'0.73'];
 var Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_data = {
 	labels: testRuns,
 	datasets: [{
@@ -139,110 +75,6 @@ type: 'line'}
 	]
 };
 window.onload = function() {
-Chart.defaults.global.elements.rectangle.borderColor = '#fff';
-var ctxMirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time = document.getElementById('Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time').getContext('2d');
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time = new Chart(ctxMirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time, {
-type: 'bar',
-data: Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_data,
-options: {
-tooltips:
-{
-mode: 'index',
-callbacks: {
-title: function(tooltipItems, data) {
-var color = Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_data.datasets[0].backgroundColor[tooltipItems[0].index];
-return tooltipItems[0].xLabel + (color === failColor ? " regressed" : " within threshold");},
-beforeFooter: function(tooltipItems, data) {
-var std = Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_Stdev_Values[tooltipItems[0].index];
-var footermsg = ['Threshold: 0.15']; footermsg.push('Standard deviation: ' + std); footermsg.push('Sample count: 100'); return footermsg;},
-},
-footerFontStyle: 'normal'
-},
-legend: { display: true},
-maintainAspectRatio: false,
-scales: {
-	yAxes: [{
-display: true,
-scaleLabel:
-{
-    display: true,
-    labelString: "Median Millisecond"
-},
-ticks: {
-suggestedMax: .001,
-suggestedMin: .0
-}
-	}],
-	xAxes: [{
-display: true,
-scaleLabel:
-{
-    display: true,
-    labelString: "Result File / Execution Time"
-}
-	}]
-},
-responsive: true,
-responsiveAnimationDuration: 0,
-title: {
-	display: true,
-	text: "Time"
-}
-}
-	});
-	
-Chart.defaults.global.elements.rectangle.borderColor = '#fff';
-var ctxMirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time = document.getElementById('Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time').getContext('2d');
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time = new Chart(ctxMirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time, {
-type: 'bar',
-data: Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_data,
-options: {
-tooltips:
-{
-mode: 'index',
-callbacks: {
-title: function(tooltipItems, data) {
-var color = Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_data.datasets[0].backgroundColor[tooltipItems[0].index];
-return tooltipItems[0].xLabel + (color === failColor ? " regressed" : " within threshold");},
-beforeFooter: function(tooltipItems, data) {
-var std = Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_Stdev_Values[tooltipItems[0].index];
-var footermsg = ['Threshold: 0.15']; footermsg.push('Standard deviation: ' + std); footermsg.push('Sample count: 100'); return footermsg;},
-},
-footerFontStyle: 'normal'
-},
-legend: { display: true},
-maintainAspectRatio: false,
-scales: {
-	yAxes: [{
-display: true,
-scaleLabel:
-{
-    display: true,
-    labelString: "Median Millisecond"
-},
-ticks: {
-suggestedMax: .001,
-suggestedMin: .0
-}
-	}],
-	xAxes: [{
-display: true,
-scaleLabel:
-{
-    display: true,
-    labelString: "Result File / Execution Time"
-}
-	}]
-},
-responsive: true,
-responsiveAnimationDuration: 0,
-title: {
-	display: true,
-	text: "Time"
-}
-}
-	});
-	
 Chart.defaults.global.elements.rectangle.borderColor = '#fff';
 var ctxMirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time = document.getElementById('Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time').getContext('2d');
 window.Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time = new Chart(ctxMirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time, {
@@ -297,28 +129,6 @@ title: {
 	
 	document.getElementById('MinButton').addEventListener('click', function()
 	{
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time.options.scales.yAxes[0].scaleLabel.labelString = "Min Millisecond";
-Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_data.datasets[0].data = Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_Min_Values;
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time.update();
-var a = document.getElementById('MinButton');
-a.style.backgroundColor = "#2196F3";
-var b = document.getElementById('MaxButton');
-b.style.backgroundColor = "#3e6892";
-var c = document.getElementById('MedianButton');
-c.style.backgroundColor = "#3e6892";
-var d = document.getElementById('AverageButton');
-d.style.backgroundColor = "#3e6892";
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time.options.scales.yAxes[0].scaleLabel.labelString = "Min Millisecond";
-Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_data.datasets[0].data = Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_Min_Values;
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time.update();
-var a = document.getElementById('MinButton');
-a.style.backgroundColor = "#2196F3";
-var b = document.getElementById('MaxButton');
-b.style.backgroundColor = "#3e6892";
-var c = document.getElementById('MedianButton');
-c.style.backgroundColor = "#3e6892";
-var d = document.getElementById('AverageButton');
-d.style.backgroundColor = "#3e6892";
 window.Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time.options.scales.yAxes[0].scaleLabel.labelString = "Min Millisecond";
 Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_data.datasets[0].data = Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Min_Values;
 window.Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time.update();
@@ -333,28 +143,6 @@ d.style.backgroundColor = "#3e6892";
 	 });
 	document.getElementById('MaxButton').addEventListener('click', function()
 	{
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time.options.scales.yAxes[0].scaleLabel.labelString = "Max Millisecond";
-Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_data.datasets[0].data = Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_Max_Values;
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time.update();
-var a = document.getElementById('MaxButton');
-a.style.backgroundColor = "#2196F3";
-var b = document.getElementById('MinButton');
-b.style.backgroundColor = "#3e6892";
-var c = document.getElementById('MedianButton');
-c.style.backgroundColor = "#3e6892";
-var d = document.getElementById('AverageButton');
-d.style.backgroundColor = "#3e6892";
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time.options.scales.yAxes[0].scaleLabel.labelString = "Max Millisecond";
-Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_data.datasets[0].data = Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_Max_Values;
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time.update();
-var a = document.getElementById('MaxButton');
-a.style.backgroundColor = "#2196F3";
-var b = document.getElementById('MinButton');
-b.style.backgroundColor = "#3e6892";
-var c = document.getElementById('MedianButton');
-c.style.backgroundColor = "#3e6892";
-var d = document.getElementById('AverageButton');
-d.style.backgroundColor = "#3e6892";
 window.Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time.options.scales.yAxes[0].scaleLabel.labelString = "Max Millisecond";
 Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_data.datasets[0].data = Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Max_Values;
 window.Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time.update();
@@ -369,28 +157,6 @@ d.style.backgroundColor = "#3e6892";
 	 });
 	document.getElementById('MedianButton').addEventListener('click', function()
 	{
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time.options.scales.yAxes[0].scaleLabel.labelString = "Median Millisecond";
-Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_data.datasets[0].data = Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_Median_Values;
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time.update();
-var a = document.getElementById('MedianButton');
-a.style.backgroundColor = "#2196F3";
-var b = document.getElementById('MinButton');
-b.style.backgroundColor = "#3e6892";
-var c = document.getElementById('MaxButton');
-c.style.backgroundColor = "#3e6892";
-var d = document.getElementById('AverageButton');
-d.style.backgroundColor = "#3e6892";
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time.options.scales.yAxes[0].scaleLabel.labelString = "Median Millisecond";
-Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_data.datasets[0].data = Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_Median_Values;
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time.update();
-var a = document.getElementById('MedianButton');
-a.style.backgroundColor = "#2196F3";
-var b = document.getElementById('MinButton');
-b.style.backgroundColor = "#3e6892";
-var c = document.getElementById('MaxButton');
-c.style.backgroundColor = "#3e6892";
-var d = document.getElementById('AverageButton');
-d.style.backgroundColor = "#3e6892";
 window.Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time.options.scales.yAxes[0].scaleLabel.labelString = "Median Millisecond";
 Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_data.datasets[0].data = Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Median_Values;
 window.Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time.update();
@@ -405,28 +171,6 @@ d.style.backgroundColor = "#3e6892";
 	 });
 	document.getElementById('AverageButton').addEventListener('click', function()
 	{
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time.options.scales.yAxes[0].scaleLabel.labelString = "Average Millisecond";
-Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_data.datasets[0].data = Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time_Average_Values;
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time.update();
-var a = document.getElementById('AverageButton');
-a.style.backgroundColor = "#2196F3";
-var b = document.getElementById('MinButton');
-b.style.backgroundColor = "#3e6892";
-var c = document.getElementById('MaxButton');
-c.style.backgroundColor = "#3e6892";
-var d = document.getElementById('MedianButton');
-d.style.backgroundColor = "#3e6892";
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time.options.scales.yAxes[0].scaleLabel.labelString = "Average Millisecond";
-Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_data.datasets[0].data = Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time_Average_Values;
-window.Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time.update();
-var a = document.getElementById('AverageButton');
-a.style.backgroundColor = "#2196F3";
-var b = document.getElementById('MinButton');
-b.style.backgroundColor = "#3e6892";
-var c = document.getElementById('MaxButton');
-c.style.backgroundColor = "#3e6892";
-var d = document.getElementById('MedianButton');
-d.style.backgroundColor = "#3e6892";
 window.Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time.options.scales.yAxes[0].scaleLabel.labelString = "Average Millisecond";
 Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_data.datasets[0].data = Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time_Average_Values;
 window.Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32_Time.update();
@@ -486,18 +230,6 @@ d.style.backgroundColor = "#3e6892";
 <tr><td><div class="buttonheader">Select statistical method</div><div class="buttondiv"><button id="MinButton" class="button">Min</button></div>&nbsp<div class="buttondiv"><button id="MaxButton" class="button">Max</button></div>&nbsp<div class="buttondiv"><button id="MedianButton" class="initialbutton">Median</button></div>&nbsp<div class="buttondiv"><button id="AverageButton" class="button">Average</button></div></td></tr>
 </table>
 <table class="visualizationTable">
-<tr class="nofailures">
-<td class="testnamecell"><div class="testname nofailures"><p><h5>Test Name:</h5></p><p><h3>Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty</h3></p></div></td></tr>
-<tr class="nofailures"><td></td></tr>
-<tr class="nofailures"><td class="chartcell nofailures"><div id="container" class="container nofailures">
-<canvas class="nofailures canvas" id="Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithDirty_Time"></canvas>
-</div></td></tr>
-<tr class="nofailures">
-<td class="testnamecell"><div class="testname nofailures"><p><h5>Test Name:</h5></p><p><h3>Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty</h3></p></div></td></tr>
-<tr class="nofailures"><td></td></tr>
-<tr class="nofailures"><td class="chartcell nofailures"><div id="container" class="container nofailures">
-<canvas class="nofailures canvas" id="Mirror_Tests_Performance_NetworkIdentityPerformance_NetworkIdentityServerUpdateWithoutDirty_Time"></canvas>
-</div></td></tr>
 <tr class="nofailures">
 <td class="testnamecell"><div class="testname nofailures"><p><h5>Test Name:</h5></p><p><h3>Mirror_Tests_Performance_NetworkWriterPerformance_WritePackedInt32</h3></p></div></td></tr>
 <tr class="nofailures"><td></td></tr>
