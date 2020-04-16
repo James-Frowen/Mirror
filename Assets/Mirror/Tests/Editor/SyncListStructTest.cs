@@ -50,7 +50,6 @@ namespace Mirror.Tests
         }
     }
 
-
     public class SyncListTestPlayer : SyncList<TestPlayer>
     {
 
@@ -62,5 +61,42 @@ namespace Mirror.Tests
     public struct TestItem
     {
         public float price;
+    }
+
+    public class SyncListClassTest
+    {
+        [Test]
+        [Ignore("This Doesnt work")]
+        public void SyncsClassesFields()
+        {
+            SyncListSomeDataClass serverList = new SyncListSomeDataClass();
+            SyncListSomeDataClass clientList = new SyncListSomeDataClass();
+            SyncListTest.SerializeAllTo(serverList, clientList);
+
+            serverList.Add(new SomeDataClass { usefulNumber = 10 });
+            Assert.That(serverList.IsDirty, Is.True);
+
+            SyncListTest.SerializeDeltaTo(serverList, clientList);
+            Assert.That(serverList.IsDirty, Is.False);
+            Assert.That(clientList[0].usefulNumber, Is.EqualTo(10));
+
+
+            serverList[0].usefulNumber = 25;
+
+            //Assert.That(serverList.IsDirty, Is.True);
+            SyncListTest.SerializeDeltaTo(serverList, clientList);
+            Assert.That(serverList.IsDirty, Is.False);
+            Assert.That(clientList[0].usefulNumber, Is.EqualTo(25));
+        }
+    }
+
+    public class SyncListSomeDataClass : SyncList<SomeDataClass>
+    {
+
+    }
+
+    public class SomeDataClass
+    {
+        public int usefulNumber;
     }
 }
