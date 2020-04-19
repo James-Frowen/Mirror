@@ -30,7 +30,6 @@ namespace Mirror.Weaver
             else
             {
                 Weaver.Error($"Could not find generic arguments for {Weaver.SyncDictionaryType} using {td}");
-                return;
             }
         }
     }

@@ -20,7 +20,6 @@ namespace Mirror.Weaver
             else
             {
                 Weaver.Error($"Could not find generic arguments for {baseType} using {td}");
-                return;
             }
         }
     }
