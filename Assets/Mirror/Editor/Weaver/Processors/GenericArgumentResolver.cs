@@ -70,7 +70,7 @@ namespace Mirror.Weaver
             return null;
         }
 
-        public bool GetGenericBaseType(TypeDefinition td, TypeReference baseType, out GenericInstanceType found)
+        bool GetGenericBaseType(TypeDefinition td, TypeReference baseType, out GenericInstanceType found)
         {
             stack.Clear();
             TypeReference parent = td.BaseType;

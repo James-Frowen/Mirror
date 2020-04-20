@@ -412,13 +412,11 @@ namespace Mirror.Weaver
             if (td.HasGenericParameters)
                 return false;
 
-
             bool modified = false;
 
             // ignore abstract classes
             // we dont need to process abstract classes because classes that
             // inherit from them will be processed instead
-
 
             // We cant early return with non classes or Abstract classes
             // because we still need to check for embeded types
@@ -440,7 +438,6 @@ namespace Mirror.Weaver
                     modified = true;
                 }
             }
-
 
             // check for embedded types
             foreach (TypeDefinition embedded in td.NestedTypes)
