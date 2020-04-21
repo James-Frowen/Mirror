@@ -184,6 +184,13 @@ namespace Mirror.Weaver.Tests
         }
 
         [Test]
+        public void SyncListGenericAbstractOverrideInheritance()
+        {
+            Assert.That(CompilationFinishedHook.WeaveFailed, Is.False);
+            Assert.That(weaverErrors, Is.Empty);
+        }
+
+        [Test]
         public void SyncListErrorWhenUsingGenericListInNetworkBehaviour()
         {
             Assert.That(CompilationFinishedHook.WeaveFailed, Is.True);
