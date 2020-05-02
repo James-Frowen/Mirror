@@ -218,7 +218,10 @@ var color = Mirror_Tests_Performance_Runtime_BenchmarkPerformance_Benchmark10k_N
 return tooltipItems[0].xLabel + (color === failColor ? " regressed" : " within threshold");},
 beforeFooter: function(tooltipItems, data) {
 var std = Mirror_Tests_Performance_Runtime_BenchmarkPerformance_Benchmark10k_NetworkManagerLateUpdate_Stdev_Values[tooltipItems[0].index];
-var footermsg = ['Threshold: 0.15']; footermsg.push('Standard deviation: ' + std); footermsg.push('Sample count: 125'); return footermsg;},
+var baseAvg = Mirror_Tests_Performance_Runtime_BenchmarkPerformance_Benchmark10k_NetworkManagerLateUpdate_Average_Values[0];
+var currentAvg = Mirror_Tests_Performance_Runtime_BenchmarkPerformance_Benchmark10k_NetworkManagerLateUpdate_Average_Values[tooltipItems[0].index];
+var change = (currentAvg - baseAvg) / baseAvg * 100;
+var footermsg = ['Threshold: 0.15']; footermsg.push('Standard deviation: ' + std); footermsg.push('Sample count: 125'); footermsg.push('Average vs Baseline: ' + change.toFixed(2) + '%'); return footermsg;},
 },
 footerFontStyle: 'normal'
 },
@@ -270,7 +273,10 @@ var color = Mirror_Tests_Performance_Runtime_BenchmarkPerformance_Benchmark10k_T
 return tooltipItems[0].xLabel + (color === failColor ? " regressed" : " within threshold");},
 beforeFooter: function(tooltipItems, data) {
 var std = Mirror_Tests_Performance_Runtime_BenchmarkPerformance_Benchmark10k_Time_Stdev_Values[tooltipItems[0].index];
-var footermsg = ['Threshold: 0.15']; footermsg.push('Standard deviation: ' + std); footermsg.push('Sample count: 120'); return footermsg;},
+var baseAvg = Mirror_Tests_Performance_Runtime_BenchmarkPerformance_Benchmark10k_Time_Average_Values[0];
+var currentAvg = Mirror_Tests_Performance_Runtime_BenchmarkPerformance_Benchmark10k_Time_Average_Values[tooltipItems[0].index];
+var change = (currentAvg - baseAvg) / baseAvg * 100;
+var footermsg = ['Threshold: 0.15']; footermsg.push('Standard deviation: ' + std); footermsg.push('Sample count: 120'); footermsg.push('Average vs Baseline: ' + change.toFixed(2) + '%'); return footermsg;},
 },
 footerFontStyle: 'normal'
 },
@@ -322,7 +328,10 @@ var color = Mirror_Tests_Performance_Runtime_BenchmarkPerformance_Benchmark10kId
 return tooltipItems[0].xLabel + (color === failColor ? " regressed" : " within threshold");},
 beforeFooter: function(tooltipItems, data) {
 var std = Mirror_Tests_Performance_Runtime_BenchmarkPerformance_Benchmark10kIdle_NetworkManagerLateUpdate_Stdev_Values[tooltipItems[0].index];
-var footermsg = ['Threshold: 0.15']; footermsg.push('Standard deviation: ' + std); footermsg.push('Sample count: 125'); return footermsg;},
+var baseAvg = Mirror_Tests_Performance_Runtime_BenchmarkPerformance_Benchmark10kIdle_NetworkManagerLateUpdate_Average_Values[0];
+var currentAvg = Mirror_Tests_Performance_Runtime_BenchmarkPerformance_Benchmark10kIdle_NetworkManagerLateUpdate_Average_Values[tooltipItems[0].index];
+var change = (currentAvg - baseAvg) / baseAvg * 100;
+var footermsg = ['Threshold: 0.15']; footermsg.push('Standard deviation: ' + std); footermsg.push('Sample count: 125'); footermsg.push('Average vs Baseline: ' + change.toFixed(2) + '%'); return footermsg;},
 },
 footerFontStyle: 'normal'
 },
@@ -374,7 +383,10 @@ var color = Mirror_Tests_Performance_Runtime_BenchmarkPerformance_Benchmark10kId
 return tooltipItems[0].xLabel + (color === failColor ? " regressed" : " within threshold");},
 beforeFooter: function(tooltipItems, data) {
 var std = Mirror_Tests_Performance_Runtime_BenchmarkPerformance_Benchmark10kIdle_Time_Stdev_Values[tooltipItems[0].index];
-var footermsg = ['Threshold: 0.15']; footermsg.push('Standard deviation: ' + std); footermsg.push('Sample count: 120'); return footermsg;},
+var baseAvg = Mirror_Tests_Performance_Runtime_BenchmarkPerformance_Benchmark10kIdle_Time_Average_Values[0];
+var currentAvg = Mirror_Tests_Performance_Runtime_BenchmarkPerformance_Benchmark10kIdle_Time_Average_Values[tooltipItems[0].index];
+var change = (currentAvg - baseAvg) / baseAvg * 100;
+var footermsg = ['Threshold: 0.15']; footermsg.push('Standard deviation: ' + std); footermsg.push('Sample count: 120'); footermsg.push('Average vs Baseline: ' + change.toFixed(2) + '%'); return footermsg;},
 },
 footerFontStyle: 'normal'
 },
@@ -426,7 +438,10 @@ var color = Mirror_Tests_Performance_Runtime_ULocalConnectionPerformance_ULocalC
 return tooltipItems[0].xLabel + (color === failColor ? " regressed" : " within threshold");},
 beforeFooter: function(tooltipItems, data) {
 var std = Mirror_Tests_Performance_Runtime_ULocalConnectionPerformance_ULocalConnectionPerformanceWithEnumeratorPasses_FrameTime_Stdev_Values[tooltipItems[0].index];
-var footermsg = ['Threshold: 0.15']; footermsg.push('Standard deviation: ' + std); footermsg.push('Sample count: 100'); return footermsg;},
+var baseAvg = Mirror_Tests_Performance_Runtime_ULocalConnectionPerformance_ULocalConnectionPerformanceWithEnumeratorPasses_FrameTime_Average_Values[0];
+var currentAvg = Mirror_Tests_Performance_Runtime_ULocalConnectionPerformance_ULocalConnectionPerformanceWithEnumeratorPasses_FrameTime_Average_Values[tooltipItems[0].index];
+var change = (currentAvg - baseAvg) / baseAvg * 100;
+var footermsg = ['Threshold: 0.15']; footermsg.push('Standard deviation: ' + std); footermsg.push('Sample count: 100'); footermsg.push('Average vs Baseline: ' + change.toFixed(2) + '%'); return footermsg;},
 },
 footerFontStyle: 'normal'
 },
