@@ -9,7 +9,7 @@ namespace Mirror.RemoteCalls
     /// </summary>
     /// <param name="obj"></param>
     /// <param name="reader"></param>
-    public delegate void CmdDelegate(NetworkBehaviour obj, NetworkReader reader, NetworkConnectionToClient senderConnection);
+    public delegate void CmdDelegate(NetworkBehaviour obj, NetworkReader reader, NetworkConnection senderConnection);
 
     class Invoker
     {
