@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mono.CecilX;
@@ -10,6 +11,52 @@ namespace Mirror.Weaver
     /// </summary>
     public static class SyncVarProcessor
     {
+        /// <summary>
+        /// <see cref="Mirror.HookParameter"/>
+        /// </summary>
+        public enum HookParameter
+        {
+            AutoDetect = 0,
+            // numbers match parameter count, do not change
+            New = 1,
+            OldNew = 2,
+            OldNewInitial = 3
+        }
+
+        public struct GetHookResult
+        {
+            public bool found;
+            public HookParameter parameter;
+            public MethodDefinition method;
+
+            public static readonly GetHookResult NotFound = new GetHookResult { found = false };
+        }
+
+        // used to log expected method signature
+        static string HookImplementationMessage(string hookName, string ValueType)
+        {
+            return "Hook method should have one of the following signatures\n" +
+                HookParameterMessage(HookParameter.New, hookName, ValueType) + "\n" +
+                HookParameterMessage(HookParameter.OldNew, hookName, ValueType) + "\n" +
+                HookParameterMessage(HookParameter.OldNewInitial, hookName, ValueType);
+        }
+        static string HookParameterMessage(HookParameter hookParameter, string hookName, string ValueType)
+        {
+            switch (hookParameter)
+            {
+                case HookParameter.New:
+                    return string.Format("void {0}({1} newValue)", hookName, ValueType);
+                case HookParameter.OldNew:
+                    return string.Format("void {0}({1} oldValue, {1} newValue)", hookName, ValueType);
+                case HookParameter.OldNewInitial:
+                    return string.Format("void {0}({1} oldValue, {1} newValue, bool initialState)", hookName, ValueType);
+                default:
+                case HookParameter.AutoDetect:
+                    // No format for AutoDetect
+                    return "";
+            }
+        }
+
         // ulong = 64 bytes
         const int SyncVarLimit = 64;
 
@@ -18,49 +65,177 @@ namespace Mirror.Weaver
             => string.Format("void {0}({1} oldValue, {1} newValue)", hookName, ValueType);
 
         // Get hook method if any
-        public static MethodDefinition GetHookMethod(TypeDefinition td, FieldDefinition syncVar)
+        public static GetHookResult GetHookMethod(TypeDefinition td, FieldDefinition syncVar)
         {
             CustomAttribute syncVarAttr = syncVar.GetCustomAttribute(Weaver.SyncVarType.FullName);
 
             if (syncVarAttr == null)
-                return null;
+                return GetHookResult.NotFound;
 
             string hookFunctionName = syncVarAttr.GetField<string>("hook", null);
+            HookParameter hookParameter = syncVarAttr.GetField("hookParameter", HookParameter.AutoDetect);
 
             if (hookFunctionName == null)
-                return null;
+                return GetHookResult.NotFound;
 
-            return FindHookMethod(td, syncVar, hookFunctionName);
+            return FindHookMethod(td, syncVar, hookFunctionName, hookParameter);
         }
 
-        static MethodDefinition FindHookMethod(TypeDefinition td, FieldDefinition syncVar, string hookFunctionName)
+        static GetHookResult FindHookMethod(TypeDefinition td, FieldDefinition syncVar, string hookFunctionName, HookParameter hookParameter)
         {
             List<MethodDefinition> methods = td.GetMethods(hookFunctionName);
 
-            List<MethodDefinition> methodsWith2Param = new List<MethodDefinition>(methods.Where(m => m.Parameters.Count == 2));
-
-            if (methodsWith2Param.Count == 0)
+            if (hookParameter == HookParameter.AutoDetect)
             {
-                Weaver.Error($"Could not find hook for '{syncVar.Name}', hook name '{hookFunctionName}'. " +
-                    $"Method signature should be {HookParameterMessage(hookFunctionName, syncVar.FieldType)}",
-                    syncVar);
+                return AutoDetectHookMethod(syncVar, hookFunctionName, methods);
+            }
+            else
+            {
+                return FindHookWithParameters(syncVar, hookFunctionName, methods, hookParameter);
+            }
+        }
 
-                return null;
+        static GetHookResult AutoDetectHookMethod(FieldDefinition syncVar, string hookFunctionName, List<MethodDefinition> methods)
+        {
+            List<MethodDefinition> methodsWith1Param = new List<MethodDefinition>(methods.Where(m => m.Parameters.Count == 1));
+            List<MethodDefinition> methodsWith2Param = new List<MethodDefinition>(methods.Where(m => m.Parameters.Count == 2));
+            List<MethodDefinition> methodsWith3Param = new List<MethodDefinition>(methods.Where(m => m.Parameters.Count == 3));
+
+            // If all empty return early with ErrorMessage
+            if (methodsWith1Param.Count == 0 &&
+                methodsWith2Param.Count == 0 &&
+                methodsWith3Param.Count == 0)
+            {
+                Weaver.Error($"No hook with correct parameters found for '{syncVar.Name}', hook name '{hookFunctionName}'. {HookImplementationMessage(hookFunctionName, syncVar.FieldType.ToString())}",
+                    syncVar);
+                return GetHookResult.NotFound;
+            }
+
+            string multipleFoundError = $"Multiple hooks found for for '{syncVar.Name}', hook name '{hookFunctionName}'. " +
+                $"Use the hookParameter option in the SyncVar Attribute to pick which one to use.";
+
+            // Find method with matching parameters
+            // return error if multiple are found
+            MethodDefinition match = null;
+            HookParameter matchParameters = HookParameter.AutoDetect;
+
+            foreach (MethodDefinition method in methodsWith1Param)
+            {
+                if (MatchesParameters(HookParameter.New, syncVar, method))
+                {
+                    if (match != null)
+                    {
+                        Weaver.Error(multipleFoundError, syncVar);
+                        return GetHookResult.NotFound;
+                    }
+
+                    match = method;
+                    matchParameters = HookParameter.New;
+                }
             }
 
             foreach (MethodDefinition method in methodsWith2Param)
             {
-                if (MatchesParameters(syncVar, method))
+                if (MatchesParameters(HookParameter.OldNew, syncVar, method))
                 {
-                    return method;
+                    if (match != null)
+                    {
+                        Weaver.Error(multipleFoundError, syncVar);
+                        return GetHookResult.NotFound;
+                    }
+
+                    match = method;
+                    matchParameters = HookParameter.OldNew;
                 }
             }
 
-            Weaver.Error($"Wrong type for Parameter in hook for '{syncVar.Name}', hook name '{hookFunctionName}'. " +
-                     $"Method signature should be {HookParameterMessage(hookFunctionName, syncVar.FieldType)}",
-                   syncVar);
+            foreach (MethodDefinition method in methodsWith3Param)
+            {
+                if (MatchesParameters(HookParameter.OldNewInitial, syncVar, method))
+                {
+                    if (match != null)
+                    {
+                        Weaver.Error(multipleFoundError, syncVar);
+                        return GetHookResult.NotFound;
+                    }
 
-            return null;
+                    match = method;
+                    matchParameters = HookParameter.OldNewInitial;
+                }
+            }
+
+            // If only 1 found, return it
+            if (match != null)
+            {
+                return new GetHookResult
+                {
+                    found = true,
+                    method = match,
+                    parameter = matchParameters
+                };
+            }
+            else
+            {
+                Weaver.Error($"No hook with correct parameters found for '{syncVar.Name}', hook name '{hookFunctionName}'. {HookImplementationMessage(hookFunctionName, syncVar.FieldType.ToString())}",
+                    syncVar);
+                return GetHookResult.NotFound;
+            }
+        }
+
+        static GetHookResult FindHookWithParameters(FieldDefinition syncVar, string hookFunctionName, List<MethodDefinition> methods, HookParameter hookParameter)
+        {
+            int parameterCount = (int)hookParameter;
+            List<MethodDefinition> methodsWithParamCount = new List<MethodDefinition>(methods.Where(m => m.Parameters.Count == parameterCount));
+
+            if (methodsWithParamCount.Count == 0)
+            {
+                Weaver.Error($"Could not find hook for '{syncVar.Name}', hook name '{hookFunctionName}' with '{Enum.GetName(typeof(HookParameter), hookParameter)}' parameters. " +
+                    $"Method signature should be {HookParameterMessage(hookParameter, hookFunctionName, syncVar.FieldType.ToString())}",
+                    syncVar);
+                return GetHookResult.NotFound;
+            }
+
+            foreach (MethodDefinition method in methodsWithParamCount)
+            {
+                if (MatchesParameters(hookParameter, syncVar, method))
+                {
+                    return new GetHookResult
+                    {
+                        found = true,
+                        method = method,
+                        parameter = hookParameter
+                    };
+                }
+            }
+
+            Weaver.Error($"Wrong type for Parameter in hook for '{syncVar.Name}', hook name '{hookFunctionName}' with '{Enum.GetName(typeof(HookParameter), hookParameter)}' parameters. " +
+               $"Method signature should be {HookParameterMessage(hookParameter, hookFunctionName, syncVar.FieldType.ToString())}",
+               syncVar);
+            return GetHookResult.NotFound;
+        }
+
+        static bool MatchesParameters(HookParameter hookParameter, FieldDefinition syncVar, MethodDefinition method)
+        {
+            if (hookParameter == HookParameter.New)
+            {
+                // matches void onValueChange(T newValue)
+                return method.Parameters[0].ParameterType.FullName == syncVar.FieldType.FullName;
+            }
+            else if (hookParameter == HookParameter.OldNew)
+            {
+                // matches void onValueChange(T oldValue, T newValue)
+                return method.Parameters[0].ParameterType.FullName == syncVar.FieldType.FullName &&
+                       method.Parameters[1].ParameterType.FullName == syncVar.FieldType.FullName;
+            }
+            else if (hookParameter == HookParameter.OldNewInitial)
+            {
+                // matches void onValueChange(T oldValue, T newValue, bool initialState)
+                return method.Parameters[0].ParameterType.FullName == syncVar.FieldType.FullName &&
+                       method.Parameters[1].ParameterType.FullName == syncVar.FieldType.FullName &&
+                       method.Parameters[2].ParameterType.FullName == Weaver.boolType.FullName;
+            }
+
+            throw new ArgumentException("hookParameter should not be autodetect for MatchesParameters", nameof(hookParameter));
         }
 
         static bool MatchesParameters(FieldDefinition syncVar, MethodDefinition method)
@@ -217,9 +392,9 @@ namespace Mirror.Weaver
                 worker.Append(worker.Create(OpCodes.Call, gm));
             }
 
-            MethodDefinition hookMethod = GetHookMethod(td, fd);
+            GetHookResult hookResult = GetHookMethod(td, fd);
 
-            if (hookMethod != null)
+            if (hookResult.found)
             {
                 //if (NetworkServer.localClientActive && !getSyncVarHookGuard(dirtyBit))
                 Instruction label = worker.Create(OpCodes.Nop);
@@ -237,8 +412,7 @@ namespace Mirror.Weaver
                 worker.Append(worker.Create(OpCodes.Call, Weaver.setSyncVarHookGuard));
 
                 // call hook (oldValue, newValue)
-                // Generates: OnValueChanged(oldValue, value);
-                WriteCallHookMethodUsingArgument(worker, hookMethod, oldValue);
+                WriteCallHookMethodUsingArgument(worker, hookResult, oldValue);
 
                 // setSyncVarHookGuard(dirtyBit, false);
                 worker.Append(worker.Create(OpCodes.Ldarg_0));
@@ -378,28 +552,45 @@ namespace Mirror.Weaver
             Weaver.SetNumSyncVars(td.FullName, numSyncVars);
         }
 
-        public static void WriteCallHookMethodUsingArgument(ILProcessor worker, MethodDefinition hookMethod, VariableDefinition oldValue)
+        public static void WriteCallHookMethodUsingArgument(ILProcessor worker, GetHookResult hookResult, VariableDefinition oldValue)
         {
-            _WriteCallHookMethod(worker, hookMethod, oldValue, null);
+            _WriteCallHookMethod(worker, hookResult, oldValue, null, false);
         }
 
-        public static void WriteCallHookMethodUsingField(ILProcessor worker, MethodDefinition hookMethod, VariableDefinition oldValue, FieldDefinition newValue)
+        public static void WriteCallHookMethodUsingField(ILProcessor worker, GetHookResult hookResult, VariableDefinition oldValue, FieldDefinition newValue, bool initialState)
         {
             if (newValue == null)
             {
                 Weaver.Error("NewValue field was null when writing SyncVar hook");
             }
 
-            _WriteCallHookMethod(worker, hookMethod, oldValue, newValue);
+            _WriteCallHookMethod(worker, hookResult, oldValue, newValue, initialState);
         }
 
-        static void _WriteCallHookMethod(ILProcessor worker, MethodDefinition hookMethod, VariableDefinition oldValue, FieldDefinition newValue)
+        static void _WriteCallHookMethod(ILProcessor worker, GetHookResult hookResult, VariableDefinition oldValue, FieldDefinition newValue, bool initialState)
         {
             WriteStartFunctionCall();
 
             // write args
-            WriteOldValue();
-            WriteNewValue();
+            if (hookResult.parameter == HookParameter.New)
+            {
+                WriteNewValue();
+            }
+            else if (hookResult.parameter == HookParameter.OldNew)
+            {
+                WriteOldValue();
+                WriteNewValue();
+            }
+            else if (hookResult.parameter == HookParameter.OldNewInitial)
+            {
+                WriteOldValue();
+                WriteNewValue();
+                WriteInitialState();
+            }
+            else
+            {
+                Weaver.Error("Invalid hook parameter in WriteCallHookMethod");
+            }
 
             WriteEndFunctionCall();
 
@@ -428,11 +619,16 @@ namespace Mirror.Weaver
                 }
             }
 
+            void WriteInitialState()
+            {
+                worker.Append(worker.Create(initialState ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0));
+            }
+
             // Writes this before method if it is not static
             void WriteStartFunctionCall()
             {
                 // dont add this (Ldarg_0) if method is static
-                if (!hookMethod.IsStatic)
+                if (!hookResult.method.IsStatic)
                 {
                     // this before method call
                     // eg this.onValueChanged
@@ -444,8 +640,8 @@ namespace Mirror.Weaver
             void WriteEndFunctionCall()
             {
                 // only use Callvirt when not static
-                OpCode opcode = hookMethod.IsStatic ? OpCodes.Call : OpCodes.Callvirt;
-                worker.Append(worker.Create(opcode, hookMethod));
+                OpCode opcode = hookResult.method.IsStatic ? OpCodes.Call : OpCodes.Callvirt;
+                worker.Append(worker.Create(opcode, hookResult.method));
             }
         }
     }

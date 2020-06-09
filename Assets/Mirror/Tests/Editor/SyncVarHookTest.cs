@@ -5,7 +5,20 @@ using UnityEngine;
 
 namespace Mirror.Tests
 {
-    class HookBehaviour : NetworkBehaviour
+    class NewHookBehaviour : NetworkBehaviour
+    {
+        [SyncVar(hook = nameof(OnValueChanged))]
+        public int value = 0;
+
+        public event Action<int> HookCalled;
+
+        void OnValueChanged(int newValue)
+        {
+            HookCalled.Invoke(newValue);
+        }
+    }
+
+    class OldNewHookBehaviour : NetworkBehaviour
     {
         [SyncVar(hook = nameof(OnValueChanged))]
         public int value = 0;
@@ -15,6 +28,38 @@ namespace Mirror.Tests
         void OnValueChanged(int oldValue, int newValue)
         {
             HookCalled.Invoke(oldValue, newValue);
+        }
+    }
+
+    class OldNewInitialHookBehaviour : NetworkBehaviour
+    {
+        [SyncVar(hook = nameof(OnValueChanged))]
+        public int value = 0;
+
+        public event Action<int, int, bool> HookCalled;
+
+        void OnValueChanged(int oldValue, int newValue, bool intialState)
+        {
+            HookCalled.Invoke(oldValue, newValue, intialState);
+        }
+    }
+
+    class MultipleOverloadsHookBehaviour : NetworkBehaviour
+    {
+        [SyncVar(hook = nameof(OnValueChanged), hookParameter = HookParameter.New)]
+        public int value = 0;
+
+        public event Action<int> HookCalled;
+        public event Action<int> NotHookCalled;
+
+        void OnValueChanged(int newValue)
+        {
+            HookCalled.Invoke(newValue);
+        }
+
+        void OnValueChanged(int newValue, int someOtherValue)
+        {
+            NotHookCalled.Invoke(newValue);
         }
     }
 
@@ -28,6 +73,19 @@ namespace Mirror.Tests
         void OnValueChanged(GameObject oldValue, GameObject newValue)
         {
             HookCalled.Invoke(oldValue, newValue);
+        }
+    }
+
+    class GameObjectHookBehaviourWithInitial : NetworkBehaviour
+    {
+        [SyncVar(hook = nameof(OnValueChanged), hookParameter = HookParameter.OldNewInitial)]
+        public GameObject value = null;
+
+        public event Action<GameObject, GameObject, bool> HookCalled;
+
+        void OnValueChanged(GameObject oldValue, GameObject newValue, bool initialState)
+        {
+            HookCalled.Invoke(oldValue, newValue, initialState);
         }
     }
 
@@ -166,10 +224,36 @@ namespace Mirror.Tests
         [Test]
         [TestCase(true)]
         [TestCase(false)]
-        public void Hook_CalledWhenSyncingChangedValue(bool intialState)
+        public void New_HookCalledWhenSyncingChangedValue(bool intialState)
         {
-            HookBehaviour serverObject = CreateObject<HookBehaviour>();
-            HookBehaviour clientObject = CreateObject<HookBehaviour>();
+            NewHookBehaviour serverObject = CreateObject<NewHookBehaviour>();
+            NewHookBehaviour clientObject = CreateObject<NewHookBehaviour>();
+
+            const int clientValue = 10;
+            const int serverValue = 24;
+
+            serverObject.value = serverValue;
+            clientObject.value = clientValue;
+
+            int callCount = 0;
+            clientObject.HookCalled += newValue =>
+            {
+                callCount++;
+                Assert.That(newValue, Is.EqualTo(serverValue));
+            };
+
+            bool written = SyncToClient(serverObject, clientObject, intialState);
+            Assert.IsTrue(written);
+            Assert.That(callCount, Is.EqualTo(1));
+        }
+
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void OldNew_HookCalledWhenSyncingChangedValue(bool intialState)
+        {
+            OldNewHookBehaviour serverObject = CreateObject<OldNewHookBehaviour>();
+            OldNewHookBehaviour clientObject = CreateObject<OldNewHookBehaviour>();
 
             const int clientValue = 10;
             const int serverValue = 24;
@@ -193,10 +277,64 @@ namespace Mirror.Tests
         [Test]
         [TestCase(true)]
         [TestCase(false)]
-        public void Hook_NotCalledWhenSyncingSameValue(bool intialState)
+        public void OldNewInitial_HookCalledWhenSyncingChangedValue(bool intialState)
         {
-            HookBehaviour serverObject = CreateObject<HookBehaviour>();
-            HookBehaviour clientObject = CreateObject<HookBehaviour>();
+            OldNewInitialHookBehaviour serverObject = CreateObject<OldNewInitialHookBehaviour>();
+            OldNewInitialHookBehaviour clientObject = CreateObject<OldNewInitialHookBehaviour>();
+
+            const int clientValue = 10;
+            const int serverValue = 24;
+
+            serverObject.value = serverValue;
+            clientObject.value = clientValue;
+
+            int callCount = 0;
+            clientObject.HookCalled += (oldValue, newValue, intial) =>
+            {
+                callCount++;
+                Assert.That(oldValue, Is.EqualTo(clientValue));
+                Assert.That(newValue, Is.EqualTo(serverValue));
+                Assert.That(intial, Is.EqualTo(intialState));
+            };
+
+            bool written = SyncToClient(serverObject, clientObject, intialState);
+            Assert.IsTrue(written);
+            Assert.That(callCount, Is.EqualTo(1));
+        }
+
+
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void New_HookNotCalledWhenSyncingSameValue(bool intialState)
+        {
+            NewHookBehaviour serverObject = CreateObject<NewHookBehaviour>();
+            NewHookBehaviour clientObject = CreateObject<NewHookBehaviour>();
+
+            const int clientValue = 16;
+            const int serverValue = 16;
+
+            serverObject.value = serverValue;
+            clientObject.value = clientValue;
+
+            int callCount = 0;
+            clientObject.HookCalled += newValue =>
+            {
+                callCount++;
+            };
+
+            bool written = SyncToClient(serverObject, clientObject, intialState);
+            Assert.IsTrue(written);
+            Assert.That(callCount, Is.EqualTo(0));
+        }
+
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void OldNew_HookNotCalledWhenSyncingSameValue(bool intialState)
+        {
+            OldNewHookBehaviour serverObject = CreateObject<OldNewHookBehaviour>();
+            OldNewHookBehaviour clientObject = CreateObject<OldNewHookBehaviour>();
 
             const int clientValue = 16;
             const int serverValue = 16;
@@ -213,6 +351,66 @@ namespace Mirror.Tests
             bool written = SyncToClient(serverObject, clientObject, intialState);
             Assert.IsTrue(written);
             Assert.That(callCount, Is.EqualTo(0));
+        }
+
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void OldNewInitial_HookOnlyCalledWhenSyncingSameValueIfIntial(bool intialState)
+        {
+            OldNewInitialHookBehaviour serverObject = CreateObject<OldNewInitialHookBehaviour>();
+            OldNewInitialHookBehaviour clientObject = CreateObject<OldNewInitialHookBehaviour>();
+
+            const int clientValue = 16;
+            const int serverValue = 16;
+
+            serverObject.value = serverValue;
+            clientObject.value = clientValue;
+
+            int callCount = 0;
+            clientObject.HookCalled += (oldValue, newValue, intial) =>
+            {
+                callCount++;
+                Assert.That(oldValue, Is.EqualTo(clientValue));
+                Assert.That(newValue, Is.EqualTo(serverValue));
+                Assert.That(intial, Is.EqualTo(intialState));
+            };
+
+            bool written = SyncToClient(serverObject, clientObject, intialState);
+            Assert.IsTrue(written);
+            Assert.That(callCount, Is.EqualTo(intialState ? 1 : 0));
+        }
+
+
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void MultipleMethods_HookCalledWhenSyncingChangedValue(bool intialState)
+        {
+            MultipleOverloadsHookBehaviour serverObject = CreateObject<MultipleOverloadsHookBehaviour>();
+            MultipleOverloadsHookBehaviour clientObject = CreateObject<MultipleOverloadsHookBehaviour>();
+
+            const int clientValue = 10;
+            const int serverValue = 24;
+
+            serverObject.value = serverValue;
+            clientObject.value = clientValue;
+
+            int hookCallCount = 0;
+            int notHookCallCount = 0;
+            clientObject.HookCalled += newValue =>
+            {
+                hookCallCount++;
+            };
+            clientObject.NotHookCalled += newValue =>
+            {
+                notHookCallCount++;
+            };
+
+            bool written = SyncToClient(serverObject, clientObject, intialState);
+            Assert.IsTrue(written);
+            Assert.That(hookCallCount, Is.EqualTo(1));
+            Assert.That(notHookCallCount, Is.EqualTo(0));
         }
 
         [Test]
@@ -267,6 +465,35 @@ namespace Mirror.Tests
             bool written = SyncToClient(serverObject, clientObject, intialState);
             Assert.IsTrue(written);
             Assert.That(callCount, Is.EqualTo(1));
+        }
+
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void GameObjectInitialHook_HookOnlyCalledWhenSyncingSameValueIfIntial(bool intialState)
+        {
+            GameObjectHookBehaviourWithInitial serverObject = CreateObject<GameObjectHookBehaviourWithInitial>();
+            GameObjectHookBehaviourWithInitial clientObject = CreateObject<GameObjectHookBehaviourWithInitial>();
+
+            GameObject target = CreateNetworkIdentity(2034).gameObject;
+            GameObject clientValue = target;
+            GameObject serverValue = target;
+
+            serverObject.value = serverValue;
+            clientObject.value = clientValue;
+
+            int callCount = 0;
+            clientObject.HookCalled += (oldValue, newValue, intial) =>
+            {
+                callCount++;
+                Assert.That(oldValue, Is.EqualTo(clientValue));
+                Assert.That(newValue, Is.EqualTo(serverValue));
+                Assert.That(intial, Is.EqualTo(intialState));
+            };
+
+            bool written = SyncToClient(serverObject, clientObject, intialState);
+            Assert.IsTrue(written);
+            Assert.That(callCount, Is.EqualTo(intialState ? 1 : 0));
         }
 
         [Test]
