@@ -1,4 +1,5 @@
 using Mirror;
+
 namespace WeaverSyncVarHookTests.FindsExplicitOldNewInitialHookWithOtherOverloads
 {
     class FindsExplicitOldNewInitialHookWithOtherOverloads : NetworkBehaviour
