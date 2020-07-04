@@ -41,21 +41,21 @@ function toggleCanvasWithNoFailures() {
 	    }
 	}
 }
-var testRuns = [['mirror_master','07/04/2020','14:39:29'], ['mirror_avoidupdate','07/04/2020','14:38:35'], ['mirror_avoidupdate2','07/04/2020','14:38:59']];
-var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_Aggregated_Values = ['1.31', '1.14', '1.32'];
-var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_Median_Values = ['1.20', '1.13', '1.18'];
-var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_Min_Values = ['1.05', '1.03', '1.06'];
-var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_Max_Values = ['4.38' ,'1.57' ,'5.80'];
-var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_Average_Values = ['1.31' ,'1.14' ,'1.32'];
-var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_Stdev_Values = ['0.38' ,'0.07' ,'0.57'];
-var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_Baseline_Values = ['1.31' ,'1.31' ,'1.31'];
-var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Time_Aggregated_Values = ['7.31', '6.05', '6.83'];
-var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Time_Median_Values = ['7.31', '6.05', '6.83'];
-var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Time_Min_Values = ['6.60', '5.66', '6.08'];
-var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Time_Max_Values = ['16.28' ,'6.82' ,'13.83'];
-var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Time_Average_Values = ['7.76' ,'6.08' ,'7.30'];
-var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Time_Stdev_Values = ['1.49' ,'0.23' ,'1.33'];
-var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Time_Baseline_Values = ['7.31' ,'7.31' ,'7.31'];
+var testRuns = [['mirror_master','07/04/2020','14:58:39'], ['mirror_avoidupdate','07/04/2020','14:57:42'], ['mirror_avoidupdate2','07/04/2020','14:58:08']];
+var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_Aggregated_Values = ['1.15', '1.02', '0.95'];
+var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_Median_Values = ['1.13', '1.01', '0.93'];
+var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_Min_Values = ['0.75', '0.89', '0.74'];
+var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_Max_Values = ['4.22' ,'1.42' ,'1.48'];
+var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_Average_Values = ['1.15' ,'1.02' ,'0.95'];
+var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_Stdev_Values = ['0.23' ,'0.08' ,'0.10'];
+var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_Baseline_Values = ['1.15' ,'1.15' ,'1.15'];
+var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Time_Aggregated_Values = ['7.42', '5.99', '5.79'];
+var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Time_Median_Values = ['7.42', '5.99', '5.79'];
+var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Time_Min_Values = ['5.91', '5.56', '5.16'];
+var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Time_Max_Values = ['10.86' ,'9.81' ,'9.40'];
+var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Time_Average_Values = ['7.52' ,'6.07' ,'5.85'];
+var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Time_Stdev_Values = ['0.73' ,'0.40' ,'0.43'];
+var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Time_Baseline_Values = ['7.42' ,'7.42' ,'7.42'];
 var Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_data = {
 	labels: testRuns,
 	datasets: [{
@@ -125,7 +125,7 @@ var std = Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Ne
 var baseAvg = Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_Average_Values[0];
 var currentAvg = Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_NetworkManagerLateUpdate_Average_Values[tooltipItems[0].index];
 var change = (currentAvg - baseAvg) / baseAvg * 100;
-var footermsg = ['Threshold: 0.15']; footermsg.push('Standard deviation: ' + std); footermsg.push('Sample count: 141'); footermsg.push('Average vs Baseline: ' + change.toFixed(2) + '%'); return footermsg;},
+var footermsg = ['Threshold: 0.15']; footermsg.push('Standard deviation: ' + std); footermsg.push('Sample count: 321'); footermsg.push('Average vs Baseline: ' + change.toFixed(2) + '%'); return footermsg;},
 },
 footerFontStyle: 'normal'
 },
@@ -180,7 +180,7 @@ var std = Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Ti
 var baseAvg = Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Time_Average_Values[0];
 var currentAvg = Mirror_Tests_Performance_Runtime_Benchmark2kPerformance_Benchmark2k_Time_Average_Values[tooltipItems[0].index];
 var change = (currentAvg - baseAvg) / baseAvg * 100;
-var footermsg = ['Threshold: 0.15']; footermsg.push('Standard deviation: ' + std); footermsg.push('Sample count: 120'); footermsg.push('Average vs Baseline: ' + change.toFixed(2) + '%'); return footermsg;},
+var footermsg = ['Threshold: 0.15']; footermsg.push('Standard deviation: ' + std); footermsg.push('Sample count: 300'); footermsg.push('Average vs Baseline: ' + change.toFixed(2) + '%'); return footermsg;},
 },
 footerFontStyle: 'normal'
 },
