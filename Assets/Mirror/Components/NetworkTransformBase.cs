@@ -45,9 +45,9 @@ namespace Mirror
         protected abstract Transform targetComponent { get; }
 
         // server
-        Vector3 lastPosition;
-        Quaternion lastRotation;
-        Vector3 lastScale;
+        internal Vector3 lastPosition;
+        internal Quaternion lastRotation;
+        internal Vector3 lastScale;
 
         // client
         public class DataPoint
@@ -284,8 +284,25 @@ namespace Mirror
             return timeSinceGoalReceived > difference * 5;
         }
 
+        internal bool HasEitherMovedRotatedScaled()
+        {
+            Transform tranform = targetComponent.transform;
+            Vector3 localPos = tranform.localPosition;
+            Quaternion localRot = tranform.localRotation;
+            Vector3 localSca = tranform.localScale;
+
+            bool changed = HasEitherMovedRotatedScaled_Optmised(localPos, localRot, localSca);
+            if (changed)
+            {
+                // local position/rotation for VR support
+                lastPosition = localPos;
+                lastRotation = localRot;
+                lastScale = localSca;
+            }
+            return changed;
+        }
         // moved since last time we checked it?
-        bool HasEitherMovedRotatedScaled()
+        internal bool HasEitherMovedRotatedScaled_OLD()
         {
             // moved or rotated or scaled?
             // local position/rotation/scale for VR support
@@ -308,6 +325,95 @@ namespace Mirror
             return change;
         }
 
+        internal bool HasEitherMovedRotatedScaled_alt1(Vector3 localPos, Quaternion localRot, Vector3 localSca)
+        {
+            // moved or rotated or scaled?
+            // local position/rotation/scale for VR support
+            bool moved = Vector3.Distance(lastPosition, localPos) > localPositionSensitivity;
+            bool scaled = Vector3.Distance(lastScale, localSca) > localScaleSensitivity;
+            bool rotated = Quaternion.Angle(lastRotation, localRot) > localRotationSensitivity;
+
+
+            // save last for next frame to compare
+            // (only if change was detected. otherwise slow moving objects might
+            //  never sync because of C#'s float comparison tolerance. see also:
+            //  https://github.com/vis2k/Mirror/pull/428)
+            bool change = moved || rotated || scaled;
+
+            return change;
+        }
+
+        internal bool HasEitherMovedRotatedScaled_alt2(Vector3 localPos, Quaternion localRot, Vector3 localSca)
+        {
+            // moved or rotated or scaled?
+            // local position/rotation/scale for VR support
+
+
+            // save last for next frame to compare
+            // (only if change was detected. otherwise slow moving objects might
+            //  never sync because of C#'s float comparison tolerance. see also:
+            //  https://github.com/vis2k/Mirror/pull/428)
+            bool change = Vector3.Distance(lastPosition, localPos) > localPositionSensitivity
+                || Quaternion.Angle(lastRotation, localRot) > localRotationSensitivity
+                || Vector3.Distance(lastScale, localSca) > localScaleSensitivity;
+
+            return change;
+        }
+        internal static bool HasChanged(Vector3 v1, Vector3 v2, float sens)
+        {
+            return false;
+        }
+
+        internal bool HasEitherMovedRotatedScaled_Optmised(Vector3 localPos, Quaternion localRot, Vector3 localSca)
+        {
+            // check position
+            Vector3 pos1 = localPos;
+            Vector3 pos2 = lastPosition;
+            float sqPosSens = localPositionSensitivity * localPositionSensitivity;
+
+            float dx = pos1.x - pos2.x;
+            float dy = pos1.y - pos2.y;
+            float dz = pos1.z - pos2.z;
+            bool changed = (dx * dx + dy * dy + dz * dz) > sqPosSens;
+
+            if (changed)
+            {
+                return true;
+            }
+
+
+            // check rotation
+            Quaternion rot1 = localRot;
+            Quaternion rot2 = lastRotation;
+            float rotSens = localRotationSensitivity;
+
+            double dot = rot1.x * rot2.x + rot1.y * rot2.y + rot1.z * rot2.z + rot1.w * rot2.w;
+            double angle = (dot < 0.999999f) ? (System.Math.Acos(System.Math.Min(System.Math.Abs(dot), 1f)) * 2f * Mathf.Rad2Deg) : 0f;
+            changed = angle > rotSens;
+            if (changed)
+            {
+                return true;
+            }
+
+            // check scale
+            Vector3 sca1 = localSca;
+            Vector3 sca2 = lastScale;
+            float sqscaleSens = localScaleSensitivity * localScaleSensitivity;
+
+            dx = sca1.x - sca2.x;
+            dy = sca1.y - sca2.y;
+            dz = sca1.z - sca2.z;
+            changed = (dx * dx + dy * dy + dz * dz) > sqscaleSens;
+
+            if (changed)
+            {
+                return true;
+            }
+
+
+            return false;
+        }
+
         // set position carefully depending on the target component
         void ApplyPositionRotationScale(Vector3 position, Quaternion rotation, Vector3 scale)
         {
@@ -317,18 +423,20 @@ namespace Mirror
             targetComponent.transform.localScale = scale;
         }
 
-        void Update()
+        private void Update()
         {
-            // if server then always sync to others.
             if (isServer)
             {
+                //// check only each 'syncInterval'
+                //if (Time.time - lastClientSendTime >= syncInterval)
+                //{
                 // just use OnSerialize via SetDirtyBit only sync when position
                 // changed. set dirty bits 0 or 1
                 SetDirtyBit(HasEitherMovedRotatedScaled() ? 1UL : 0UL);
+                //    lastClientSendTime = Time.time;
+                //}
             }
-
-            // no 'else if' since host mode would be both
-            if (isClient)
+            else if (isClient)
             {
                 // send to server if we have local authority (and aren't the server)
                 // -> only if connectionToServer has been initialized yet too
