@@ -929,7 +929,7 @@ namespace Mirror.Weaver
             {
                 if (callType == RemoteCallType.Command)
                 {
-                    Weaver.Error($"{method.Name} has invalid parameter {param}, Cannot pass NetworkConnections. Instead use 'NetworkConnectionToClient conn = null' to get the sender's connection on the server", method);
+                    Weaver.Error($"{method.Name} has invalid parameter {param}, Cannot pass NetworkConnections. Instead use '[SenderConnection] NetworkConnection conn = null' to get the sender's connection on the server", method);
                 }
                 else
                 {
@@ -955,12 +955,13 @@ namespace Mirror.Weaver
                 return false;
             }
 
-            TypeReference type = param.ParameterType;
+            // Sender Param must be a NetworkConnection
+            if (param.ParameterType.FullName != Weaver.NetworkConnectionType.FullName)
+            {
+                return false;
+            }
 
-            const string ConnectionToClient = "Mirror.NetworkConnectionToClient";
-            bool isConnectionToClient = type.FullName == ConnectionToClient || type.Resolve().IsDerivedFrom(ConnectionToClient);
-
-            return isConnectionToClient;
+            return param.HasCustomAttribute("Mirror.SenderConnectionAttribute");
         }
 
         void ProcessMethods()

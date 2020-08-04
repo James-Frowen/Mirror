@@ -5,7 +5,7 @@ namespace WeaverCommandTests.CommandThatIgnoresAuthorityWithSenderConnection
     class CommandThatIgnoresAuthorityWithSenderConnection : NetworkBehaviour
     {
         [Command(ignoreAuthority = true)]
-        void CmdFunction(NetworkConnectionToClient connection = null)
+        void CmdFunction([SenderConnection] NetworkConnection connection = null)
         {
             // do something
         }
