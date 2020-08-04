@@ -1,6 +1,5 @@
 using Mirror;
 
-
 namespace WeaverSyncVarHookTests.FindsHookWithNetworkIdentity
 {
     class FindsHookWithNetworkIdentity : NetworkBehaviour
