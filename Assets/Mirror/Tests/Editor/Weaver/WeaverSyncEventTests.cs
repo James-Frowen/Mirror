@@ -2,26 +2,26 @@ using NUnit.Framework;
 
 namespace Mirror.Weaver.Tests
 {
-    public class WeaverSyncEventTests : WeaverTestsBuildFromTestName
+    public class WeaverSyncEventTests : BatchedWeaverTests
     {
-        [Test]
+        [BatchedTest(true)]
         public void SyncEventValid()
         {
-            Assert.That(weaverErrors, Is.Empty);
+            Assert.Pass();
         }
 
-        [Test]
+        [BatchedTest(true)]
         public void MultipleSyncEvent()
         {
-            Assert.That(weaverErrors, Is.Empty);
+            Assert.Pass();
         }
 
-        [Test]
+        [BatchedTest(false)]
         public void ErrorWhenSyncEventUsesGenericParameter()
         {
-            Assert.That(weaverErrors, Contains.Item("EventDoCoolThingsWithExcitingPeople must not have generic parameters.  " +
+            AssertHasError("EventDoCoolThingsWithExcitingPeople must not have generic parameters.  " +
                 "Consider creating a new class that inherits from WeaverSyncEventTests.ErrorWhenSyncEventUsesGenericParameter.ErrorWhenSyncEventUsesGenericParameter/MySyncEventDelegate`1<System.Int32> instead " +
-                "(at WeaverSyncEventTests.ErrorWhenSyncEventUsesGenericParameter.ErrorWhenSyncEventUsesGenericParameter/MySyncEventDelegate`1<System.Int32> WeaverSyncEventTests.ErrorWhenSyncEventUsesGenericParameter.ErrorWhenSyncEventUsesGenericParameter::EventDoCoolThingsWithExcitingPeople)"));
+                "(at WeaverSyncEventTests.ErrorWhenSyncEventUsesGenericParameter.ErrorWhenSyncEventUsesGenericParameter/MySyncEventDelegate`1<System.Int32> WeaverSyncEventTests.ErrorWhenSyncEventUsesGenericParameter.ErrorWhenSyncEventUsesGenericParameter::EventDoCoolThingsWithExcitingPeople)");
         }
     }
 }

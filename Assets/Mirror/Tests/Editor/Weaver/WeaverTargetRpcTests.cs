@@ -2,62 +2,62 @@ using NUnit.Framework;
 
 namespace Mirror.Weaver.Tests
 {
-    public class WeaverTargetRpcTests : WeaverTestsBuildFromTestName
+    public class WeaverTargetRpcTests : BatchedWeaverTests
     {
-        [Test]
+        [BatchedTest(true)]
         public void TargetRpcValid()
         {
-            Assert.That(weaverErrors, Is.Empty);
+            Assert.Pass();
         }
 
-        [Test]
+        [BatchedTest(false)]
         public void ErrorWhenTargetRpcIsStatic()
         {
-            Assert.That(weaverErrors, Contains.Item("TargetCantBeStatic must not be static " +
-                "(at System.Void WeaverTargetRpcTests.ErrorWhenTargetRpcIsStatic.ErrorWhenTargetRpcIsStatic::TargetCantBeStatic(Mirror.NetworkConnection))"));
+            AssertHasError("TargetCantBeStatic must not be static " +
+                "(at System.Void WeaverTargetRpcTests.ErrorWhenTargetRpcIsStatic.ErrorWhenTargetRpcIsStatic::TargetCantBeStatic(Mirror.NetworkConnection))");
         }
 
-        [Test]
+        [BatchedTest(true)]
         public void TargetRpcCanSkipNetworkConnection()
         {
-            Assert.That(weaverErrors, Is.Empty);
+            Assert.Pass();
         }
 
-        [Test]
+        [BatchedTest(true)]
         public void TargetRpcCanHaveOtherParametersWhileSkipingNetworkConnection()
         {
-            Assert.That(weaverErrors, Is.Empty);
+            Assert.Pass();
         }
 
-        [Test]
+        [BatchedTest(false)]
         public void ErrorWhenNetworkConnectionIsNotTheFirstParameter()
         {
-            Assert.That(weaverErrors, Contains.Item($"TargetRpcMethod has invalid parameter nc. Cannot pass NetworkConnections " +
-                "(at System.Void WeaverTargetRpcTests.ErrorWhenNetworkConnectionIsNotTheFirstParameter.ErrorWhenNetworkConnectionIsNotTheFirstParameter::TargetRpcMethod(System.Int32,Mirror.NetworkConnection))"));
+            AssertHasError($"TargetRpcMethod has invalid parameter nc. Cannot pass NetworkConnections " +
+                "(at System.Void WeaverTargetRpcTests.ErrorWhenNetworkConnectionIsNotTheFirstParameter.ErrorWhenNetworkConnectionIsNotTheFirstParameter::TargetRpcMethod(System.Int32,Mirror.NetworkConnection))");
         }
 
-        [Test]
+        [BatchedTest(true)]
         public void VirtualTargetRpc()
         {
-            Assert.That(weaverErrors, Is.Empty);
+            Assert.Pass();
         }
 
-        [Test]
+        [BatchedTest(true)]
         public void OverrideVirtualTargetRpc()
         {
-            Assert.That(weaverErrors, Is.Empty);
+            Assert.Pass();
         }
 
-        [Test]
+        [BatchedTest(false)]
         public void AbstractTargetRpc()
         {
-            Assert.That(weaverErrors, Contains.Item("Abstract TargetRpc are currently not supported, use virtual method instead (at System.Void WeaverTargetRpcTests.AbstractTargetRpc.AbstractTargetRpc::TargetDoSomething())"));
+            AssertHasError("Abstract TargetRpc are currently not supported, use virtual method instead (at System.Void WeaverTargetRpcTests.AbstractTargetRpc.AbstractTargetRpc::TargetDoSomething())");
         }
 
-        [Test]
+        [BatchedTest(false)]
         public void OverrideAbstractTargetRpc()
         {
-            Assert.That(weaverErrors, Contains.Item("Abstract TargetRpc are currently not supported, use virtual method instead (at System.Void WeaverTargetRpcTests.OverrideAbstractTargetRpc.BaseBehaviour::TargetDoSomething())"));
+            AssertHasError("Abstract TargetRpc are currently not supported, use virtual method instead (at System.Void WeaverTargetRpcTests.OverrideAbstractTargetRpc.BaseBehaviour::TargetDoSomething())");
         }
     }
 }

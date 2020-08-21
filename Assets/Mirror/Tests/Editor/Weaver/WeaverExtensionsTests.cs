@@ -4,7 +4,7 @@ namespace Mirror.Weaver.Tests
 {
     public class WeaverExtensionsTests
     {
-        [Test]
+        [BatchedTest(true)]
         public void StripGenericParametersFromClassName()
         {
             Assert.That(Extensions.StripGenericParametersFromClassName("Type"), Is.EqualTo("Type"));
