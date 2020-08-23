@@ -39,22 +39,22 @@ namespace Mirror
         /// <summary>
         /// Notify subscribers when when this client establish a successful connection to the server
         /// </summary>
-        public event ClientConnect OnClientConnected;
+        public abstract event ClientConnect OnClientConnected;
 
         /// <summary>
         /// Notify subscribers when this client receive data from the server
         /// </summary>
-        public event ClientDataReceivedEvent OnClientDataReceived;
+        public abstract event ClientDataReceivedEvent OnClientDataReceived;
 
         /// <summary>
         /// Notify subscribers when this client encounters an error communicating with the server
         /// </summary>
-        public event ClientException OnClientError;
+        public abstract event ClientException OnClientError;
 
         /// <summary>
         /// Notify subscribers when this client disconnects from the server
         /// </summary>
-        public event ClientDisconnect OnClientDisconnected;
+        public abstract event ClientDisconnect OnClientDisconnected;
 
         /// <summary>
         /// Determines if we are currently connected to the server
@@ -108,22 +108,22 @@ namespace Mirror
         /// <summary>
         /// Notify subscribers when a client connects to this server
         /// </summary>
-        public event ServerConnect OnServerConnected;
+        public abstract event ServerConnect OnServerConnected;
 
         /// <summary>
         /// Notify subscribers when this server receives data from the client
         /// </summary>
-        public event ServerDataReceivedEvent OnServerDataReceived;
+        public abstract event ServerDataReceivedEvent OnServerDataReceived;
 
         /// <summary>
         /// Notify subscribers when this server has some problem communicating with the client
         /// </summary>
-        public event ServerException OnServerError;
+        public abstract event ServerException OnServerError;
 
         /// <summary>
         /// Notify subscribers when a client disconnects from this server
         /// </summary>
-        public event ServerDisconnect OnServerDisconnected;
+        public abstract event ServerDisconnect OnServerDisconnected;
 
         /// <summary>
         /// Determines if the server is up and running
