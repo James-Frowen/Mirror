@@ -11,13 +11,47 @@ namespace Mirror
 
         Transport available;
 
+        // used to partition recipients for each one of the base transports
+        // without allocating a new list every time
+        List<int>[] recipientsCache;
+
+
+        public override event ClientConnect OnClientConnected
+        {
+            add => available.OnClientConnected += value;
+            remove => available.OnClientConnected -= value;
+        }
+
+        public override event ClientDataReceivedEvent OnClientDataReceived
+        {
+            add => available.OnClientDataReceived += value;
+            remove => available.OnClientDataReceived -= value;
+        }
+
+        public override event ClientException OnClientError
+        {
+            add => available.OnClientError += value;
+            remove => available.OnClientError -= value;
+        }
+
+        public override event ClientDisconnect OnClientDisconnected
+        {
+            add => available.OnClientDisconnected += value;
+            remove => available.OnClientDisconnected -= value;
+        }
+
+        public override event ServerConnect OnServerConnected;
+        public override event ServerDataReceivedEvent OnServerDataReceived;
+        public override event ServerException OnServerError;
+        public override event ServerDisconnect OnServerDisconnected;
+
+
         public void Awake()
         {
             if (transports == null || transports.Length == 0)
             {
                 Debug.LogError("Multiplex transport requires at least 1 underlying transport");
             }
-            InitClient();
             InitServer();
         }
 
@@ -51,18 +85,6 @@ namespace Mirror
         }
 
         #region Client
-        // clients always pick the first transport
-        void InitClient()
-        {
-            // wire all the base transports to my events
-            foreach (Transport transport in transports)
-            {
-                transport.OnClientConnected.AddListener(OnClientConnected.Invoke);
-                transport.OnClientDataReceived.AddListener(OnClientDataReceived.Invoke);
-                transport.OnClientError.AddListener(OnClientError.Invoke);
-                transport.OnClientDisconnected.AddListener(OnClientDisconnected.Invoke);
-            }
-        }
 
         public override void ClientConnect(string address)
         {
@@ -148,24 +170,24 @@ namespace Mirror
                 int locali = i;
                 Transport transport = transports[i];
 
-                transport.OnServerConnected.AddListener(baseConnectionId =>
+                transport.OnServerConnected += baseConnectionId =>
                 {
                     OnServerConnected.Invoke(FromBaseId(locali, baseConnectionId));
-                });
+                };
 
-                transport.OnServerDataReceived.AddListener((baseConnectionId, data, channel) =>
-                {
-                    OnServerDataReceived.Invoke(FromBaseId(locali, baseConnectionId), data, channel);
-                });
+                transport.OnServerDataReceived += (baseConnectionId, data, channel) =>
+                 {
+                     OnServerDataReceived.Invoke(FromBaseId(locali, baseConnectionId), data, channel);
+                 };
 
-                transport.OnServerError.AddListener((baseConnectionId, error) =>
-                {
-                    OnServerError.Invoke(FromBaseId(locali, baseConnectionId), error);
-                });
-                transport.OnServerDisconnected.AddListener(baseConnectionId =>
-                {
-                    OnServerDisconnected.Invoke(FromBaseId(locali, baseConnectionId));
-                });
+                transport.OnServerError += (baseConnectionId, error) =>
+                 {
+                     OnServerError.Invoke(FromBaseId(locali, baseConnectionId), error);
+                 };
+                transport.OnServerDisconnected += baseConnectionId =>
+                 {
+                     OnServerDisconnected.Invoke(FromBaseId(locali, baseConnectionId));
+                 };
             }
         }
 

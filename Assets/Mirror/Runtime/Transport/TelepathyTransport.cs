@@ -37,6 +37,15 @@ namespace Mirror
         protected Telepathy.Client client = new Telepathy.Client();
         protected Telepathy.Server server = new Telepathy.Server();
 
+        public override event ClientConnect OnClientConnected;
+        public override event ClientDataReceivedEvent OnClientDataReceived;
+        public override event ClientException OnClientError;
+        public override event ClientDisconnect OnClientDisconnected;
+        public override event ServerConnect OnServerConnected;
+        public override event ServerDataReceivedEvent OnServerDataReceived;
+        public override event ServerException OnServerError;
+        public override event ServerDisconnect OnServerDisconnected;
+
         void Awake()
         {
             // tell Telepathy to use Unity's Debug.Log
