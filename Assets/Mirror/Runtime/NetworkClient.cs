@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace Mirror
 {
+    public interface INetworkClient
+    {
+        bool active { get; }
+    }
     public enum ConnectState
     {
         None,
@@ -18,6 +22,7 @@ namespace Mirror
     /// <para><see cref="NetworkClient">NetworkClient</see> has an internal update function where it handles events from the transport layer. This includes asynchronous connect events, disconnect events and incoming data from a server.</para>
     /// <para>The <see cref="NetworkManager">NetworkManager</see> has a NetworkClient instance that it uses for games that it starts, but the NetworkClient may be used by itself.</para>
     /// </summary>
+    [Obsolete("Use INetworkClient instead", true)]
     public static class NetworkClient
     {
         static readonly ILogger logger = LogFactory.GetLogger(typeof(NetworkClient));

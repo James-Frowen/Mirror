@@ -6,6 +6,16 @@ using UnityEngine;
 
 namespace Mirror
 {
+    public interface INetworkServer
+    {
+        bool active { get; }
+        IReadOnlyDictionary<int, NetworkConnection> connections { get; }
+        NetworkConnection localConnection { get; }
+
+        void SendToReady(NetworkIdentity identity, RpcMessage message, bool includeOwner, int? channelId = null);
+        void Destroy(GameObject gameObject);
+        void SendSpawnMessage(NetworkIdentity networkIdentity, NetworkConnection conn);
+    }
     /// <summary>
     /// The NetworkServer.
     /// </summary>
@@ -16,6 +26,8 @@ namespace Mirror
     /// <para>The set of networked objects that have been spawned is managed by NetworkServer. Objects are spawned with NetworkServer.Spawn() which adds them to this set, and makes them be created on clients. Spawned objects are removed automatically when they are destroyed, or than they can be removed from the spawned set by calling NetworkServer.UnSpawn() - this does not destroy the object.</para>
     /// <para>There are a number of internal messages used by NetworkServer, these are setup when NetworkServer.Listen() is called.</para>
     /// </remarks>
+
+    [Obsolete("Use INetworkServer instead", true)]
     public static class NetworkServer
     {
         static readonly ILogger logger = LogFactory.GetLogger(typeof(NetworkServer));
@@ -128,7 +140,7 @@ namespace Mirror
                 {
                     if (identity.sceneId != 0)
                     {
-                        identity.Reset();
+                        identity.ClearState();
                         identity.gameObject.SetActive(false);
                     }
                     else
@@ -1114,7 +1126,7 @@ namespace Mirror
         static ArraySegment<byte> CreateSpawnMessagePayload(bool isOwner, NetworkIdentity identity, PooledNetworkWriter ownerWriter, PooledNetworkWriter observersWriter)
         {
             // Only call OnSerializeAllSafely if there are NetworkBehaviours
-            if (identity.NetworkBehaviours.Length == 0)
+            if (identity.Behaviours.Count == 0)
             {
                 return default;
             }
