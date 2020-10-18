@@ -201,6 +201,10 @@ namespace Mirror
         //    during FinishLoadScene.
         public NetworkManagerMode mode { get; private set; }
 
+
+        private ServerSceneManager serverSceneManager;
+        private ClientSceneManager clientSceneManager;
+
         #region Unity Callbacks
 
         /// <summary>
@@ -737,6 +741,8 @@ namespace Mirror
 
             // Network Server initially registers its own handler for this, so we replace it here.
             NetworkServer.ReplaceHandler<ReadyMessage>(OnServerReadyMessageInternal);
+
+            serverSceneManager = new ServerSceneManager();
         }
 
         void RegisterClientMessages()
@@ -746,6 +752,8 @@ namespace Mirror
             NetworkClient.RegisterHandler<NotReadyMessage>(OnClientNotReadyMessageInternal);
             NetworkClient.RegisterHandler<ErrorMessage>(OnClientErrorInternal, false);
             NetworkClient.RegisterHandler<SceneMessage>(OnClientSceneInternal, false);
+
+            clientSceneManager = new ClientSceneManager();
 
             if (playerPrefab != null)
             {

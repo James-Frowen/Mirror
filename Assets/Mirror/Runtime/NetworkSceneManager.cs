@@ -5,181 +5,185 @@ using UnityEngine.SceneManagement;
 
 namespace Mirror
 {
-    public interface IMessageWithNetId
+    public interface INetworkSceneManager
     {
-        uint NetId { get; }
+        event Action<LoadSceneMessage, AsyncOperation> onLoadStarted;
+        event Action<LoadSceneMessage, AsyncOperation> onLoadFinished;
+        event Action<UnloadSceneMessage, AsyncOperation> onUnloadStarted;
+        event Action<UnloadSceneMessage, AsyncOperation> onUnloadFinished;
     }
+    public class ClientSceneManager : INetworkSceneManager
+    {
+        static readonly ILogger logger = LogFactory.GetLogger<ClientSceneManager>();
+
+        public event Action<LoadSceneMessage, AsyncOperation> onLoadStarted;
+        public event Action<LoadSceneMessage, AsyncOperation> onLoadFinished;
+        public event Action<UnloadSceneMessage, AsyncOperation> onUnloadStarted;
+        public event Action<UnloadSceneMessage, AsyncOperation> onUnloadFinished;
+
+        public ClientSceneManager()
+        {
+            NetworkClient.RegisterHandler<LoadSceneMessage>(LoadSceneHandler);
+            NetworkClient.RegisterHandler<UnloadSceneMessage>(UnloadSceneHandler);
+        }
+
+        private void LoadSceneHandler(NetworkConnection conn, LoadSceneMessage msg)
+        {
+            PauseTransport();
+
+            AsyncOperation asyncOp = SceneManager.LoadSceneAsync(msg.nameOrPath, msg.mode);
+            onLoadStarted?.Invoke(msg, asyncOp);
+
+            // send message on finish
+            asyncOp.completed += _ =>
+            {
+                ResumeTransport();
+
+                conn.Send(new LoadSceneFinishedMessage { operationIndex = msg.operationIndex });
+
+                onLoadFinished?.Invoke(msg, asyncOp);
+
+                // todo finish this method
+                handleNewSceneObjects();
+            };
+        }
+
+        private void handleNewSceneObjects()
+        {
+            // todo manage 
+            ////ClientScene.PrepareToSpawnSceneObjects();
+            //// invoke message locally
+            //NetworkClient.connection.InvokeHandler(new ObjectSpawnStartedMessage(), -1);
+            //// spawn all objects
+            //while (spawnQueue.Count > 0)
+            //{
+            //    ClientScene.OnSpawn(spawnQueue.Dequeue());
+            //}
+            //// invoke locally
+            //NetworkClient.connection.InvokeHandler(new ObjectSpawnFinishedMessage(), -1);
+        }
+
+        private static void PauseTransport()
+        {
+            // vis2k: pause message handling while loading scene. otherwise we will process messages and then lose all
+            // the state as soon as the load is finishing, causing all kinds of bugs because of missing state.
+            // (client may be null after StopClient etc.)
+            if (logger.LogEnabled()) logger.Log("ClientChangeScene: pausing handlers while scene is loading to avoid data loss after scene was loaded.");
+            Transport.activeTransport.enabled = false;
+        }
+        private static void ResumeTransport()
+        {
+            // process queued messages that we received while loading the scene
+            logger.Log("FinishLoadScene: resuming handlers after scene was loading.");
+            Transport.activeTransport.enabled = true;
+        }
+
+        private void UnloadSceneHandler(NetworkConnection conn, UnloadSceneMessage msg)
+        {
+            PauseTransport();
+
+            AsyncOperation asyncOp = SceneManager.UnloadSceneAsync(msg.nameOrPath, msg.options);
+            onUnloadStarted?.Invoke(msg, asyncOp);
+
+            // send message on finish
+            asyncOp.completed += _ =>
+            {
+                if (logger.LogEnabled()) logger.Log("ClientChangeScene done readyCon:" + NetworkClient.connection);
+
+                ResumeTransport();
+                conn.Send(new LoadSceneFinishedMessage { operationIndex = msg.operationIndex });
+                onUnloadFinished?.Invoke(msg, asyncOp);
+
+                handleNewSceneObjects();
+            };
+        }
+    }
+
     /// <summary>
     /// Manager scenes over the network
     /// <para>Keeps track of: which scenes are loaded on clients, message to scene objects on clients which may not be loaded yet</para>
     /// </summary>
-    public class NetworkSceneManager
+    public class ServerSceneManager : INetworkSceneManager
     {
-        Dictionary<NetworkConnection, SceneData> connectioScenes = new Dictionary<NetworkConnection, SceneData>();
-        SceneData serverScenes;
-        int _OperationIndex;
-        int NextOperationIndex => _OperationIndex++;
+        static readonly ILogger logger = LogFactory.GetLogger<ServerSceneManager>();
+        Dictionary<int, Scene> localScenes;
 
-        Dictionary<int, Operation> operations = new Dictionary<int, Operation>();
-        private bool isLoading;
-        private Queue<IMessageWithNetId> messageQueue = new Queue<IMessageWithNetId>();
+        int _loadId;
+        int GetGetNextLoadId() => _loadId++;
 
-        public NetworkSceneManager()
+        public event Action<LoadSceneMessage, AsyncOperation> onLoadStarted;
+        public event Action<LoadSceneMessage, AsyncOperation> onLoadFinished;
+        public event Action<UnloadSceneMessage, AsyncOperation> onUnloadStarted;
+        public event Action<UnloadSceneMessage, AsyncOperation> onUnloadFinished;
+
+        public event Action<LoadSceneFinishedMessage, NetworkConnection> onClientLoadFinished;
+        public event Action<UnloadSceneFinishedMessage, NetworkConnection> onClientUnloadFinished;
+
+
+        // todo keep track of what scenes are loaded on each connection
+        //Dictionary<NetworkConnection, SceneData> connectioScenes = new Dictionary<NetworkConnection, SceneData>();
+        //SceneData serverScenes;
+        //void OnConnect(NetworkConnection conn)
+        //{
+        //    //connectioScenes.Add(conn, new SceneData());
+        //}
+        //void OnDisconnect(NetworkConnection conn)
+        //{
+        //    //connectioScenes.Remove(conn);
+        //}
+
+        public ServerSceneManager()
         {
-            NetworkClient.RegisterHandler<LoadSceneMessage>(LoadSceneHandler);
-            NetworkClient.RegisterHandler<UnloadSceneMessage>(UnloadSceneHandler);
-
             NetworkServer.RegisterHandler<LoadSceneFinishedMessage>(LoadSceneFinishedHandler);
             NetworkServer.RegisterHandler<UnloadSceneFinishedMessage>(UnloadSceneFinishedHandler);
-
-            // todo find a way to get existing handler when replacing
-            NetworkClient.ReplaceHandler<SpawnMessage>(SpawnMessageHandler);
-            NetworkClient.ReplaceHandler<UpdateVarsMessage>(UpdateVarsMessageHandler);
-            NetworkClient.ReplaceHandler<ObjectHideMessage>(ObjectHideMessageHandler);
-            NetworkClient.ReplaceHandler<ObjectDestroyMessage>(ObjectDestroyMessageHandler);
-        }
-
-        private void ObjectDestroyMessageHandler(ObjectDestroyMessage msg)
-        {
-            if (isLoading)
-            {
-                messageQueue.Enqueue(msg);
-            }
-            else
-            {
-                ClientScene.OnSpawn(msg);
-            }
-        }
-
-        private void ObjectHideMessageHandler(ObjectHideMessage msg)
-        {
-            if (isLoading)
-            {
-                messageQueue.Enqueue(msg);
-            }
-            else
-            {
-                ClientScene.OnSpawn(msg);
-            }
-        }
-
-        private void UpdateVarsMessageHandler(UpdateVarsMessage msg)
-        {
-            if (isLoading)
-            {
-                messageQueue.Enqueue(msg);
-            }
-            else
-            {
-                ClientScene.OnSpawn(msg);
-            }
-        }
-
-        void SpawnMessageHandler(SpawnMessage msg)
-        {
-            if (isLoading)
-            {
-                messageQueue.Enqueue(msg);
-            }
-            else
-            {
-                ClientScene.OnSpawn(msg);
-            }
-        }
-
-        private void LoadSceneFinishedHandler(NetworkConnection conn, LoadSceneFinishedMessage msg)
-        {
-
-        }
-        private void UnloadSceneFinishedHandler(NetworkConnection conn, UnloadSceneFinishedMessage msg)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        private void LoadSceneHandler(NetworkConnection conn, LoadSceneMessage msg)
-        {
-            isLoading = true;
-            // load
-            AsyncOperation asyncOp = SceneManager.LoadSceneAsync(msg.nameOrPath, msg.mode);
-            // on finish send message
-            asyncOp.completed += _ =>
-            {
-                isLoading = false;
-                conn.Send(new LoadSceneFinishedMessage { operationIndex = msg.operationIndex });
-                //ClientScene.PrepareToSpawnSceneObjects();
-                // invoke message locally
-                NetworkClient.connection.InvokeHandler(new ObjectSpawnStartedMessage(), -1);
-                // spawn all objects
-                while (spawnQueue.Count > 0)
-                {
-                    ClientScene.OnSpawn(spawnQueue.Dequeue());
-                }
-                // invoke locally
-                NetworkClient.connection.InvokeHandler(new ObjectSpawnFinishedMessage(), -1);
-            };
-        }
-        private void UnloadSceneHandler(NetworkConnection conn, UnloadSceneMessage msg)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        void OnConnect(NetworkConnection conn)
-        {
-            connectioScenes.Add(conn, new SceneData());
-        }
-        void OnDisconnect(NetworkConnection conn)
-        {
-            connectioScenes.Remove(conn);
         }
 
         public void LoadSceneForAll(string nameOrPath, LoadSceneMode loadSceneMode = default)
         {
             AsyncOperation asyncOp = SceneManager.LoadSceneAsync(nameOrPath, loadSceneMode);
-            Operation op = new Operation(asyncOp, NextOperationIndex);
-            operations.Add(op.index, op);
-            NetworkServer.SendToAll(new LoadSceneMessage
+            int nextId = GetGetNextLoadId();
+            LoadSceneMessage msg = new LoadSceneMessage
             {
                 nameOrPath = nameOrPath,
                 mode = loadSceneMode,
-                operationIndex = op.index,
-            });
+                operationIndex = nextId,
+            };
+            NetworkServer.SendToAll(msg);
+            onLoadStarted?.Invoke(msg, asyncOp);
             asyncOp.completed += _ =>
             {
-                //Scene scene = SceneManager.GetSceneAt(SceneManager.sceneCount - 1);
-                // todo tell NetworkServer to only prepare objects in scene
-                NetworkServer.SpawnObjects();
+                onLoadStarted?.Invoke(msg, asyncOp);
             };
         }
+
+        private void LoadSceneFinishedHandler(NetworkConnection conn, LoadSceneFinishedMessage msg)
+        {
+            onClientLoadFinished?.Invoke(msg, conn);
+        }
+
         public void UnLoadSceneForAll(string nameOrPath, UnloadSceneOptions unloadSceneOptions = default)
         {
             AsyncOperation asyncOp = SceneManager.UnloadSceneAsync(nameOrPath, unloadSceneOptions);
-            Operation op = new Operation(asyncOp, NextOperationIndex);
-            operations.Add(op.index, op);
-            NetworkServer.SendToAll(new UnloadSceneMessage
+
+            int nextId = GetGetNextLoadId();
+            UnloadSceneMessage msg = new UnloadSceneMessage
             {
                 nameOrPath = nameOrPath,
                 options = unloadSceneOptions,
-                operationIndex = op.index,
-            });
+                operationIndex = nextId,
+            };
+            NetworkServer.SendToAll(msg);
+            onUnloadStarted?.Invoke(msg, asyncOp);
+            asyncOp.completed += _ =>
+            {
+                onUnloadFinished?.Invoke(msg, asyncOp);
+            };
         }
 
-    }
-    public class Operation
-    {
-        public readonly AsyncOperation op;
-        public readonly int index;
-
-        public Operation(AsyncOperation op, int index)
+        private void UnloadSceneFinishedHandler(NetworkConnection conn, UnloadSceneFinishedMessage msg)
         {
-            this.op = op ?? throw new ArgumentNullException(nameof(op));
-            this.index = index;
+            onClientUnloadFinished?.Invoke(msg, conn);
         }
-    }
-    public class SceneData
-    {
-
     }
 
     public struct LoadSceneMessage : NetworkMessage
