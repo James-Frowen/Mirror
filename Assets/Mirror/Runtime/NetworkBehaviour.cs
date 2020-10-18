@@ -24,7 +24,20 @@ namespace Mirror
     [HelpURL("https://mirror-networking.com/docs/Guides/NetworkBehaviour.html")]
     public abstract class NetworkBehaviour : MonoBehaviour
     {
+        const int INDEX_NOT_SET = -1;
         static readonly ILogger logger = LogFactory.GetLogger(typeof(NetworkBehaviour));
+
+        INetworkClient _client;
+        INetworkServer _server;
+
+        public void Setup(INetworkServer server, INetworkClient client, NetworkIdentity networkIdentity, int componentIndex)
+        {
+            _server = server;
+            _client = client;
+            Identity = networkIdentity;
+            ComponentIndex = componentIndex;
+        }
+
 
         internal float lastSyncTime;
 
@@ -45,20 +58,20 @@ namespace Mirror
 
         /// <summary>
         /// Returns true if this object is active on an active server.
-        /// <para>This is only true if the object has been spawned. This is different from NetworkServer.active, which is true if the server itself is active rather than this object being active.</para>
+        /// <para>This is only true if the object has been spawned. This is different from _server.active, which is true if the server itself is active rather than this object being active.</para>
         /// </summary>
-        public bool isServer => netIdentity.isServer;
+        public bool isServer => !(_server is null);
 
         /// <summary>
         /// Returns true if running as a client and this object was spawned by a server.
         /// </summary>
-        public bool isClient => netIdentity.isClient;
+        public bool isClient => !(_client is null);
 
         /// <summary>
         /// This returns true if this object is the one that represents the player on the local machine.
         /// <para>In multiplayer games, there are multiple instances of the Player object. The client needs to know which one is for "themselves" so that only that player processes input and potentially has a camera attached. The IsLocalPlayer function will return true only for the player instance that belongs to the player on the local machine, so it can be used to filter out input for non-local players.</para>
         /// </summary>
-        public bool isLocalPlayer => netIdentity.isLocalPlayer;
+        public bool isLocalPlayer => Identity.isLocalPlayer;
 
         /// <summary>
         /// True if this object only exists on the server
@@ -70,27 +83,29 @@ namespace Mirror
         /// </summary>
         public bool isClientOnly => isClient && !isServer;
 
+        public bool isHost => isClient && isServer;
+
         /// <summary>
         /// This returns true if this object is the authoritative version of the object in the distributed network application.
         /// <para>The <see cref="NetworkIdentity.hasAuthority">NetworkIdentity.hasAuthority</see> value on the NetworkIdentity determines how authority is determined. For most objects, authority is held by the server. For objects with <see cref="NetworkIdentity.hasAuthority">NetworkIdentity.hasAuthority</see> set, authority is held by the client of that player.</para>
         /// </summary>
-        public bool hasAuthority => netIdentity.hasAuthority;
+        public bool hasAuthority => Identity.hasAuthority;
 
         /// <summary>
         /// The unique network Id of this object.
         /// <para>This is assigned at runtime by the network server and will be unique for all objects for that network session.</para>
         /// </summary>
-        public uint netId => netIdentity.netId;
+        public uint netId => Identity.netId;
 
         /// <summary>
         /// The <see cref="NetworkConnection">NetworkConnection</see> associated with this <see cref="NetworkIdentity">NetworkIdentity.</see> This is only valid for player objects on the client.
         /// </summary>
-        public NetworkConnection connectionToServer => netIdentity.connectionToServer;
+        public NetworkConnection connectionToServer => Identity.connectionToServer;
 
         /// <summary>
         /// The <see cref="NetworkConnection">NetworkConnection</see> associated with this <see cref="NetworkIdentity">NetworkIdentity.</see> This is only valid for player objects on the server.
         /// </summary>
-        public NetworkConnection connectionToClient => netIdentity.connectionToClient;
+        public NetworkConnection connectionToClient => Identity.connectionToClient;
 
         protected ulong syncVarDirtyBits { get; private set; }
         ulong syncVarHookGuard;
@@ -114,51 +129,14 @@ namespace Mirror
         protected readonly List<SyncObject> syncObjects = new List<SyncObject>();
 
         /// <summary>
-        /// NetworkIdentity component caching for easier access
-        /// </summary>
-        NetworkIdentity netIdentityCache;
-
-        /// <summary>
         /// Returns the NetworkIdentity of this object
         /// </summary>
-        public NetworkIdentity netIdentity
-        {
-            get
-            {
-                if (netIdentityCache is null)
-                {
-                    netIdentityCache = GetComponent<NetworkIdentity>();
-                    // do this 2nd check inside first if so that we are not checking == twice on unity Object
-                    if (netIdentityCache is null)
-                    {
-                        logger.LogError("There is no NetworkIdentity on " + name + ". Please add one.");
-                    }
-                }
-                return netIdentityCache;
-            }
-        }
+        public NetworkIdentity Identity { get; private set; }
 
         /// <summary>
         /// Returns the index of the component on this object
         /// </summary>
-        public int ComponentIndex
-        {
-            get
-            {
-                // note: FindIndex causes allocations, we search manually instead
-                for (int i = 0; i < netIdentity.NetworkBehaviours.Length; i++)
-                {
-                    NetworkBehaviour component = netIdentity.NetworkBehaviours[i];
-                    if (component == this)
-                        return i;
-                }
-
-                // this should never happen
-                logger.LogError("Could not find component in GameObject. You should not add/remove components in networked objects dynamically", this);
-
-                return -1;
-            }
-        }
+        public int ComponentIndex { get; private set; } = INDEX_NOT_SET;
 
         // this gets called in the constructor by the weaver
         // for every SyncObject in the component (e.g. SyncLists).
@@ -178,7 +156,7 @@ namespace Mirror
             // this was in Weaver before
             // NOTE: we could remove this later to allow calling Cmds on Server
             //       to avoid Wrapper functions. a lot of people requested this.
-            if (!NetworkClient.active)
+            if (!_client.active)
             {
                 logger.LogError($"Command Function {cmdName} called without an active client.");
                 return;
@@ -217,12 +195,12 @@ namespace Mirror
         protected void SendRPCInternal(Type invokeClass, string rpcName, NetworkWriter writer, int channelId, bool excludeOwner)
         {
             // this was in Weaver before
-            if (!NetworkServer.active)
+            if (!_server.active)
             {
                 logger.LogError("RPC Function " + rpcName + " called on Client.");
                 return;
             }
-            // This cannot use NetworkServer.active, as that is not specific to this object.
+            // This cannot use _server.active, as that is not specific to this object.
             if (!isServer)
             {
                 logger.LogWarning("ClientRpc " + rpcName + " called on un-spawned object: " + name);
@@ -243,14 +221,14 @@ namespace Mirror
             // The public facing parameter is excludeOwner in [ClientRpc]
             // so we negate it here to logically align with SendToReady.
             bool includeOwner = !excludeOwner;
-            NetworkServer.SendToReady(netIdentity, message, includeOwner, channelId);
+            _server.SendToReady(Identity, message, includeOwner, channelId);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected void SendTargetRPCInternal(NetworkConnection conn, Type invokeClass, string rpcName, NetworkWriter writer, int channelId)
         {
             // this was in Weaver before
-            if (!NetworkServer.active)
+            if (!_server.active)
             {
                 logger.LogError("TargetRPC Function " + rpcName + " called on client.");
                 return;
@@ -266,7 +244,7 @@ namespace Mirror
                 logger.LogError("TargetRPC Function " + rpcName + " called on connection to server");
                 return;
             }
-            // This cannot use NetworkServer.active, as that is not specific to this object.
+            // This cannot use _server.active, as that is not specific to this object.
             if (!isServer)
             {
                 logger.LogWarning("TargetRpc " + rpcName + " called on un-spawned object: " + name);
@@ -661,7 +639,7 @@ namespace Mirror
 
         /// <summary>
         /// This is invoked for NetworkBehaviour objects when they become active on the server.
-        /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
+        /// <para>This could be triggered by _server.Listen() for objects in the scene, or by _server.Spawn() for objects that are dynamically created.</para>
         /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
         /// </summary>
         public virtual void OnStartServer() { }
@@ -687,7 +665,7 @@ namespace Mirror
         /// <summary>
         /// This is invoked on behaviours that have authority, based on context and <see cref="NetworkIdentity.hasAuthority">NetworkIdentity.hasAuthority</see>.
         /// <para>This is called after <see cref="OnStartServer">OnStartServer</see> and before <see cref="OnStartClient">OnStartClient.</see></para>
-        /// <para>When <see cref="NetworkIdentity.AssignClientAuthority">AssignClientAuthority</see> is called on the server, this will be called on the client that owns the object. When an object is spawned with <see cref="NetworkServer.Spawn">NetworkServer.Spawn</see> with a NetworkConnection parameter included, this will be called on the client that owns the object.</para>
+        /// <para>When <see cref="NetworkIdentity.AssignClientAuthority">AssignClientAuthority</see> is called on the server, this will be called on the client that owns the object. When an object is spawned with <see cref="_server.Spawn">_server.Spawn</see> with a NetworkConnection parameter included, this will be called on the client that owns the object.</para>
         /// </summary>
         public virtual void OnStartAuthority() { }
 

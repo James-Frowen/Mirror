@@ -725,7 +725,7 @@ namespace Mirror
                             }
                             else
                             {
-                                identity.Reset();
+                                identity.ClearState();
                                 identity.gameObject.SetActive(false);
                             }
                         }
@@ -975,7 +975,7 @@ namespace Mirror
                     }
                 }
                 NetworkIdentity.spawned.Remove(netId);
-                localObject.Reset();
+                localObject.ClearState();
             }
             else
             {

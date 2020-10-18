@@ -108,17 +108,42 @@ namespace Mirror
     {
         static readonly ILogger logger = LogFactory.GetLogger<NetworkIdentity>();
 
-        NetworkBehaviour[] networkBehavioursCache;
+        INetworkClient _client;
+        INetworkServer _server;
+        List<NetworkBehaviour> _behaviours = new List<NetworkBehaviour>();
+        bool onStartServerCalled;
+        bool onStartClientCalled;
+
+        public IReadOnlyList<NetworkBehaviour> Behaviours => _behaviours;
+
+        public void Setup(INetworkServer server, INetworkClient client)
+        {
+            _client = client;
+            _server = server;
+            NetworkBehaviour[] behaviours = GetComponents<NetworkBehaviour>();
+
+            for (int i = 0; i < behaviours.Length; i++)
+            {
+                if (i > byte.MaxValue)
+                {
+                    logger.LogError($"Only {byte.MaxValue} NetworkBehaviour components are allowed for NetworkIdentity: {name} because we send the index as byte.", this);
+                    break;
+                }
+                _behaviours.Add(behaviours[i]);
+                behaviours[i].Setup(server, client, this, i);
+            }
+        }
+
 
         /// <summary>
         /// Returns true if running as a client and this object was spawned by a server.
         /// </summary>
         /// <remarks>
         /// <para>
-        ///     <b>IMPORTANT:</b> checking NetworkClient.active means that isClient is false in OnDestroy:
+        ///     <b>IMPORTANT:</b> checking _client.active means that isClient is false in OnDestroy:
         /// </para>
         /// <c>
-        ///     public bool isClient => NetworkClient.active &amp;&amp; netId != 0 &amp;&amp; !serverOnly;
+        ///     public bool isClient => _client.active &amp;&amp; netId != 0 &amp;&amp; !serverOnly;
         /// </c>
         /// <para>
         ///     but we need it in OnDestroy, e.g. when saving skillbars on quit. this
@@ -128,17 +153,17 @@ namespace Mirror
         ///     => fixes <see href="https://github.com/vis2k/Mirror/issues/1475"/>
         /// </para>
         /// </remarks>
-        public bool isClient { get; internal set; }
+        public bool isClient => !(_client is null);
 
         /// <summary>
-        /// Returns true if NetworkServer.active and server is not stopped.
+        /// Returns true if _server.active and server is not stopped.
         /// </summary>
         /// <remarks>
         /// <para>
-        ///    <b>IMPORTANT:</b> checking NetworkServer.active means that isServer is false in OnDestroy:
+        ///    <b>IMPORTANT:</b> checking _server.active means that isServer is false in OnDestroy:
         /// </para>
         /// <c>
-        ///     public bool isServer => NetworkServer.active &amp;&amp; netId != 0;
+        ///     public bool isServer => _server.active &amp;&amp; netId != 0;
         /// </c>
         /// <para>
         ///     but we need it in OnDestroy, e.g. when saving players on quit. this
@@ -148,7 +173,7 @@ namespace Mirror
         ///     => fixes <see href="https://github.com/vis2k/Mirror/issues/1484"/>
         /// </para>
         /// </remarks>
-        public bool isServer { get; internal set; }
+        public bool isServer => !(_server is null);
 
         /// <summary>
         /// This returns true if this object is the one that represents the player on the local machine.
@@ -224,28 +249,7 @@ namespace Mirror
         /// </summary>
         public static readonly Dictionary<uint, NetworkIdentity> spawned = new Dictionary<uint, NetworkIdentity>();
 
-        public NetworkBehaviour[] NetworkBehaviours
-        {
-            get
-            {
-                if (networkBehavioursCache == null)
-                {
-                    CreateNetworkBehavioursCache();
-                }
-                return networkBehavioursCache;
-            }
-        }
 
-        void CreateNetworkBehavioursCache()
-        {
-            networkBehavioursCache = GetComponents<NetworkBehaviour>();
-            if (networkBehavioursCache.Length > byte.MaxValue)
-            {
-                logger.LogError($"Only {byte.MaxValue} NetworkBehaviour components are allowed for NetworkIdentity: {name} because we send the index as byte.", this);
-                // Log error once then resize array so that NetworkIdentity does not throw exceptions later
-                Array.Resize(ref networkBehavioursCache, byte.MaxValue);
-            }
-        }
 
 
         NetworkVisibility visibilityCache;
@@ -642,7 +646,7 @@ namespace Mirror
         void OnDestroy()
         {
             // Objects spawned from Instantiate are not allowed so are destroyed right away
-            // we don't want to call NetworkServer.Destroy if this is the case
+            // we don't want to call _server.Destroy if this is the case
             if (SpawnedFromInstantiate)
                 return;
 
@@ -652,7 +656,7 @@ namespace Mirror
             if (isServer && !destroyCalled)
             {
                 // Do not add logging to this (see above)
-                NetworkServer.Destroy(gameObject);
+                _server.Destroy(gameObject);
             }
 
             if (isLocalPlayer)
@@ -664,11 +668,14 @@ namespace Mirror
         internal void OnStartServer()
         {
             // do nothing if already spawned
-            if (isServer)
+            if (onStartServerCalled)
+            {
+                Debug.LogWarning("OnStartServer already called");
                 return;
+            }
 
             // set isServer flag
-            isServer = true;
+            onStartServerCalled = true;
 
             // If the instance/net ID is invalid here then this is an object instantiated from a prefab and the server should assign a valid ID
             // NOTE: this might not be necessary because the above m_IsServer
@@ -692,14 +699,7 @@ namespace Mirror
             // because we already set m_isServer=true above)
             spawned[netId] = this;
 
-            // in host mode we set isClient true before calling OnStartServer,
-            // otherwise isClient is false in OnStartServer.
-            if (NetworkClient.active)
-            {
-                isClient = true;
-            }
-
-            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in Behaviours)
             {
                 // an exception in OnStartServer should be caught, so that one
                 // component's exception doesn't stop all other components from
@@ -719,7 +719,7 @@ namespace Mirror
 
         internal void OnStopServer()
         {
-            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in Behaviours)
             {
                 // an exception in OnStartServer should be caught, so that one
                 // component's exception doesn't stop all other components from
@@ -737,17 +737,14 @@ namespace Mirror
             }
         }
 
-        bool clientStarted;
         internal void OnStartClient()
         {
-            if (clientStarted)
+            if (onStartClientCalled)
                 return;
-            clientStarted = true;
-
-            isClient = true;
+            onStartClientCalled = true;
 
             if (logger.LogEnabled()) logger.Log("OnStartClient " + gameObject + " netId:" + netId);
-            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in Behaviours)
             {
                 // an exception in OnStartClient should be caught, so that one
                 // component's exception doesn't stop all other components from
@@ -773,7 +770,7 @@ namespace Mirror
                 return;
             previousLocalPlayer = this;
 
-            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in Behaviours)
             {
                 // an exception in OnStartLocalPlayer should be caught, so that
                 // one component's exception doesn't stop all other components
@@ -803,7 +800,7 @@ namespace Mirror
 
         internal void OnStartAuthority()
         {
-            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in Behaviours)
             {
                 // an exception in OnStartAuthority should be caught, so that one
                 // component's exception doesn't stop all other components from
@@ -823,7 +820,7 @@ namespace Mirror
 
         internal void OnStopAuthority()
         {
-            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in Behaviours)
             {
                 // an exception in OnStopAuthority should be caught, so that one
                 // component's exception doesn't stop all other components from
@@ -887,7 +884,7 @@ namespace Mirror
 
         internal void OnStopClient()
         {
-            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in Behaviours)
             {
                 // an exception in OnNetworkDestroy should be caught, so that
                 // one component's exception doesn't stop all other components
@@ -902,7 +899,6 @@ namespace Mirror
                 {
                     logger.LogError("Exception in OnNetworkDestroy:" + e.Message + " " + e.StackTrace);
                 }
-                isServer = false;
             }
         }
 
@@ -960,12 +956,12 @@ namespace Mirror
 
             // check if components are in byte.MaxRange just to be 100% sure
             // that we avoid overflows
-            NetworkBehaviour[] components = NetworkBehaviours;
-            if (components.Length > byte.MaxValue)
+            IReadOnlyList<NetworkBehaviour> components = Behaviours;
+            if (components.Count > byte.MaxValue)
                 throw new IndexOutOfRangeException($"{name} has more than {byte.MaxValue} components. This is not supported.");
 
             // serialize all components
-            for (int i = 0; i < components.Length; ++i)
+            for (int i = 0; i < components.Count; ++i)
             {
                 // is this component dirty?
                 // -> always serialize if initialState so all components are included in spawn packet
@@ -1049,12 +1045,12 @@ namespace Mirror
         internal void OnDeserializeAllSafely(NetworkReader reader, bool initialState)
         {
             // deserialize all components that were received
-            NetworkBehaviour[] components = NetworkBehaviours;
+            IReadOnlyList<NetworkBehaviour> components = Behaviours;
             while (reader.Position < reader.Length)
             {
                 // read & check index [0..255]
                 byte index = reader.ReadByte();
-                if (index < components.Length)
+                if (index < components.Count)
                 {
                     // deserialize this component
                     OnDeserializeSafely(components[index], reader, initialState);
@@ -1080,14 +1076,14 @@ namespace Mirror
             }
 
             // find the right component to invoke the function on
-            if (componentIndex < 0 || componentIndex >= NetworkBehaviours.Length)
+            if (componentIndex < 0 || componentIndex >= Behaviours.Count)
             {
                 logger.LogWarning($"Component [{componentIndex}] not found for [netId={netId}]");
                 return;
             }
 
 
-            NetworkBehaviour invokeComponent = NetworkBehaviours[componentIndex];
+            NetworkBehaviour invokeComponent = Behaviours[componentIndex];
 
             if (!RemoteCallHelper.InvokeHandlerDelegate(functionHash, invokeType, reader, invokeComponent, senderConnection))
             {
@@ -1111,9 +1107,9 @@ namespace Mirror
             }
 
             // find the right component to invoke the function on
-            if (0 <= componentIndex && componentIndex < NetworkBehaviours.Length)
+            if (0 <= componentIndex && componentIndex < Behaviours.Count)
             {
-                NetworkBehaviour invokeComponent = NetworkBehaviours[componentIndex];
+                NetworkBehaviour invokeComponent = Behaviours[componentIndex];
                 return RemoteCallHelper.GetCommandInfo(cmdHash, invokeComponent);
             }
             else
@@ -1191,16 +1187,16 @@ namespace Mirror
         internal void AddAllReadyServerConnectionsToObservers()
         {
             // add all server connections
-            foreach (NetworkConnection conn in NetworkServer.connections.Values)
+            foreach (NetworkConnection conn in _server.connections.Values)
             {
                 if (conn.isReady)
                     AddObserver(conn);
             }
 
             // add local host connection (if any)
-            if (NetworkServer.localConnection != null && NetworkServer.localConnection.isReady)
+            if (_server.localConnection != null && _server.localConnection.isReady)
             {
-                AddObserver(NetworkServer.localConnection);
+                AddObserver(_server.localConnection);
             }
         }
 
@@ -1305,7 +1301,7 @@ namespace Mirror
             //      iterating all identities in a special function in StartHost.
             if (initialize)
             {
-                if (!newObservers.Contains(NetworkServer.localConnection))
+                if (!newObservers.Contains(_server.localConnection))
                 {
                     OnSetHostVisibility(false);
                 }
@@ -1343,7 +1339,7 @@ namespace Mirror
 
             // The client will match to the existing object
             // update all variables and assign authority
-            NetworkServer.SendSpawnMessage(this, conn);
+            _server.SendSpawnMessage(this, conn);
 
             clientAuthorityCallback?.Invoke(conn, this, true);
 
@@ -1352,7 +1348,7 @@ namespace Mirror
 
         /// <summary>
         /// Removes ownership for an object.
-        /// <para>This applies to objects that had authority set by AssignClientAuthority, or <see cref="NetworkServer.Spawn">NetworkServer.Spawn</see> with a NetworkConnection parameter included.</para>
+        /// <para>This applies to objects that had authority set by AssignClientAuthority, or <see cref="_server.Spawn">_server.Spawn</see> with a NetworkConnection parameter included.</para>
         /// <para>Authority cannot be removed for player objects.</para>
         /// </summary>
         public void RemoveClientAuthority()
@@ -1381,7 +1377,7 @@ namespace Mirror
                 // so just spawn it again,
                 // the client will not create a new instance,  it will simply
                 // reset all variables and remove authority
-                NetworkServer.SendSpawnMessage(this, previousOwner);
+                _server.SendSpawnMessage(this, previousOwner);
 
                 connectionToClient = null;
             }
@@ -1393,20 +1389,20 @@ namespace Mirror
         /// as people might want to be able to read the members inside OnDestroy(), and we have no way
         /// of invoking reset after OnDestroy is called.
         /// </summary>
-        internal void Reset()
+        internal void ClearState()
         {
             // make sure to call this before networkBehavioursCache is cleared below
             ResetSyncObjects();
 
             hasSpawned = false;
-            clientStarted = false;
-            isClient = false;
-            isServer = false;
+
+            onStartClientCalled = false;
+            onStartServerCalled = false;
 
             netId = 0;
             connectionToServer = null;
             connectionToClient = null;
-            networkBehavioursCache = null;
+            _behaviours.Clear();
 
             ClearObservers();
 
@@ -1417,7 +1413,7 @@ namespace Mirror
         }
 
         /// <summary>
-        /// Invoked by NetworkServer.Update during LateUpdate
+        /// Invoked by _server.Update during LateUpdate
         /// </summary>
         internal void ServerUpdate()
         {
@@ -1456,7 +1452,7 @@ namespace Mirror
                     {
                         varsMessage.payload = ownerWriter.ToArraySegment();
                         if (connectionToClient != null && connectionToClient.isReady)
-                            NetworkServer.SendToClientOfPlayer(this, varsMessage);
+                            connectionToClient.Send(varsMessage);
                     }
 
                     // send observersWriter to everyone but owner
@@ -1464,7 +1460,7 @@ namespace Mirror
                     if (observersWritten > 0)
                     {
                         varsMessage.payload = observersWriter.ToArraySegment();
-                        NetworkServer.SendToReady(this, varsMessage, false);
+                        _server.SendToReady(this, varsMessage, false);
                     }
 
                     // clear dirty bits only for the components that we serialized
@@ -1485,7 +1481,7 @@ namespace Mirror
         /// </summary>
         internal void ClearAllComponentsDirtyBits()
         {
-            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in Behaviours)
             {
                 comp.ClearAllDirtyBits();
             }
@@ -1497,7 +1493,7 @@ namespace Mirror
         /// </summary>
         internal void ClearDirtyComponentsDirtyBits()
         {
-            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in Behaviours)
             {
                 if (comp.IsDirty())
                 {
@@ -1508,7 +1504,7 @@ namespace Mirror
 
         void ResetSyncObjects()
         {
-            foreach (NetworkBehaviour comp in NetworkBehaviours)
+            foreach (NetworkBehaviour comp in Behaviours)
             {
                 comp.ResetSyncObjects();
             }
