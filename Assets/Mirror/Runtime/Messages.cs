@@ -93,8 +93,9 @@ namespace Mirror
     #endregion
 
     #region Internal System Messages
-    public struct SpawnMessage : NetworkMessage
+    public struct SpawnMessage : NetworkMessage, IMessageWithNetId
     {
+
         /// <summary>
         /// netId of new or existing object
         /// </summary>
@@ -133,6 +134,8 @@ namespace Mirror
         /// <remark>ArraySegment to avoid unnecessary allocations</remark>
         /// </summary>
         public ArraySegment<byte> payload;
+
+        uint IMessageWithNetId.NetId => netId;
     }
 
     public struct ObjectSpawnStartedMessage : NetworkMessage
@@ -143,22 +146,25 @@ namespace Mirror
     {
     }
 
-    public struct ObjectDestroyMessage : NetworkMessage
+    public struct ObjectDestroyMessage : NetworkMessage, IMessageWithNetId
     {
         public uint netId;
+        uint IMessageWithNetId.NetId => netId;
     }
 
-    public struct ObjectHideMessage : NetworkMessage
+    public struct ObjectHideMessage : NetworkMessage, IMessageWithNetId
     {
         public uint netId;
+        uint IMessageWithNetId.NetId => netId;
     }
 
-    public struct UpdateVarsMessage : NetworkMessage
+    public struct UpdateVarsMessage : NetworkMessage, IMessageWithNetId
     {
         public uint netId;
         // the serialized component data
         // -> ArraySegment to avoid unnecessary allocations
         public ArraySegment<byte> payload;
+        uint IMessageWithNetId.NetId => netId;
     }
 
     // A client sends this message to the server
