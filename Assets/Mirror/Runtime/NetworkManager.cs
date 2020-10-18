@@ -566,12 +566,16 @@ namespace Mirror
             }
 
             networkAddress = "localhost";
-            NetworkServer.ActivateHostScene();
+
+            NetworkServerV2 server = new NetworkServerV2();
+            NetworkClientV2 client = new NetworkClientV2();
+
+            server.ActivateHostScene(client);
             RegisterClientMessages();
 
             // ConnectLocalServer needs to be called AFTER RegisterClientMessages
             // (https://github.com/vis2k/Mirror/pull/1249/)
-            NetworkClient.ConnectLocalServer();
+            client.ConnectLocalServer(server);
 
             OnStartClient();
         }

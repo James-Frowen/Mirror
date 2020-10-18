@@ -5,11 +5,11 @@ namespace Mirror
 {
     // a server's connection TO a LocalClient.
     // sending messages on this connection causes the client's handler function to be invoked directly
-    class ULocalConnectionToClient : NetworkConnectionToClient
+    public class ULocalConnectionToClient : NetworkConnectionToClient
     {
         internal ULocalConnectionToServer connectionToServer;
 
-        public ULocalConnectionToClient() : base(LocalConnectionId) { }
+        public ULocalConnectionToClient(INetworkServer server) : base(server, LocalConnectionId, default) { }
 
         public override string address => "localhost";
 
@@ -79,12 +79,14 @@ namespace Mirror
 
     // a localClient's connection TO a server.
     // send messages on this connection causes the server's handler function to be invoked directly.
-    internal class ULocalConnectionToServer : NetworkConnectionToServer
+    public class ULocalConnectionToServer : NetworkConnectionToServer
     {
         static readonly ILogger logger = LogFactory.GetLogger(typeof(ULocalConnectionToClient));
 
         internal ULocalConnectionToClient connectionToClient;
         internal readonly LocalConnectionBuffer buffer = new LocalConnectionBuffer();
+
+        internal ULocalConnectionToServer(INetworkClient client) : base(client) { }
 
         public override string address => "localhost";
 

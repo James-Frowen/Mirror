@@ -7,6 +7,11 @@ namespace Mirror
     {
         static readonly ILogger logger = LogFactory.GetLogger<NetworkConnectionToServer>();
 
+        public readonly INetworkClient client;
+        public NetworkConnectionToServer(INetworkClient client) : base()
+        {
+            this.client = client ?? throw new ArgumentNullException(nameof(client));
+        }
         public override string address => "";
 
         internal override bool Send(ArraySegment<byte> segment, int channelId = Channels.DefaultReliable)

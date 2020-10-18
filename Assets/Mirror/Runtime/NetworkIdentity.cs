@@ -17,6 +17,72 @@ using UnityEditor.Experimental.SceneManagement;
 namespace Mirror
 {
     /// <summary>
+    /// Internal methods that help work with NetworkIdentity
+    /// </summary>
+    internal static class NetworkIdentityExtensions
+    {
+        static readonly ILogger logger = LogFactory.GetLogger<NetworkIdentity>();
+
+        internal static void SendSpawnMessage(this NetworkIdentity identity, NetworkConnection conn)
+        {
+            if (identity.serverOnly)
+                return;
+
+            // for easier debugging
+            if (logger.LogEnabled()) logger.Log("Server SendSpawnMessage: name=" + identity.name + " sceneId=" + identity.sceneId.ToString("X") + " netid=" + identity.netId);
+
+            // one writer for owner, one for observers
+            using (PooledNetworkWriter ownerWriter = NetworkWriterPool.GetWriter(), observersWriter = NetworkWriterPool.GetWriter())
+            {
+                bool isOwner = identity.connectionToClient == conn;
+
+                ArraySegment<byte> payload = CreateSpawnMessagePayload(isOwner, identity, ownerWriter, observersWriter);
+
+                SpawnMessage msg = new SpawnMessage
+                {
+                    netId = identity.netId,
+                    isLocalPlayer = conn.identity == identity,
+                    isOwner = isOwner,
+                    sceneId = identity.sceneId,
+                    assetId = identity.assetId,
+                    // use local values for VR support
+                    position = identity.transform.localPosition,
+                    rotation = identity.transform.localRotation,
+                    scale = identity.transform.localScale,
+
+                    payload = payload,
+                };
+
+                conn.Send(msg);
+            }
+        }
+
+        static ArraySegment<byte> CreateSpawnMessagePayload(bool isOwner, NetworkIdentity identity, PooledNetworkWriter ownerWriter, PooledNetworkWriter observersWriter)
+        {
+            // Only call OnSerializeAllSafely if there are NetworkBehaviours
+            if (identity.Behaviours.Count == 0)
+            {
+                return default;
+            }
+
+            // serialize all components with initialState = true
+            // (can be null if has none)
+            identity.OnSerializeAllSafely(true, ownerWriter, out int ownerWritten, observersWriter, out int observersWritten);
+
+            // convert to ArraySegment to avoid reader allocations
+            // (need to handle null case too)
+            ArraySegment<byte> ownerSegment = ownerWritten > 0 ? ownerWriter.ToArraySegment() : default;
+            ArraySegment<byte> observersSegment = observersWritten > 0 ? observersWriter.ToArraySegment() : default;
+
+            // use owner segment if 'conn' owns this identity, otherwise
+            // use observers segment
+            ArraySegment<byte> payload = isOwner ? ownerSegment : observersSegment;
+
+            return payload;
+        }
+
+    }
+    /// <summary>
     /// The NetworkIdentity identifies objects across the network, between server and clients.
     /// Its primary data is a NetworkInstanceId which is allocated by the server and then set on clients.
     /// This is used in network communications to be able to lookup game objects on different machines.
@@ -135,6 +201,7 @@ namespace Mirror
         }
 
 
+
         /// <summary>
         /// Returns true if running as a client and this object was spawned by a server.
         /// </summary>
@@ -192,7 +259,10 @@ namespace Mirror
         /// The set of network connections (players) that can see this object.
         /// <para>null until OnStartServer was called. this is necessary for SendTo* to work properly in server-only mode.</para>
         /// </summary>
-        public Dictionary<int, NetworkConnection> observers;
+        public Dictionary<int, NetworkConnectionToClient> observers;
+
+
+        static readonly HashSet<NetworkConnectionToClient> newObservers = new HashSet<NetworkConnectionToClient>();
 
         /// <summary>
         /// Unique identifier for this particular object instance, used for tracking objects between networked clients and the server.
@@ -691,7 +761,7 @@ namespace Mirror
             }
 
             netId = GetNextNetworkId();
-            observers = new Dictionary<int, NetworkConnection>();
+            observers = new Dictionary<int, NetworkConnectionToClient>();
 
             if (logger.LogEnabled()) logger.Log("OnStartServer " + this + " NetId:" + netId + " SceneId:" + sceneId);
 
@@ -866,7 +936,7 @@ namespace Mirror
         /// </summary>
         /// <param name="conn"></param>
         /// <returns></returns>
-        internal bool OnCheckObserver(NetworkConnection conn)
+        internal bool OnCheckObserver(NetworkConnectionToClient conn)
         {
             if (visibility != null)
             {
@@ -1126,7 +1196,7 @@ namespace Mirror
         {
             if (observers != null)
             {
-                foreach (NetworkConnection conn in observers.Values)
+                foreach (NetworkConnectionToClient conn in observers.Values)
                 {
                     conn.RemoveFromVisList(this, true);
                 }
@@ -1134,7 +1204,7 @@ namespace Mirror
             }
         }
 
-        internal void AddObserver(NetworkConnection conn)
+        internal void AddObserver(NetworkConnectionToClient conn)
         {
             if (observers == null)
             {
@@ -1164,7 +1234,7 @@ namespace Mirror
         /// <param name="observersSet"></param>
         /// <param name="initialize"></param>
         /// <returns></returns>
-        internal bool GetNewObservers(HashSet<NetworkConnection> observersSet, bool initialize)
+        internal bool GetNewObservers(HashSet<NetworkConnectionToClient> observersSet, bool initialize)
         {
             observersSet.Clear();
 
@@ -1187,7 +1257,7 @@ namespace Mirror
         internal void AddAllReadyServerConnectionsToObservers()
         {
             // add all server connections
-            foreach (NetworkConnection conn in _server.connections.Values)
+            foreach (NetworkConnectionToClient conn in _server.connections.Values)
             {
                 if (conn.isReady)
                     AddObserver(conn);
@@ -1199,8 +1269,6 @@ namespace Mirror
                 AddObserver(_server.localConnection);
             }
         }
-
-        static readonly HashSet<NetworkConnection> newObservers = new HashSet<NetworkConnection>();
 
         /// <summary>
         /// This causes the set of players that can see this object to be rebuild.
@@ -1240,7 +1308,7 @@ namespace Mirror
             }
 
             // add all newObservers that aren't in .observers yet
-            foreach (NetworkConnection conn in newObservers)
+            foreach (NetworkConnectionToClient conn in newObservers)
             {
                 // only add ready connections.
                 // otherwise the player might not be in the world yet or anymore
@@ -1257,7 +1325,7 @@ namespace Mirror
             }
 
             // remove all old .observers that aren't in newObservers anymore
-            foreach (NetworkConnection conn in observers.Values)
+            foreach (NetworkConnectionToClient conn in observers.Values)
             {
                 if (!newObservers.Contains(conn))
                 {
@@ -1271,7 +1339,7 @@ namespace Mirror
             if (changed)
             {
                 observers.Clear();
-                foreach (NetworkConnection conn in newObservers)
+                foreach (NetworkConnectionToClient conn in newObservers)
                 {
                     if (conn != null && conn.isReady)
                         observers.Add(conn.connectionId, conn);
@@ -1339,7 +1407,7 @@ namespace Mirror
 
             // The client will match to the existing object
             // update all variables and assign authority
-            _server.SendSpawnMessage(this, conn);
+            this.SendSpawnMessage(conn);
 
             clientAuthorityCallback?.Invoke(conn, this, true);
 
@@ -1377,7 +1445,7 @@ namespace Mirror
                 // so just spawn it again,
                 // the client will not create a new instance,  it will simply
                 // reset all variables and remove authority
-                _server.SendSpawnMessage(this, previousOwner);
+                this.SendSpawnMessage(previousOwner);
 
                 connectionToClient = null;
             }

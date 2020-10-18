@@ -53,12 +53,12 @@ namespace Mirror
             offsetMax = double.MaxValue;
         }
 
-        internal static void UpdateClient()
+        internal static void UpdateClient(NetworkConnectionToServer conn)
         {
             if (Time.time - lastPingTime >= PingFrequency)
             {
                 NetworkPingMessage pingMessage = new NetworkPingMessage(LocalTime());
-                NetworkClient.Send(pingMessage);
+                conn.Send(pingMessage);
                 lastPingTime = Time.time;
             }
         }

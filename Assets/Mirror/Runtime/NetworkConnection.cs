@@ -14,13 +14,11 @@ namespace Mirror
     /// <para>NetworkConnection objects also act as observers for networked objects. When a connection is an observer of a networked object with a NetworkIdentity, then the object will be visible to corresponding client for the connection, and incremental state changes will be sent to the client.</para>
     /// <para>There are many virtual functions on NetworkConnection that allow its behaviour to be customized. NetworkClient and NetworkServer can both be made to instantiate custom classes derived from NetworkConnection by setting their networkConnectionClass member variable.</para>
     /// </remarks>
-    public abstract class NetworkConnection : IDisposable
+    public abstract class NetworkConnection
     {
         public const int LocalConnectionId = 0;
         static readonly ILogger logger = LogFactory.GetLogger<NetworkConnection>();
 
-        // internal so it can be tested
-        internal readonly HashSet<NetworkIdentity> visList = new HashSet<NetworkIdentity>();
 
         Dictionary<int, NetworkMessageDelegate> messageHandlers;
 
@@ -70,15 +68,6 @@ namespace Mirror
         public NetworkIdentity identity { get; internal set; }
 
         /// <summary>
-        /// A list of the NetworkIdentity objects owned by this connection. This list is read-only.
-        /// <para>This includes the player object for the connection - if it has localPlayerAutority set, and any objects spawned with local authority or set with AssignLocalAuthority.</para>
-        /// <para>This list can be used to validate messages from clients, to ensure that clients are only trying to control objects that they own.</para>
-        /// </summary>
-        // IMPORTANT: this needs to be <NetworkIdentity>, not <uint netId>. fixes a bug where DestroyOwnedObjects wouldn't find
-        //            the netId anymore: https://github.com/vis2k/Mirror/issues/1380 . Works fine with NetworkIdentity pointers though.
-        public readonly HashSet<NetworkIdentity> clientOwnedObjects = new HashSet<NetworkIdentity>();
-
-        /// <summary>
         /// Setting this to true will log the contents of network message to the console.
         /// </summary>
         /// <remarks>
@@ -105,28 +94,6 @@ namespace Mirror
         internal NetworkConnection(int networkConnectionId) : this()
         {
             connectionId = networkConnectionId;
-        }
-
-        ~NetworkConnection()
-        {
-            Dispose(false);
-        }
-
-        /// <summary>
-        /// Disposes of this connection, releasing channel buffers that it holds.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            // Take yourself off the Finalization queue
-            // to prevent finalization code for this object
-            // from executing a second time.
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            clientOwnedObjects.Clear();
         }
 
         /// <summary>
@@ -190,33 +157,7 @@ namespace Mirror
             return $"connection({connectionId})";
         }
 
-        internal void AddToVisList(NetworkIdentity identity)
-        {
-            visList.Add(identity);
 
-            // spawn identity for this conn
-            NetworkServer.ShowForConnection(identity, this);
-        }
-
-        internal void RemoveFromVisList(NetworkIdentity identity, bool isDestroyed)
-        {
-            visList.Remove(identity);
-
-            if (!isDestroyed)
-            {
-                // hide identity for this conn
-                NetworkServer.HideForConnection(identity, this);
-            }
-        }
-
-        internal void RemoveObservers()
-        {
-            foreach (NetworkIdentity identity in visList)
-            {
-                identity.RemoveObserverInternal(this);
-            }
-            visList.Clear();
-        }
 
         internal bool InvokeHandler(int msgType, NetworkReader reader, int channelId)
         {
@@ -296,32 +237,6 @@ namespace Mirror
         internal virtual bool IsClientAlive()
         {
             return true;
-        }
-
-        internal void AddOwnedObject(NetworkIdentity obj)
-        {
-            clientOwnedObjects.Add(obj);
-        }
-
-        internal void RemoveOwnedObject(NetworkIdentity obj)
-        {
-            clientOwnedObjects.Remove(obj);
-        }
-
-        internal void DestroyOwnedObjects()
-        {
-            // create a copy because the list might be modified when destroying
-            HashSet<NetworkIdentity> tmp = new HashSet<NetworkIdentity>(clientOwnedObjects);
-            foreach (NetworkIdentity netIdentity in tmp)
-            {
-                if (netIdentity != null)
-                {
-                    NetworkServer.Destroy(netIdentity.gameObject);
-                }
-            }
-
-            // clear the hashset because we destroyed them all
-            clientOwnedObjects.Clear();
         }
     }
 }
