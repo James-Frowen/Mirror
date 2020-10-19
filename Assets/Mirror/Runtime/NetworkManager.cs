@@ -201,7 +201,37 @@ namespace Mirror
         //    during FinishLoadScene.
         public NetworkManagerMode mode { get; private set; }
 
+        public INetworkServer NetworkServer
+        {
+            get
+            {
+                if (_networkServer == null) { Debug.LogWarning($"Using {nameof(NetworkServer)} before it is set"); }
+                return _networkServer;
+            }
 
+            private set
+            {
+                if (_networkServer != null && value != null) { Debug.LogWarning($"Overriding {nameof(NetworkServer)}, set it to null before setting new"); }
+                _networkServer = value;
+            }
+        }
+        public INetworkClient NetworkClient
+        {
+            get
+            {
+                if (_networkClient == null) { Debug.LogWarning($"Using {nameof(NetworkClient)} before it is set"); }
+                return _networkClient;
+            }
+            private set
+            {
+                if (_networkClient != null && value != null) { Debug.LogWarning($"Overriding {nameof(NetworkClient)}, set it to null before setting new"); }
+                _networkClient = value;
+            }
+        }
+        public ClientSceneV2 ClientScene => NetworkClient.ClientScene;
+
+        private INetworkServer _networkServer;
+        private INetworkClient _networkClient;
         private ServerSceneManager serverSceneManager;
         private ClientSceneManager clientSceneManager;
 
@@ -311,6 +341,8 @@ namespace Mirror
             if (logger.LogEnabled()) logger.Log("NetworkManager SetupServer");
             InitializeSingleton();
 
+            NetworkServer = new NetworkServerV2(disconnectInactiveConnections, disconnectInactiveTimeout);
+
             if (runInBackground)
                 Application.runInBackground = true;
 
@@ -321,10 +353,6 @@ namespace Mirror
             }
 
             ConfigureServerFrameRate();
-
-            // Copy auto-disconnect settings to NetworkServer
-            NetworkServer.disconnectInactiveTimeout = disconnectInactiveTimeout;
-            NetworkServer.disconnectInactiveConnections = disconnectInactiveConnections;
 
             // start listening to network connections
             NetworkServer.Listen(maxConnections);
@@ -392,6 +420,8 @@ namespace Mirror
 
             InitializeSingleton();
 
+            NetworkClient = new NetworkClientV2();
+
             if (authenticator != null)
             {
                 authenticator.OnStartClient();
@@ -427,6 +457,8 @@ namespace Mirror
             mode = NetworkManagerMode.ClientOnly;
 
             InitializeSingleton();
+
+            NetworkClient = new NetworkClientV2();
 
             if (authenticator != null)
             {
@@ -567,15 +599,12 @@ namespace Mirror
 
             networkAddress = "localhost";
 
-            NetworkServerV2 server = new NetworkServerV2();
-            NetworkClientV2 client = new NetworkClientV2();
-
-            server.ActivateHostScene(client);
+            NetworkServer.ActivateHostScene(client);
             RegisterClientMessages();
 
             // ConnectLocalServer needs to be called AFTER RegisterClientMessages
             // (https://github.com/vis2k/Mirror/pull/1249/)
-            client.ConnectLocalServer(server);
+            NetworkClient.ConnectLocalServer(server);
 
             OnStartClient();
         }
@@ -810,6 +839,7 @@ namespace Mirror
         /// <para>Loading a scene manually wont set networkSceneName, so Mirror would still load it again on start.</para>
         /// </remarks>
         public static string networkSceneName { get; protected set; } = "";
+
 
         public static UnityEngine.AsyncOperation loadingSceneAsync;
 
@@ -1083,6 +1113,7 @@ namespace Mirror
         /// List of transforms populted by NetworkStartPosition components found in the scene.
         /// </summary>
         public static List<Transform> startPositions = new List<Transform>();
+
 
         /// <summary>
         /// Registers the transform of a game object as a player spawn location.

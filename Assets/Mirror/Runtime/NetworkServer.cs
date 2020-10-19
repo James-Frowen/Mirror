@@ -19,6 +19,9 @@ namespace Mirror
         void OnConnected(ULocalConnectionToClient localConnection);
         void OnDisconnected(int connectionId);
         void RemoveLocalConnection();
+        void Listen(int maxConnections);
+        void Update();
+        void SpawnObjects();
     }
     /// <summary>
     /// The NetworkServer.
@@ -37,9 +40,11 @@ namespace Mirror
         ReadOnlyDictionary<int, NetworkConnectionToClient> _readonlyConnections;
         IReadOnlyDictionary<int, NetworkConnectionToClient> INetworkServer.connections => _readonlyConnections;
 
-        public NetworkServerV2()
+        public NetworkServerV2(bool disconnectInactiveConnections, float disconnectInactiveTimeout)
         {
             _readonlyConnections = new ReadOnlyDictionary<int, NetworkConnectionToClient>(connections);
+            this.disconnectInactiveConnections = disconnectInactiveConnections;
+            this.disconnectInactiveTimeout = disconnectInactiveTimeout;
         }
 
         bool initialized;
@@ -84,7 +89,7 @@ namespace Mirror
         /// Should the server disconnect remote connections that have gone silent for more than Server Idle Timeout?
         /// <para>This value is initially set from NetworkManager in SetupServer and can be changed at runtime</para>
         /// </summary>
-        public bool disconnectInactiveConnections;
+        public readonly bool disconnectInactiveConnections;
 
         /// <summary>
         /// Timeout in seconds since last message from a client after which server will auto-disconnect.
@@ -93,7 +98,7 @@ namespace Mirror
         /// <para>The Host client is immune from idle timeout disconnection.</para>
         /// <para>Default value is 60 seconds.</para>
         /// </summary>
-        public float disconnectInactiveTimeout = 60f;
+        public readonly float disconnectInactiveTimeout = 60f;
 
         /// <summary>
         /// cache the Send(connectionIds) list to avoid allocating each time 

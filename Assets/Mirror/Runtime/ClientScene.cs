@@ -16,14 +16,14 @@ namespace Mirror
     /// <para>As the ClientScene manages player objects on the client, it is where clients request to add players. The NetworkManager does this via the ClientScene automatically when auto-add-players is set, but it can be done through code using the function ClientScene.AddPlayer(). This sends an AddPlayer message to the server and will cause a player object to be created for this client.</para>
     /// <para>Like NetworkServer, the ClientScene understands the concept of the local client. The function ClientScene.ConnectLocalServer() is used to become a host by starting a local client (when a server is already running).</para>
     /// </summary>
-    public class ClientScene
+    public class ClientSceneV2
     {
-        readonly ILogger logger = LogFactory.GetLogger(typeof(ClientScene));
+        readonly ILogger logger = LogFactory.GetLogger(typeof(ClientSceneV2));
 
         bool isSpawnFinished;
         NetworkIdentity _localPlayer;
         readonly INetworkClient client;
-        public ClientScene(INetworkClient client)
+        public ClientSceneV2(INetworkClient client)
         {
             this.client = client;
         }
