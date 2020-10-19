@@ -126,7 +126,7 @@ namespace Mirror
             // set not ready and handle clientscene disconnect in any case
             // (might be client or host mode here)
             isReady = false;
-            ClientScene.HandleClientDisconnect(this);
+            client.ClientScene.HandleClientDisconnect(this);
         }
 
         /// <summary>

@@ -174,18 +174,25 @@ namespace Mirror
     {
         static readonly ILogger logger = LogFactory.GetLogger<NetworkIdentity>();
 
-        INetworkClient _client;
-        INetworkServer _server;
-        List<NetworkBehaviour> _behaviours = new List<NetworkBehaviour>();
+        INetworkClient client;
+        INetworkServer server;
+        List<NetworkBehaviour> _behaviours;
         bool onStartServerCalled;
         bool onStartClientCalled;
+        bool hasSetup = false;
 
         public IReadOnlyList<NetworkBehaviour> Behaviours => _behaviours;
 
-        public void Setup(INetworkServer server, INetworkClient client)
+        public void Setup(INetworkServer server, INetworkClient client, NetworkConnectionToClient owner)
         {
-            _client = client;
-            _server = server;
+            if (hasSetup) return;
+            hasSetup = true;
+
+            this.client = client;
+            this.server = server;
+            connectionToClient = owner;
+
+
             NetworkBehaviour[] behaviours = GetComponents<NetworkBehaviour>();
 
             for (int i = 0; i < behaviours.Length; i++)
@@ -199,8 +206,14 @@ namespace Mirror
                 behaviours[i].Setup(server, client, this, i);
             }
         }
-
-
+        /// <summary>
+        /// Called after setup to make existing object aware of local client
+        /// </summary>
+        /// <param name="client"></param>
+        public void LateHostSetup(INetworkClient client)
+        {
+            this.client = client;
+        }
 
         /// <summary>
         /// Returns true if running as a client and this object was spawned by a server.
@@ -220,7 +233,7 @@ namespace Mirror
         ///     => fixes <see href="https://github.com/vis2k/Mirror/issues/1475"/>
         /// </para>
         /// </remarks>
-        public bool isClient => !(_client is null);
+        public bool isClient => !(client is null);
 
         /// <summary>
         /// Returns true if _server.active and server is not stopped.
@@ -240,13 +253,13 @@ namespace Mirror
         ///     => fixes <see href="https://github.com/vis2k/Mirror/issues/1484"/>
         /// </para>
         /// </remarks>
-        public bool isServer => !(_server is null);
+        public bool isServer => !(server is null);
 
         /// <summary>
         /// This returns true if this object is the one that represents the player on the local machine.
         /// <para>This is set when the server has spawned an object for this particular client.</para>
         /// </summary>
-        public bool isLocalPlayer => ClientScene.localPlayer == this;
+        public bool isLocalPlayer => client.ClientScene.localPlayer == this;
 
         /// <summary>
         /// This returns true if this object is the authoritative player object on the client.
@@ -311,6 +324,11 @@ namespace Mirror
 
                 _connectionToClient = value;
                 _connectionToClient?.AddOwnedObject(this);
+
+                // special case to make sure hasAuthority is set
+                // on start server in host mode
+                if (_connectionToClient is ULocalConnectionToClient)
+                    hasAuthority = true;
             }
         }
 
@@ -726,12 +744,12 @@ namespace Mirror
             if (isServer && !destroyCalled)
             {
                 // Do not add logging to this (see above)
-                _server.Destroy(gameObject);
+                server.Destroy(gameObject);
             }
 
             if (isLocalPlayer)
             {
-                ClientScene.ClearLocalPlayer();
+                client.ClientScene.ClearLocalPlayer();
             }
         }
 
@@ -1257,16 +1275,16 @@ namespace Mirror
         internal void AddAllReadyServerConnectionsToObservers()
         {
             // add all server connections
-            foreach (NetworkConnectionToClient conn in _server.connections.Values)
+            foreach (NetworkConnectionToClient conn in server.connections.Values)
             {
                 if (conn.isReady)
                     AddObserver(conn);
             }
 
             // add local host connection (if any)
-            if (_server.localConnection != null && _server.localConnection.isReady)
+            if (server.localConnection != null && server.localConnection.isReady)
             {
-                AddObserver(_server.localConnection);
+                AddObserver(server.localConnection);
             }
         }
 
@@ -1369,7 +1387,7 @@ namespace Mirror
             //      iterating all identities in a special function in StartHost.
             if (initialize)
             {
-                if (!newObservers.Contains(_server.localConnection))
+                if (!newObservers.Contains(server.localConnection))
                 {
                     OnSetHostVisibility(false);
                 }
@@ -1476,7 +1494,7 @@ namespace Mirror
 
             if (isLocalPlayer)
             {
-                ClientScene.ClearLocalPlayer();
+                client.ClientScene.ClearLocalPlayer();
             }
         }
 
@@ -1528,7 +1546,7 @@ namespace Mirror
                     if (observersWritten > 0)
                     {
                         varsMessage.payload = observersWriter.ToArraySegment();
-                        _server.SendToReady(this, varsMessage, false);
+                        server.SendToReady(this, varsMessage, false);
                     }
 
                     // clear dirty bits only for the components that we serialized

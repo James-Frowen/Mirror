@@ -27,13 +27,13 @@ namespace Mirror
         const int INDEX_NOT_SET = -1;
         static readonly ILogger logger = LogFactory.GetLogger(typeof(NetworkBehaviour));
 
-        INetworkClient _client;
-        INetworkServer _server;
+        INetworkClient client;
+        INetworkServer server;
 
         public void Setup(INetworkServer server, INetworkClient client, NetworkIdentity networkIdentity, int componentIndex)
         {
-            _server = server;
-            _client = client;
+            this.server = server;
+            this.client = client;
             Identity = networkIdentity;
             ComponentIndex = componentIndex;
         }
@@ -60,12 +60,12 @@ namespace Mirror
         /// Returns true if this object is active on an active server.
         /// <para>This is only true if the object has been spawned. This is different from _server.active, which is true if the server itself is active rather than this object being active.</para>
         /// </summary>
-        public bool isServer => !(_server is null);
+        public bool isServer => !(server is null);
 
         /// <summary>
         /// Returns true if running as a client and this object was spawned by a server.
         /// </summary>
-        public bool isClient => !(_client is null);
+        public bool isClient => !(client is null);
 
         /// <summary>
         /// This returns true if this object is the one that represents the player on the local machine.
@@ -156,7 +156,7 @@ namespace Mirror
             // this was in Weaver before
             // NOTE: we could remove this later to allow calling Cmds on Server
             //       to avoid Wrapper functions. a lot of people requested this.
-            if (!_client.active)
+            if (!client.active)
             {
                 logger.LogError($"Command Function {cmdName} called without an active client.");
                 return;
@@ -168,7 +168,7 @@ namespace Mirror
                 return;
             }
 
-            if (ClientScene.readyConnection == null)
+            if (client.ClientScene.readyConnection == null)
             {
                 logger.LogError("Send command attempted with no client running [client=" + connectionToServer + "].");
                 return;
@@ -185,7 +185,7 @@ namespace Mirror
                 payload = writer.ToArraySegment()
             };
 
-            ClientScene.readyConnection.Send(message, channelId);
+            client.ClientScene.readyConnection.Send(message, channelId);
         }
 
         #endregion
@@ -195,7 +195,7 @@ namespace Mirror
         protected void SendRPCInternal(Type invokeClass, string rpcName, NetworkWriter writer, int channelId, bool excludeOwner)
         {
             // this was in Weaver before
-            if (!_server.active)
+            if (!server.active)
             {
                 logger.LogError("RPC Function " + rpcName + " called on Client.");
                 return;
@@ -221,14 +221,14 @@ namespace Mirror
             // The public facing parameter is excludeOwner in [ClientRpc]
             // so we negate it here to logically align with SendToReady.
             bool includeOwner = !excludeOwner;
-            _server.SendToReady(Identity, message, includeOwner, channelId);
+            server.SendToReady(Identity, message, includeOwner, channelId);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected void SendTargetRPCInternal(NetworkConnection conn, Type invokeClass, string rpcName, NetworkWriter writer, int channelId)
         {
             // this was in Weaver before
-            if (!_server.active)
+            if (!server.active)
             {
                 logger.LogError("TargetRPC Function " + rpcName + " called on client.");
                 return;

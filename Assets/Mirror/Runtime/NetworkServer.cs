@@ -270,12 +270,14 @@ namespace Mirror
         public void ActivateHostScene(INetworkClient client)
         {
             host = client;
+
             foreach (NetworkIdentity identity in NetworkIdentity.spawned.Values)
             {
                 if (!identity.isClient)
                 {
                     if (logger.LogEnabled()) logger.Log("ActivateHostScene " + identity.netId + " " + identity);
 
+                    identity.LateHostSetup(client);
                     identity.OnStartClient();
                 }
             }
@@ -863,7 +865,7 @@ namespace Mirror
             if (conn is ULocalConnectionToClient)
             {
                 identity.hasAuthority = true;
-                ClientScene.InternalAddPlayer(identity);
+                host.ClientScene.InternalAddPlayer(identity);
             }
 
             // set ready if not set yet
@@ -918,7 +920,7 @@ namespace Mirror
             if (conn is ULocalConnectionToClient)
             {
                 identity.hasAuthority = true;
-                ClientScene.InternalAddPlayer(identity);
+                host.ClientScene.InternalAddPlayer(identity);
             }
 
             // add connection to observers AFTER the playerController was set.
@@ -1089,12 +1091,7 @@ namespace Mirror
                 return;
             }
 
-            identity.connectionToClient = (NetworkConnectionToClient)ownerConnection;
-
-            // special case to make sure hasAuthority is set
-            // on start server in host mode
-            if (ownerConnection is ULocalConnectionToClient)
-                identity.hasAuthority = true;
+            identity.Setup(this, host, (NetworkConnectionToClient)ownerConnection);
 
             identity.OnStartServer();
 

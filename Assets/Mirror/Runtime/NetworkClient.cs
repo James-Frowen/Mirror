@@ -7,6 +7,7 @@ namespace Mirror
     public interface INetworkClient
     {
         bool active { get; }
+        ClientScene ClientScene { get; }
     }
     public enum ConnectState
     {
@@ -38,6 +39,13 @@ namespace Mirror
         public NetworkConnectionToServer connection { get; internal set; }
 
         internal ConnectState connectState = ConnectState.None;
+
+        public NetworkClientV2()
+        {
+            ClientScene = new ClientScene(this);
+        }
+
+        public ClientScene ClientScene { get; }
 
         /// <summary>
         /// The IP address of the server that this client is connected to.
