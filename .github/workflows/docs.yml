@@ -51,3 +51,13 @@ jobs:
       # - name: upload
       #   if: github.ref == 'refs/heads/master'
 
+      - name: GitHub Pages
+        uses: crazy-max/ghaction-github-pages@v1.2.5
+        if: github.ref == 'refs/heads/master'
+        with:
+          # Create incremental commit instead of doing push force
+          keep_history: true
+          # Allow an empty commit to be created
+          allow_empty_commit: False
+          # Build directory to deploy
+          build_dir: doc/_site
