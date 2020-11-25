@@ -35,6 +35,7 @@ jobs:
           args: metadata doc/docfx.json --logLevel Warning --warningsAsErrors
 
       - name: docfx build
+        if: always()
         uses: nikeee/docfx-action@v1.0.0
         with:
           args: build doc/docfx.json --logLevel Warning --warningsAsErrors
@@ -52,6 +53,7 @@ jobs:
       #   if: github.ref == 'refs/heads/master'
 
       - name: GitHub Pages
+        if: always()
         uses: crazy-max/ghaction-github-pages@v1.2.5
         if: github.ref == 'refs/heads/master'
         with:
