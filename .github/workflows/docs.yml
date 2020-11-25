@@ -5,7 +5,7 @@ on: push
 jobs:
 
   Docs:
-    name: Test
+    name: Build docs
     runs-on: ubuntu-latest
     env:
       UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
