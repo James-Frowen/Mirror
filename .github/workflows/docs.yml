@@ -55,7 +55,7 @@ jobs:
       - name: GitHub Pages
         if: always()
         uses: crazy-max/ghaction-github-pages@v1.2.5
-        if: github.ref == 'refs/heads/master'
+        # if: github.ref == 'refs/heads/master'
         with:
           # Create incremental commit instead of doing push force
           keep_history: true
