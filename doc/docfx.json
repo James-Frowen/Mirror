@@ -66,6 +66,9 @@
         "xrefService": [
             "https://xref.docs.microsoft.com/query?uid={uid}"
         ],
+        "xref": [
+            "https://normanderwan.github.io/DocFxForUnity/Unity/2019.4/xrefmap.yml"
+        ],
         "postProcessors": [],
         "markdownEngineName": "markdig",
         "noLangKeyword": false,
