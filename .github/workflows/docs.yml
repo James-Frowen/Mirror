@@ -1,0 +1,51 @@
+name: Docs
+
+jobs:
+
+  Docs:
+    name: Test
+    runs-on: ubuntu-latest
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+    if: true
+    steps:
+  
+      # Checkout repository (required to test local actions)
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+   
+      - name: Activate license
+        uses: MirrorNG/unity-runner@2.0.0
+        with:
+          entrypoint: /activate.sh
+          
+      - name: Generate Solution
+        uses: MirrorNG/unity-runner@2.0.0
+        with:
+          # Arguments to pass to unity
+          args: -buildTarget StandaloneWindows64 -customBuildName MirrorNG -customBuildPath ./build/StandaloneWindows64 -projectPath . -executeMethod  UnityEditor.SyncVS.SyncSolution -quit
+      
+      - uses: nikeee/docfx-action@v1.0.0
+        name: docfx metadata
+        with:
+          args: metadata doc/docfx.json --logLevel Warning --warningsAsErrors
+
+      - uses: nikeee/docfx-action@v1.0.0
+        name: docfx build
+        with:
+          args: build doc/docfx.json --logLevel Warning --warningsAsErrors
+
+      # - name: install docfx
+
+      # - name: docfx metadata
+      #   run: docfx metadata doc/docfx.json --logLevel Warning --warningsAsErrors
+
+      # - name: docfx build
+      #   run: docfx metadata doc/docfx.json --logLevel Warning --warningsAsErrors
+
+      # upload using ftp
+      # - name: upload
+      #   if: github.ref == 'refs/heads/master'
+
