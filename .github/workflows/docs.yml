@@ -29,13 +29,13 @@ jobs:
           # Arguments to pass to unity
           args: -buildTarget StandaloneWindows64 -customBuildName MirrorNG -customBuildPath ./build/StandaloneWindows64 -projectPath . -executeMethod  UnityEditor.SyncVS.SyncSolution -quit
       
-      - uses: nikeee/docfx-action@v1.0.0
-        name: docfx metadata
+      - name: docfx metadata
+        uses: nikeee/docfx-action@v1.0.0
         with:
           args: metadata doc/docfx.json --logLevel Warning --warningsAsErrors
 
-      - uses: nikeee/docfx-action@v1.0.0
-        name: docfx build
+      - name: docfx build
+        uses: nikeee/docfx-action@v1.0.0
         with:
           args: build doc/docfx.json --logLevel Warning --warningsAsErrors
 
