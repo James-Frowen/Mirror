@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Simple Web Transport </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Simple Web Transport ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" style="display:flex;" href="http://mirror-networking.com">
+                <img id="logo" class="svg" style="vertical-align: middle;align-self:center;" src="../../logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="simple-web-transport">Simple Web Transport</h1>
+
+<p>Transport that uses the websocket protocol. This allows this transport to be used in WebGL builds of unity.</p>
+<p>Source code: <a href="https://github.com/MirrorNetworking/SimpleWebTransport">SimpleWebTransport</a></p>
+<p><img src="SimpleWebTransportInspector.jpg" alt="Inspector"></p>
+<h2 id="usage">Usage</h2>
+<ol>
+<li>Download the code from the source folder or package on <a href="https://github.com/MirrorNetworking/SimpleWebTransport/releases">Release</a> page.</li>
+<li>Put the code somewhere in your Assets folder</li>
+<li>Replace your existing Transport with SimpleWebTransport on your NetworkManager</li>
+</ol>
+<h2 id="bugs">Bugs?</h2>
+<p>Please report any bugs or issues <a href="https://github.com/MirrorNetworking/SimpleWebTransport/issues">Here</a></p>
+<h1 id="websocket-secure">Websocket Secure</h1>
+<p>This transport supports the wss protocol which is required for https pages.</p>
+<h2 id="how-to-create-and-setup-an-ssl-cert">How to create and setup an SSL Cert</h2>
+<p>If you host your webgl build on a https domain you will need to use wss which will require a ssl cert.</p>
+<p><a href="https://github.com/MirrorNetworking/SimpleWebTransport/blob/master/HowToCreateSSLCert.md">See this page</a></p>
+<h1 id="logging">Logging</h1>
+<p>Log levels can be set using the dropdown on the transport or or setting <code>Mirror.SimpleWeb.Log.level</code>.</p>
+<p>The transport applies the dropdown value in its <code>Awake</code> and <code>OnValidate</code> methods.</p>
+<h3 id="log-methods">Log methods</h3>
+<p>Log methods in this transport use the <a href="https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.conditionalattribute?view=netstandard-2.0">ConditionalAttribute</a> so they are removed depending on the preprocessor defines.</p>
+<p>These preprocessor defines effect the logging</p>
+<ul>
+<li><code>DEBUG</code> allows warn/error logs</li>
+<li><code>SIMPLEWEB_LOG_ENABLED</code> allows all logs</li>
+</ul>
+<p>Without <code>SIMPLEWEB_LOG_ENABLED</code> info or verbose logging will never happen even if log level allows it.</p>
+<p>See the <a href="https://docs.unity3d.com/Manual/PlatformDependentCompilation.html">Unity docs</a> on how set custom defines.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/doc/Articles/Transports/SimpleWebTransport.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

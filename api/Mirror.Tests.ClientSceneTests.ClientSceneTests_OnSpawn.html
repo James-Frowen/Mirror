@@ -1,0 +1,610 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ClientSceneTests_OnSpawn
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ClientSceneTests_OnSpawn
+   ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" style="display:flex;" href="http://mirror-networking.com">
+                <img id="logo" class="svg" style="vertical-align: middle;align-self:center;" src="../logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn">
+  
+  
+  <h1 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn" class="text-break">Class ClientSceneTests_OnSpawn
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html">ClientSceneTestsBase</a></div>
+    <div class="level2"><span class="xref">ClientSceneTests_OnSpawn</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_ValidPrefabAssetGuid">ClientSceneTestsBase.ValidPrefabAssetGuid</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_PrefabWithChildrenAssetGuid">ClientSceneTestsBase.PrefabWithChildrenAssetGuid</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_InvalidPrefabAssetGuid">ClientSceneTestsBase.InvalidPrefabAssetGuid</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_AnotherGuidString">ClientSceneTestsBase.AnotherGuidString</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_validPrefab">ClientSceneTestsBase.validPrefab</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_validPrefabNetworkIdentity">ClientSceneTestsBase.validPrefabNetworkIdentity</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_prefabWithChildren">ClientSceneTestsBase.prefabWithChildren</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_invalidPrefab">ClientSceneTestsBase.invalidPrefab</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_validPrefabGuid">ClientSceneTestsBase.validPrefabGuid</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_anotherGuid">ClientSceneTestsBase.anotherGuid</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase__createdObjects">ClientSceneTestsBase._createdObjects</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_prefabs">ClientSceneTestsBase.prefabs</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_spawnHandlers">ClientSceneTestsBase.spawnHandlers</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_unspawnHandlers">ClientSceneTestsBase.unspawnHandlers</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_spawnableObjects">ClientSceneTestsBase.spawnableObjects</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_OneTimeSetUp">ClientSceneTestsBase.OneTimeSetUp()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_OneTimeTearDown">ClientSceneTestsBase.OneTimeTearDown()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Mirror.Tests.ClientSceneTests.html">Mirror.Tests.ClientSceneTests</a></h6>
+  <h6><strong>Assembly</strong>: Mirror.Tests.dll</h6>
+  <h5 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class ClientSceneTests_OnSpawn : ClientSceneTestsBase</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_AppliesAuthority_System_Boolean_.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_AppliesAuthority(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L419">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_AppliesAuthority_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_AppliesAuthority*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_AppliesAuthority_System_Boolean_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_AppliesAuthority(System.Boolean)">ApplyPayload_AppliesAuthority(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ApplyPayload_AppliesAuthority(bool isOwner)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">isOwner</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_AppliesLocalValuesToTransform.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_AppliesLocalValuesToTransform%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L378">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_AppliesLocalValuesToTransform_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_AppliesLocalValuesToTransform*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_AppliesLocalValuesToTransform" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_AppliesLocalValuesToTransform">ApplyPayload_AppliesLocalValuesToTransform()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ApplyPayload_AppliesLocalValuesToTransform()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_AppliesTransform.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_AppliesTransform%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L341">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_AppliesTransform_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_AppliesTransform*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_AppliesTransform" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_AppliesTransform">ApplyPayload_AppliesTransform()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ApplyPayload_AppliesTransform()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_DoesNotSetAssetIdToEmpty.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_DoesNotSetAssetIdToEmpty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L520">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_DoesNotSetAssetIdToEmpty_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_DoesNotSetAssetIdToEmpty*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_DoesNotSetAssetIdToEmpty" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_DoesNotSetAssetIdToEmpty">ApplyPayload_DoesNotSetAssetIdToEmpty()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ApplyPayload_DoesNotSetAssetIdToEmpty()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_EnablesObject_System_Boolean_.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_EnablesObject(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L454">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_EnablesObject_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_EnablesObject*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_EnablesObject_System_Boolean_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_EnablesObject(System.Boolean)">ApplyPayload_EnablesObject(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ApplyPayload_EnablesObject(bool startActive)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">startActive</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_isSpawnFinished_Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_SpawnFinishedState_.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_isSpawnFinished(Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.SpawnFinishedState)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L683">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_isSpawnFinished_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_isSpawnFinished*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_isSpawnFinished_Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_SpawnFinishedState_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_isSpawnFinished(Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.SpawnFinishedState)">ApplyPayload_isSpawnFinished(ClientSceneTests_OnSpawn.SpawnFinishedState)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ApplyPayload_isSpawnFinished(ClientSceneTests_OnSpawn.SpawnFinishedState flag)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.SpawnFinishedState.html">ClientSceneTests_OnSpawn.SpawnFinishedState</a></td>
+        <td><span class="parametername">flag</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_LocalPlayerAddsIdentityToConnection.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_LocalPlayerAddsIdentityToConnection%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L608">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_LocalPlayerAddsIdentityToConnection_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_LocalPlayerAddsIdentityToConnection*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_LocalPlayerAddsIdentityToConnection" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_LocalPlayerAddsIdentityToConnection">ApplyPayload_LocalPlayerAddsIdentityToConnection()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ApplyPayload_LocalPlayerAddsIdentityToConnection()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_LocalPlayerWarningWhenNoReadyConnection.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_LocalPlayerWarningWhenNoReadyConnection%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L643">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_LocalPlayerWarningWhenNoReadyConnection_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_LocalPlayerWarningWhenNoReadyConnection*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_LocalPlayerWarningWhenNoReadyConnection" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_LocalPlayerWarningWhenNoReadyConnection">ApplyPayload_LocalPlayerWarningWhenNoReadyConnection()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ApplyPayload_LocalPlayerWarningWhenNoReadyConnection()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_SendsDataToNetworkBehaviourDeserialize.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_SendsDataToNetworkBehaviourDeserialize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L552">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_SendsDataToNetworkBehaviourDeserialize_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_SendsDataToNetworkBehaviourDeserialize*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_SendsDataToNetworkBehaviourDeserialize" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_SendsDataToNetworkBehaviourDeserialize">ApplyPayload_SendsDataToNetworkBehaviourDeserialize()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ApplyPayload_SendsDataToNetworkBehaviourDeserialize()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_SetsAssetId.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_SetsAssetId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L487">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_SetsAssetId_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_SetsAssetId*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_ApplyPayload_SetsAssetId" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.ApplyPayload_SetsAssetId">ApplyPayload_SetsAssetId()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ApplyPayload_SetsAssetId()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_ErrorWhenNoExistingAndAssetIdAndSceneIdAreBothEmpty.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_ErrorWhenNoExistingAndAssetIdAndSceneIdAreBothEmpty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L95">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_ErrorWhenNoExistingAndAssetIdAndSceneIdAreBothEmpty_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_ErrorWhenNoExistingAndAssetIdAndSceneIdAreBothEmpty*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_ErrorWhenNoExistingAndAssetIdAndSceneIdAreBothEmpty" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_ErrorWhenNoExistingAndAssetIdAndSceneIdAreBothEmpty">FindOrSpawnObject_ErrorWhenNoExistingAndAssetIdAndSceneIdAreBothEmpty()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FindOrSpawnObject_ErrorWhenNoExistingAndAssetIdAndSceneIdAreBothEmpty()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_ErrorWhenPrefabInNullInDictionary.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_ErrorWhenPrefabInNullInDictionary%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L136">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_ErrorWhenPrefabInNullInDictionary_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_ErrorWhenPrefabInNullInDictionary*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_ErrorWhenPrefabInNullInDictionary" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_ErrorWhenPrefabInNullInDictionary">FindOrSpawnObject_ErrorWhenPrefabInNullInDictionary()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FindOrSpawnObject_ErrorWhenPrefabInNullInDictionary()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_ErrorWhenSceneIdIsNotInSpawnableObjectsDictionary.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_ErrorWhenSceneIdIsNotInSpawnableObjectsDictionary%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L321">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_ErrorWhenSceneIdIsNotInSpawnableObjectsDictionary_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_ErrorWhenSceneIdIsNotInSpawnableObjectsDictionary*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_ErrorWhenSceneIdIsNotInSpawnableObjectsDictionary" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_ErrorWhenSceneIdIsNotInSpawnableObjectsDictionary">FindOrSpawnObject_ErrorWhenSceneIdIsNotInSpawnableObjectsDictionary()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FindOrSpawnObject_ErrorWhenSceneIdIsNotInSpawnableObjectsDictionary()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_ErrorWhenSpawnHanlderReturnsNull.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_ErrorWhenSpawnHanlderReturnsNull%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L218">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_ErrorWhenSpawnHanlderReturnsNull_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_ErrorWhenSpawnHanlderReturnsNull*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_ErrorWhenSpawnHanlderReturnsNull" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_ErrorWhenSpawnHanlderReturnsNull">FindOrSpawnObject_ErrorWhenSpawnHanlderReturnsNull()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FindOrSpawnObject_ErrorWhenSpawnHanlderReturnsNull()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_ErrorWhenSpawnHanlderReturnsWithoutNetworkIdentity.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_ErrorWhenSpawnHanlderReturnsWithoutNetworkIdentity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L240">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_ErrorWhenSpawnHanlderReturnsWithoutNetworkIdentity_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_ErrorWhenSpawnHanlderReturnsWithoutNetworkIdentity*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_ErrorWhenSpawnHanlderReturnsWithoutNetworkIdentity" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_ErrorWhenSpawnHanlderReturnsWithoutNetworkIdentity">FindOrSpawnObject_ErrorWhenSpawnHanlderReturnsWithoutNetworkIdentity()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FindOrSpawnObject_ErrorWhenSpawnHanlderReturnsWithoutNetworkIdentity()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_FindExistingObject.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_FindExistingObject%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L72">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_FindExistingObject_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_FindExistingObject*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_FindExistingObject" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_FindExistingObject">FindOrSpawnObject_FindExistingObject()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FindOrSpawnObject_FindExistingObject()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_SpawnHandlerCalledFromDictionary.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_SpawnHandlerCalledFromDictionary%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L187">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_SpawnHandlerCalledFromDictionary_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_SpawnHandlerCalledFromDictionary*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_SpawnHandlerCalledFromDictionary" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_SpawnHandlerCalledFromDictionary">FindOrSpawnObject_SpawnHandlerCalledFromDictionary()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FindOrSpawnObject_SpawnHandlerCalledFromDictionary()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_SpawnsFromPrefabDictionary.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_SpawnsFromPrefabDictionary%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L113">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_SpawnsFromPrefabDictionary_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_SpawnsFromPrefabDictionary*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_SpawnsFromPrefabDictionary" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_SpawnsFromPrefabDictionary">FindOrSpawnObject_SpawnsFromPrefabDictionary()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FindOrSpawnObject_SpawnsFromPrefabDictionary()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_SpawnsFromPrefabIfBothPrefabAndHandlerExists.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_SpawnsFromPrefabIfBothPrefabAndHandlerExists%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L158">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_SpawnsFromPrefabIfBothPrefabAndHandlerExists_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_SpawnsFromPrefabIfBothPrefabAndHandlerExists*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_SpawnsFromPrefabIfBothPrefabAndHandlerExists" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_SpawnsFromPrefabIfBothPrefabAndHandlerExists">FindOrSpawnObject_SpawnsFromPrefabIfBothPrefabAndHandlerExists()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FindOrSpawnObject_SpawnsFromPrefabIfBothPrefabAndHandlerExists()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_SpawnsUsingSceneIdInsteadOfAssetId.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_SpawnsUsingSceneIdInsteadOfAssetId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L299">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_SpawnsUsingSceneIdInsteadOfAssetId_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_SpawnsUsingSceneIdInsteadOfAssetId*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_SpawnsUsingSceneIdInsteadOfAssetId" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_SpawnsUsingSceneIdInsteadOfAssetId">FindOrSpawnObject_SpawnsUsingSceneIdInsteadOfAssetId()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FindOrSpawnObject_SpawnsUsingSceneIdInsteadOfAssetId()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_UsesSceneIdToSpawnFromSpawnableObjectsDictionary.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_UsesSceneIdToSpawnFromSpawnableObjectsDictionary%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L278">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_UsesSceneIdToSpawnFromSpawnableObjectsDictionary_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_UsesSceneIdToSpawnFromSpawnableObjectsDictionary*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_FindOrSpawnObject_UsesSceneIdToSpawnFromSpawnableObjectsDictionary" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.FindOrSpawnObject_UsesSceneIdToSpawnFromSpawnableObjectsDictionary">FindOrSpawnObject_UsesSceneIdToSpawnFromSpawnableObjectsDictionary()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void FindOrSpawnObject_UsesSceneIdToSpawnFromSpawnableObjectsDictionary()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_OnSpawn_GiveNoExtraErrorsWhenPrefabIsntSpawned.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.OnSpawn_GiveNoExtraErrorsWhenPrefabIsntSpawned%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L773">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_OnSpawn_GiveNoExtraErrorsWhenPrefabIsntSpawned_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.OnSpawn_GiveNoExtraErrorsWhenPrefabIsntSpawned*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_OnSpawn_GiveNoExtraErrorsWhenPrefabIsntSpawned" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.OnSpawn_GiveNoExtraErrorsWhenPrefabIsntSpawned">OnSpawn_GiveNoExtraErrorsWhenPrefabIsntSpawned()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void OnSpawn_GiveNoExtraErrorsWhenPrefabIsntSpawned()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_OnSpawn_SpawnsAndAppliesPayload.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.OnSpawn_SpawnsAndAppliesPayload%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L741">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_OnSpawn_SpawnsAndAppliesPayload_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.OnSpawn_SpawnsAndAppliesPayload*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_OnSpawn_SpawnsAndAppliesPayload" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.OnSpawn_SpawnsAndAppliesPayload">OnSpawn_SpawnsAndAppliesPayload()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void OnSpawn_SpawnsAndAppliesPayload()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_TearDown.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.TearDown%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L64">View Source</a>
+  </span>
+  <a id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_TearDown_" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.TearDown*"></a>
+  <h4 id="Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn_TearDown" data-uid="Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn.TearDown">TearDown()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void TearDown()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Mirror.Tests.ClientSceneTestsBase.html#Mirror_Tests_ClientSceneTestsBase_TearDown">ClientSceneTestsBase.TearDown()</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Tests_ClientSceneTests_ClientSceneTests_OnSpawn.md&amp;value=---%0Auid%3A%20Mirror.Tests.ClientSceneTests.ClientSceneTests_OnSpawn%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Tests/Editor/ClientSceneTests_OnSpawn.cs/#L60" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

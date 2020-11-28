@@ -1,0 +1,616 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class NetworkRoomManagerExt
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class NetworkRoomManagerExt
+   ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" style="display:flex;" href="http://mirror-networking.com">
+                <img id="logo" class="svg" style="vertical-align: middle;align-self:center;" src="../logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Mirror.Examples.NetworkRoom.NetworkRoomManagerExt">
+  
+  
+  <h1 id="Mirror_Examples_NetworkRoom_NetworkRoomManagerExt" data-uid="Mirror.Examples.NetworkRoom.NetworkRoomManagerExt" class="text-break">Class NetworkRoomManagerExt
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><a class="xref" href="Mirror.NetworkManager.html">NetworkManager</a></div>
+    <div class="level2"><a class="xref" href="Mirror.NetworkRoomManager.html">NetworkRoomManager</a></div>
+    <div class="level3"><span class="xref">NetworkRoomManagerExt</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_minPlayers">NetworkRoomManager.minPlayers</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_roomPlayerPrefab">NetworkRoomManager.roomPlayerPrefab</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_RoomScene">NetworkRoomManager.RoomScene</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_GameplayScene">NetworkRoomManager.GameplayScene</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_pendingPlayers">NetworkRoomManager.pendingPlayers</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_roomSlots">NetworkRoomManager.roomSlots</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_allPlayersReady">NetworkRoomManager.allPlayersReady</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnValidate">NetworkRoomManager.OnValidate()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnServerReady_Mirror_NetworkConnection_">NetworkRoomManager.OnServerReady(NetworkConnection)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_CheckReadyToBegin">NetworkRoomManager.CheckReadyToBegin()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnServerConnect_Mirror_NetworkConnection_">NetworkRoomManager.OnServerConnect(NetworkConnection)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnServerDisconnect_Mirror_NetworkConnection_">NetworkRoomManager.OnServerDisconnect(NetworkConnection)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_clientIndex">NetworkRoomManager.clientIndex</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnServerAddPlayer_Mirror_NetworkConnection_">NetworkRoomManager.OnServerAddPlayer(NetworkConnection)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_RecalculateRoomPlayerIndices">NetworkRoomManager.RecalculateRoomPlayerIndices()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_ServerChangeScene_System_String_">NetworkRoomManager.ServerChangeScene(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnServerSceneChanged_System_String_">NetworkRoomManager.OnServerSceneChanged(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnStartServer">NetworkRoomManager.OnStartServer()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnStartHost">NetworkRoomManager.OnStartHost()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnStopServer">NetworkRoomManager.OnStopServer()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnStopHost">NetworkRoomManager.OnStopHost()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnStartClient">NetworkRoomManager.OnStartClient()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnClientConnect_Mirror_NetworkConnection_">NetworkRoomManager.OnClientConnect(NetworkConnection)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnClientDisconnect_Mirror_NetworkConnection_">NetworkRoomManager.OnClientDisconnect(NetworkConnection)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnStopClient">NetworkRoomManager.OnStopClient()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnClientSceneChanged_Mirror_NetworkConnection_">NetworkRoomManager.OnClientSceneChanged(NetworkConnection)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomStartHost">NetworkRoomManager.OnRoomStartHost()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomStopHost">NetworkRoomManager.OnRoomStopHost()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomStartServer">NetworkRoomManager.OnRoomStartServer()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomServerConnect_Mirror_NetworkConnection_">NetworkRoomManager.OnRoomServerConnect(NetworkConnection)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomServerDisconnect_Mirror_NetworkConnection_">NetworkRoomManager.OnRoomServerDisconnect(NetworkConnection)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomServerCreateRoomPlayer_Mirror_NetworkConnection_">NetworkRoomManager.OnRoomServerCreateRoomPlayer(NetworkConnection)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomServerCreateGamePlayer_Mirror_NetworkConnection_GameObject_">NetworkRoomManager.OnRoomServerCreateGamePlayer(NetworkConnection, GameObject)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomServerAddPlayer_Mirror_NetworkConnection_">NetworkRoomManager.OnRoomServerAddPlayer(NetworkConnection)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomServerPlayersNotReady">NetworkRoomManager.OnRoomServerPlayersNotReady()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomClientEnter">NetworkRoomManager.OnRoomClientEnter()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomClientExit">NetworkRoomManager.OnRoomClientExit()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomClientConnect_Mirror_NetworkConnection_">NetworkRoomManager.OnRoomClientConnect(NetworkConnection)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomClientDisconnect_Mirror_NetworkConnection_">NetworkRoomManager.OnRoomClientDisconnect(NetworkConnection)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomStartClient">NetworkRoomManager.OnRoomStartClient()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomClientSceneChanged_Mirror_NetworkConnection_">NetworkRoomManager.OnRoomClientSceneChanged(NetworkConnection)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomClientAddPlayerFailed">NetworkRoomManager.OnRoomClientAddPlayerFailed()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_dontDestroyOnLoad">NetworkManager.dontDestroyOnLoad</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_runInBackground">NetworkManager.runInBackground</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_autoStartServerBuild">NetworkManager.autoStartServerBuild</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_showDebugMessages">NetworkManager.showDebugMessages</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_serverTickRate">NetworkManager.serverTickRate</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_offlineScene">NetworkManager.offlineScene</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_onlineScene">NetworkManager.onlineScene</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_transport">NetworkManager.transport</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_networkAddress">NetworkManager.networkAddress</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_maxConnections">NetworkManager.maxConnections</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_disconnectInactiveConnections">NetworkManager.disconnectInactiveConnections</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_disconnectInactiveTimeout">NetworkManager.disconnectInactiveTimeout</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_authenticator">NetworkManager.authenticator</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_playerPrefab">NetworkManager.playerPrefab</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_autoCreatePlayer">NetworkManager.autoCreatePlayer</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_playerSpawnMethod">NetworkManager.playerSpawnMethod</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_spawnPrefabs">NetworkManager.spawnPrefabs</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_singleton">NetworkManager.singleton</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_numPlayers">NetworkManager.numPlayers</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_isNetworkActive">NetworkManager.isNetworkActive</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_clientLoadedScene">NetworkManager.clientLoadedScene</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_mode">NetworkManager.mode</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_Awake">NetworkManager.Awake()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_Start">NetworkManager.Start()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_LateUpdate">NetworkManager.LateUpdate()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_IsSceneActive_System_String_">NetworkManager.IsSceneActive(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_StartServer">NetworkManager.StartServer()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_StartClient">NetworkManager.StartClient()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_StartClient_Uri_">NetworkManager.StartClient(Uri)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_StartHost">NetworkManager.StartHost()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_StopHost">NetworkManager.StopHost()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_StopServer">NetworkManager.StopServer()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_StopClient">NetworkManager.StopClient()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_OnApplicationQuit">NetworkManager.OnApplicationQuit()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_ConfigureServerFrameRate">NetworkManager.ConfigureServerFrameRate()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_Shutdown">NetworkManager.Shutdown()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_OnDestroy">NetworkManager.OnDestroy()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_networkSceneName">NetworkManager.networkSceneName</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_loadingSceneAsync">NetworkManager.loadingSceneAsync</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_startPositionIndex">NetworkManager.startPositionIndex</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_startPositions">NetworkManager.startPositions</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_RegisterStartPosition_Transform_">NetworkManager.RegisterStartPosition(Transform)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_UnRegisterStartPosition_Transform_">NetworkManager.UnRegisterStartPosition(Transform)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_GetStartPosition">NetworkManager.GetStartPosition()</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_OnServerError_Mirror_NetworkConnection_System_Int32_">NetworkManager.OnServerError(NetworkConnection, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_OnServerChangeScene_System_String_">NetworkManager.OnServerChangeScene(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_OnClientError_Mirror_NetworkConnection_System_Int32_">NetworkManager.OnClientError(NetworkConnection, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_OnClientNotReady_Mirror_NetworkConnection_">NetworkManager.OnClientNotReady(NetworkConnection)</a>
+    </div>
+    <div>
+      <a class="xref" href="Mirror.NetworkManager.html#Mirror_NetworkManager_OnClientChangeScene_System_String_Mirror_SceneOperation_System_Boolean_">NetworkManager.OnClientChangeScene(String, SceneOperation, Boolean)</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Mirror.Examples.NetworkRoom.html">Mirror.Examples.NetworkRoom</a></h6>
+  <h6><strong>Assembly</strong>: Mirror.Examples.dll</h6>
+  <h5 id="Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class NetworkRoomManagerExt : NetworkRoomManager</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_rewardPrefab.md&amp;value=---%0Auid%3A%20Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.rewardPrefab%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs/#L11">View Source</a>
+  </span>
+  <h4 id="Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_rewardPrefab" data-uid="Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.rewardPrefab">rewardPrefab</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public GameObject rewardPrefab</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">GameObject</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnGUI.md&amp;value=---%0Auid%3A%20Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnGUI%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs/#L83">View Source</a>
+  </span>
+  <a id="Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnGUI_" data-uid="Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnGUI*"></a>
+  <h4 id="Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnGUI" data-uid="Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnGUI">OnGUI()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void OnGUI()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnGUI">NetworkRoomManager.OnGUI()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnRoomServerPlayersReady.md&amp;value=---%0Auid%3A%20Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnRoomServerPlayersReady%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs/#L73">View Source</a>
+  </span>
+  <a id="Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnRoomServerPlayersReady_" data-uid="Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnRoomServerPlayersReady*"></a>
+  <h4 id="Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnRoomServerPlayersReady" data-uid="Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnRoomServerPlayersReady">OnRoomServerPlayersReady()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void OnRoomServerPlayersReady()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomServerPlayersReady">NetworkRoomManager.OnRoomServerPlayersReady()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnRoomServerSceneChanged_System_String_.md&amp;value=---%0Auid%3A%20Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnRoomServerSceneChanged(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs/#L17">View Source</a>
+  </span>
+  <a id="Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnRoomServerSceneChanged_" data-uid="Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnRoomServerSceneChanged*"></a>
+  <h4 id="Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnRoomServerSceneChanged_System_String_" data-uid="Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnRoomServerSceneChanged(System.String)">OnRoomServerSceneChanged(String)</h4>
+  <div class="markdown level1 summary"><p>This is called on the server when a networked scene finishes loading.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void OnRoomServerSceneChanged(string sceneName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">sceneName</span></td>
+        <td><p>Name of the new scene.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomServerSceneChanged_System_String_">NetworkRoomManager.OnRoomServerSceneChanged(String)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnRoomServerSceneLoadedForPlayer_Mirror_NetworkConnection_GameObject_GameObject_.md&amp;value=---%0Auid%3A%20Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnRoomServerSceneLoadedForPlayer(Mirror.NetworkConnection%2CGameObject%2CGameObject)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs/#L35">View Source</a>
+  </span>
+  <a id="Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnRoomServerSceneLoadedForPlayer_" data-uid="Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnRoomServerSceneLoadedForPlayer*"></a>
+  <h4 id="Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnRoomServerSceneLoadedForPlayer_Mirror_NetworkConnection_GameObject_GameObject_" data-uid="Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnRoomServerSceneLoadedForPlayer(Mirror.NetworkConnection,GameObject,GameObject)">OnRoomServerSceneLoadedForPlayer(NetworkConnection, GameObject, GameObject)</h4>
+  <div class="markdown level1 summary"><p>Called just after GamePlayer object is instantiated and just before it replaces RoomPlayer object.
+This is the ideal point to pass any data like player name, credentials, tokens, colors, etc.
+into the GamePlayer object as it is about to enter the Online scene.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Mirror.NetworkConnection.html">NetworkConnection</a></td>
+        <td><span class="parametername">conn</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">GameObject</span></td>
+        <td><span class="parametername">roomPlayer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">GameObject</span></td>
+        <td><span class="parametername">gamePlayer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><p>true unless some code in here decides it needs to abort the replacement</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnRoomStopClient.md&amp;value=---%0Auid%3A%20Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnRoomStopClient%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs/#L42">View Source</a>
+  </span>
+  <a id="Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnRoomStopClient_" data-uid="Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnRoomStopClient*"></a>
+  <h4 id="Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnRoomStopClient" data-uid="Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnRoomStopClient">OnRoomStopClient()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void OnRoomStopClient()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomStopClient">NetworkRoomManager.OnRoomStopClient()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnRoomStopServer.md&amp;value=---%0Auid%3A%20Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnRoomStopServer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs/#L52">View Source</a>
+  </span>
+  <a id="Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnRoomStopServer_" data-uid="Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnRoomStopServer*"></a>
+  <h4 id="Mirror_Examples_NetworkRoom_NetworkRoomManagerExt_OnRoomStopServer" data-uid="Mirror.Examples.NetworkRoom.NetworkRoomManagerExt.OnRoomStopServer">OnRoomStopServer()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void OnRoomStopServer()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Mirror.NetworkRoomManager.html#Mirror_NetworkRoomManager_OnRoomStopServer">NetworkRoomManager.OnRoomStopServer()</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Examples_NetworkRoom_NetworkRoomManagerExt.md&amp;value=---%0Auid%3A%20Mirror.Examples.NetworkRoom.NetworkRoomManagerExt%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs/#L6" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

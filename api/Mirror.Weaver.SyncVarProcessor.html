@@ -1,0 +1,502 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class SyncVarProcessor
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class SyncVarProcessor
+   ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" style="display:flex;" href="http://mirror-networking.com">
+                <img id="logo" class="svg" style="vertical-align: middle;align-self:center;" src="../logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Mirror.Weaver.SyncVarProcessor">
+  
+  
+  <h1 id="Mirror_Weaver_SyncVarProcessor" data-uid="Mirror.Weaver.SyncVarProcessor" class="text-break">Class SyncVarProcessor
+  </h1>
+  <div class="markdown level0 summary"><p>Processes [SyncVar] in NetworkBehaviour</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">SyncVarProcessor</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Mirror.Weaver.html">Mirror.Weaver</a></h6>
+  <h6><strong>Assembly</strong>: Mirror.Weaver.dll</h6>
+  <h5 id="Mirror_Weaver_SyncVarProcessor_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class SyncVarProcessor : object</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Weaver_SyncVarProcessor_GenerateSyncVarGetter_FieldDefinition_System_String_FieldDefinition_.md&amp;value=---%0Auid%3A%20Mirror.Weaver.SyncVarProcessor.GenerateSyncVarGetter(FieldDefinition%2CSystem.String%2CFieldDefinition)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Editor/Weaver/Processors/SyncVarProcessor.cs/#L73">View Source</a>
+  </span>
+  <a id="Mirror_Weaver_SyncVarProcessor_GenerateSyncVarGetter_" data-uid="Mirror.Weaver.SyncVarProcessor.GenerateSyncVarGetter*"></a>
+  <h4 id="Mirror_Weaver_SyncVarProcessor_GenerateSyncVarGetter_FieldDefinition_System_String_FieldDefinition_" data-uid="Mirror.Weaver.SyncVarProcessor.GenerateSyncVarGetter(FieldDefinition,System.String,FieldDefinition)">GenerateSyncVarGetter(FieldDefinition, String, FieldDefinition)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MethodDefinition GenerateSyncVarGetter(FieldDefinition fd, string originalName, FieldDefinition netFieldId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">FieldDefinition</span></td>
+        <td><span class="parametername">fd</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">originalName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">FieldDefinition</span></td>
+        <td><span class="parametername">netFieldId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">MethodDefinition</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Weaver_SyncVarProcessor_GenerateSyncVarSetter_TypeDefinition_FieldDefinition_System_String_System_Int64_FieldDefinition_.md&amp;value=---%0Auid%3A%20Mirror.Weaver.SyncVarProcessor.GenerateSyncVarSetter(TypeDefinition%2CFieldDefinition%2CSystem.String%2CSystem.Int64%2CFieldDefinition)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Editor/Weaver/Processors/SyncVarProcessor.cs/#L125">View Source</a>
+  </span>
+  <a id="Mirror_Weaver_SyncVarProcessor_GenerateSyncVarSetter_" data-uid="Mirror.Weaver.SyncVarProcessor.GenerateSyncVarSetter*"></a>
+  <h4 id="Mirror_Weaver_SyncVarProcessor_GenerateSyncVarSetter_TypeDefinition_FieldDefinition_System_String_System_Int64_FieldDefinition_" data-uid="Mirror.Weaver.SyncVarProcessor.GenerateSyncVarSetter(TypeDefinition,FieldDefinition,System.String,System.Int64,FieldDefinition)">GenerateSyncVarSetter(TypeDefinition, FieldDefinition, String, Int64, FieldDefinition)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MethodDefinition GenerateSyncVarSetter(TypeDefinition td, FieldDefinition fd, string originalName, long dirtyBit, FieldDefinition netFieldId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TypeDefinition</span></td>
+        <td><span class="parametername">td</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">FieldDefinition</span></td>
+        <td><span class="parametername">fd</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">originalName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">dirtyBit</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">FieldDefinition</span></td>
+        <td><span class="parametername">netFieldId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">MethodDefinition</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Weaver_SyncVarProcessor_GetHookMethod_TypeDefinition_FieldDefinition_.md&amp;value=---%0Auid%3A%20Mirror.Weaver.SyncVarProcessor.GetHookMethod(TypeDefinition%2CFieldDefinition)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Editor/Weaver/Processors/SyncVarProcessor.cs/#L21">View Source</a>
+  </span>
+  <a id="Mirror_Weaver_SyncVarProcessor_GetHookMethod_" data-uid="Mirror.Weaver.SyncVarProcessor.GetHookMethod*"></a>
+  <h4 id="Mirror_Weaver_SyncVarProcessor_GetHookMethod_TypeDefinition_FieldDefinition_" data-uid="Mirror.Weaver.SyncVarProcessor.GetHookMethod(TypeDefinition,FieldDefinition)">GetHookMethod(TypeDefinition, FieldDefinition)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MethodDefinition GetHookMethod(TypeDefinition td, FieldDefinition syncVar)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TypeDefinition</span></td>
+        <td><span class="parametername">td</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">FieldDefinition</span></td>
+        <td><span class="parametername">syncVar</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">MethodDefinition</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Weaver_SyncVarProcessor_ProcessSyncVar_TypeDefinition_FieldDefinition_Dictionary_FieldDefinition_FieldDefinition__System_Int64_.md&amp;value=---%0Auid%3A%20Mirror.Weaver.SyncVarProcessor.ProcessSyncVar(TypeDefinition%2CFieldDefinition%2CDictionary%7BFieldDefinition%2CFieldDefinition%7D%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Editor/Weaver/Processors/SyncVarProcessor.cs/#L262">View Source</a>
+  </span>
+  <a id="Mirror_Weaver_SyncVarProcessor_ProcessSyncVar_" data-uid="Mirror.Weaver.SyncVarProcessor.ProcessSyncVar*"></a>
+  <h4 id="Mirror_Weaver_SyncVarProcessor_ProcessSyncVar_TypeDefinition_FieldDefinition_Dictionary_FieldDefinition_FieldDefinition__System_Int64_" data-uid="Mirror.Weaver.SyncVarProcessor.ProcessSyncVar(TypeDefinition,FieldDefinition,Dictionary{FieldDefinition,FieldDefinition},System.Int64)">ProcessSyncVar(TypeDefinition, FieldDefinition, Dictionary&lt;FieldDefinition, FieldDefinition&gt;, Int64)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void ProcessSyncVar(TypeDefinition td, FieldDefinition fd, Dictionary&lt;FieldDefinition, FieldDefinition&gt; syncVarNetIds, long dirtyBit)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TypeDefinition</span></td>
+        <td><span class="parametername">td</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">FieldDefinition</span></td>
+        <td><span class="parametername">fd</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Dictionary</span>&lt;<span class="xref">FieldDefinition</span>, <span class="xref">FieldDefinition</span>&gt;</td>
+        <td><span class="parametername">syncVarNetIds</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td><span class="parametername">dirtyBit</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Weaver_SyncVarProcessor_ProcessSyncVars_TypeDefinition_.md&amp;value=---%0Auid%3A%20Mirror.Weaver.SyncVarProcessor.ProcessSyncVars(TypeDefinition)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Editor/Weaver/Processors/SyncVarProcessor.cs/#L307">View Source</a>
+  </span>
+  <a id="Mirror_Weaver_SyncVarProcessor_ProcessSyncVars_" data-uid="Mirror.Weaver.SyncVarProcessor.ProcessSyncVars*"></a>
+  <h4 id="Mirror_Weaver_SyncVarProcessor_ProcessSyncVars_TypeDefinition_" data-uid="Mirror.Weaver.SyncVarProcessor.ProcessSyncVars(TypeDefinition)">ProcessSyncVars(TypeDefinition)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (List&lt;FieldDefinition&gt; syncVars, Dictionary&lt;FieldDefinition, FieldDefinition&gt; syncVarNetIds)ProcessSyncVars(TypeDefinition td)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TypeDefinition</span></td>
+        <td><span class="parametername">td</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.valuetuple-2">ValueTuple</a>&lt;<span class="xref">List</span>&lt;<span class="xref">FieldDefinition</span>&gt;, <span class="xref">Dictionary</span>&lt;<span class="xref">FieldDefinition</span>, <span class="xref">FieldDefinition</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Weaver_SyncVarProcessor_WriteCallHookMethodUsingArgument_ILProcessor_MethodDefinition_VariableDefinition_.md&amp;value=---%0Auid%3A%20Mirror.Weaver.SyncVarProcessor.WriteCallHookMethodUsingArgument(ILProcessor%2CMethodDefinition%2CVariableDefinition)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Editor/Weaver/Processors/SyncVarProcessor.cs/#L363">View Source</a>
+  </span>
+  <a id="Mirror_Weaver_SyncVarProcessor_WriteCallHookMethodUsingArgument_" data-uid="Mirror.Weaver.SyncVarProcessor.WriteCallHookMethodUsingArgument*"></a>
+  <h4 id="Mirror_Weaver_SyncVarProcessor_WriteCallHookMethodUsingArgument_ILProcessor_MethodDefinition_VariableDefinition_" data-uid="Mirror.Weaver.SyncVarProcessor.WriteCallHookMethodUsingArgument(ILProcessor,MethodDefinition,VariableDefinition)">WriteCallHookMethodUsingArgument(ILProcessor, MethodDefinition, VariableDefinition)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void WriteCallHookMethodUsingArgument(ILProcessor worker, MethodDefinition hookMethod, VariableDefinition oldValue)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">ILProcessor</span></td>
+        <td><span class="parametername">worker</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">MethodDefinition</span></td>
+        <td><span class="parametername">hookMethod</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">VariableDefinition</span></td>
+        <td><span class="parametername">oldValue</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Weaver_SyncVarProcessor_WriteCallHookMethodUsingField_ILProcessor_MethodDefinition_VariableDefinition_FieldDefinition_.md&amp;value=---%0Auid%3A%20Mirror.Weaver.SyncVarProcessor.WriteCallHookMethodUsingField(ILProcessor%2CMethodDefinition%2CVariableDefinition%2CFieldDefinition)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Editor/Weaver/Processors/SyncVarProcessor.cs/#L368">View Source</a>
+  </span>
+  <a id="Mirror_Weaver_SyncVarProcessor_WriteCallHookMethodUsingField_" data-uid="Mirror.Weaver.SyncVarProcessor.WriteCallHookMethodUsingField*"></a>
+  <h4 id="Mirror_Weaver_SyncVarProcessor_WriteCallHookMethodUsingField_ILProcessor_MethodDefinition_VariableDefinition_FieldDefinition_" data-uid="Mirror.Weaver.SyncVarProcessor.WriteCallHookMethodUsingField(ILProcessor,MethodDefinition,VariableDefinition,FieldDefinition)">WriteCallHookMethodUsingField(ILProcessor, MethodDefinition, VariableDefinition, FieldDefinition)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void WriteCallHookMethodUsingField(ILProcessor worker, MethodDefinition hookMethod, VariableDefinition oldValue, FieldDefinition newValue)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">ILProcessor</span></td>
+        <td><span class="parametername">worker</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">MethodDefinition</span></td>
+        <td><span class="parametername">hookMethod</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">VariableDefinition</span></td>
+        <td><span class="parametername">oldValue</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">FieldDefinition</span></td>
+        <td><span class="parametername">newValue</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/James-Frowen/Mirror/new/docfx-references-origin/apiSpec/new?filename=Mirror_Weaver_SyncVarProcessor.md&amp;value=---%0Auid%3A%20Mirror.Weaver.SyncVarProcessor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/James-Frowen/Mirror/blob/docfx-references-origin/Assets/Mirror/Editor/Weaver/Processors/SyncVarProcessor.cs/#L11" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
