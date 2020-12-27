@@ -461,7 +461,47 @@ namespace Mirror
                 NetworkIdentity identity = kvp.Value;
                 if (identity != null)
                 {
-                    identity.ServerUpdate();
+                    identity.CreateAndCacheSyncVarMessage();
+                }
+                else
+                {
+                    // spawned list should have no null entries because we
+                    // always call Remove in OnObjectDestroy everywhere.
+                    logger.LogWarning("Found 'null' entry in spawned list for netId=" + kvp.Key + ". Please call NetworkServer.Destroy to destroy networked objects. Don't use GameObject.Destroy.");
+                }
+            }
+
+            foreach (KeyValuePair<int, NetworkConnectionToClient> kvp in connections)
+            {
+                NetworkConnectionToClient conn = kvp.Value;
+                // todo check if not ready connections need updates?
+                if (!conn.isReady) { continue; }
+                using (PooledNetworkWriter writer = NetworkWriterPool.GetWriter())
+                {
+                    foreach (NetworkIdentity obj in conn.visList)
+                    {
+                        if (obj.HasSyncVarMessage(conn))
+                        {
+                            // todo, make sure message size limit isn't reached
+                            writer.WriteUInt32(obj.netId);
+                            writer.WriteBytesAndSizeSegment(obj.GetSyncVarMessage(conn));
+                        }
+                    }
+
+                    SyncVarGroupMessage msg = new SyncVarGroupMessage
+                    {
+                        payload = writer.ToArraySegment()
+                    };
+                    conn.Send(msg);
+                }
+            }
+
+            foreach (KeyValuePair<uint, NetworkIdentity> kvp in NetworkIdentity.spawned)
+            {
+                NetworkIdentity identity = kvp.Value;
+                if (identity != null)
+                {
+                    identity.ClearSyncVarMessage();
                 }
                 else
                 {

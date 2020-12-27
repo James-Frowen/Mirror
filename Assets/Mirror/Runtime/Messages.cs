@@ -130,6 +130,11 @@ namespace Mirror
         public uint netId;
     }
 
+    public struct SyncVarGroupMessage : NetworkMessage
+    {
+        public ArraySegment<byte> payload;
+    }
+
     public struct UpdateVarsMessage : NetworkMessage
     {
         public uint netId;

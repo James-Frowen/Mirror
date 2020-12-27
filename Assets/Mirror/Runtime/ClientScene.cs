@@ -1014,17 +1014,32 @@ namespace Mirror
         }
 
         internal static void OnUpdateVarsMessage(UpdateVarsMessage msg)
-        {
-            if (logger.LogEnabled()) logger.Log("ClientScene.OnUpdateVarsMessage " + msg.netId);
+            => OnUpdateVarsMessage(msg.netId, msg.payload);
 
-            if (NetworkIdentity.spawned.TryGetValue(msg.netId, out NetworkIdentity localObject) && localObject != null)
+        internal static void OnUpdateVarsMessage(uint netId, ArraySegment<byte> payload)
+        {
+            if (logger.LogEnabled()) logger.Log("ClientScene.OnUpdateVarsMessage " + netId);
+
+            if (NetworkIdentity.spawned.TryGetValue(netId, out NetworkIdentity localObject) && localObject != null)
             {
-                using (PooledNetworkReader networkReader = NetworkReaderPool.GetReader(msg.payload))
+                using (PooledNetworkReader networkReader = NetworkReaderPool.GetReader(payload))
                     localObject.OnDeserializeAllSafely(networkReader, false);
             }
             else
             {
-                logger.LogWarning("Did not find target for sync message for " + msg.netId + " . Note: this can be completely normal because UDP messages may arrive out of order, so this message might have arrived after a Destroy message.");
+                logger.LogWarning("Did not find target for sync message for " + netId + " . Note: this can be completely normal because UDP messages may arrive out of order, so this message might have arrived after a Destroy message.");
+            }
+        }
+        internal static void OnSyncVarGroupMessage(SyncVarGroupMessage msg)
+        {
+            using (PooledNetworkReader reader = NetworkReaderPool.GetReader(msg.payload))
+            {
+                while (reader.Position < reader.Length)
+                {
+                    uint netId = reader.ReadUInt32();
+                    ArraySegment<byte> segment = reader.ReadBytesAndSizeSegment();
+                    OnUpdateVarsMessage(netId, segment);
+                }
             }
         }
 

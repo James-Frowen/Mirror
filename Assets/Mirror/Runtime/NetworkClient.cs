@@ -276,6 +276,7 @@ namespace Mirror
                 // host mode doesn't need spawning
                 RegisterHandler<ObjectSpawnFinishedMessage>((conn, msg) => { });
                 RegisterHandler<UpdateVarsMessage>((conn, msg) => { });
+                RegisterHandler<SyncVarGroupMessage>((conn, msg) => { });
             }
             else
             {
@@ -286,6 +287,7 @@ namespace Mirror
                 RegisterHandler<ObjectSpawnStartedMessage>(ClientScene.OnObjectSpawnStarted);
                 RegisterHandler<ObjectSpawnFinishedMessage>(ClientScene.OnObjectSpawnFinished);
                 RegisterHandler<UpdateVarsMessage>(ClientScene.OnUpdateVarsMessage);
+                RegisterHandler<SyncVarGroupMessage>(ClientScene.OnSyncVarGroupMessage);
             }
             RegisterHandler<RpcMessage>(ClientScene.OnRPCMessage);
         }

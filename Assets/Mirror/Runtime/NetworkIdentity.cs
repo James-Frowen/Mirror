@@ -1005,6 +1005,9 @@ namespace Mirror
                         observersWriter.WriteBytes(segment.Array, startPosition, length);
                         ++observersWritten;
                     }
+
+                    // if written, clear dirty bits
+                    comp.ClearAllDirtyBits();
                 }
             }
         }
@@ -1418,11 +1421,49 @@ namespace Mirror
             }
         }
 
+        bool _hasSyncVarOwnerMessage;
+        PooledNetworkWriter _syncVarOwnerWriter;
+        ArraySegment<byte> _syncVarOwnerMessage;
+
+        bool _hasSyncVarObserverMessage;
+        PooledNetworkWriter _syncVarObserverWriter;
+        ArraySegment<byte> _syncVarObserverMessage;
+
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ArraySegment<byte> GetSyncVarMessage(NetworkConnectionToClient conn)
+        {
+            if (connectionToClient == conn)
+            {
+                return _syncVarOwnerMessage;
+            }
+            else
+            {
+                return _syncVarObserverMessage;
+            }
+        }
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool HasSyncVarMessage(NetworkConnectionToClient conn)
+        {
+            if (connectionToClient == conn)
+            {
+                return _hasSyncVarOwnerMessage;
+            }
+            else
+            {
+                return _hasSyncVarObserverMessage;
+            }
+        }
+
+
+
         /// <summary>
         /// Invoked by NetworkServer.Update during LateUpdate
         /// </summary>
-        internal void ServerUpdate()
+        internal void CreateAndCacheSyncVarMessage()
         {
+            // clear this incase it isnt already clear
+            _hasSyncVarOwnerMessage = false;
+            _hasSyncVarObserverMessage = false;
             if (observers != null && observers.Count > 0)
             {
                 SendUpdateVarsMessage();
@@ -1435,49 +1476,56 @@ namespace Mirror
             }
         }
 
+        /// <summary>
+        /// Invoked by NetworkServer.Update during LateUpdate
+        /// </summary>
+        internal void ClearSyncVarMessage()
+        {
+            if (_hasSyncVarOwnerMessage)
+            {
+                _hasSyncVarOwnerMessage = false;
+                _syncVarOwnerWriter.Dispose();
+                _syncVarOwnerWriter = null;
+                _syncVarOwnerMessage = default;
+            }
+
+            if (_hasSyncVarObserverMessage)
+            {
+                _hasSyncVarObserverMessage = false;
+                _syncVarObserverWriter.Dispose();
+                _syncVarObserverWriter = null;
+                _syncVarObserverMessage = default;
+            }
+        }
+
         void SendUpdateVarsMessage()
         {
             // one writer for owner, one for observers
-            using (PooledNetworkWriter ownerWriter = NetworkWriterPool.GetWriter(), observersWriter = NetworkWriterPool.GetWriter())
+            _syncVarOwnerWriter = NetworkWriterPool.GetWriter();
+            _syncVarObserverWriter = NetworkWriterPool.GetWriter();
+
+            // serialize all the dirty components and send
+            OnSerializeAllSafely(false, _syncVarOwnerWriter, out int ownerWritten, _syncVarObserverWriter, out int observersWritten);
+
+            if (ownerWritten > 0)
             {
-                // serialize all the dirty components and send
-                OnSerializeAllSafely(false, ownerWriter, out int ownerWritten, observersWriter, out int observersWritten);
-                if (ownerWritten > 0 || observersWritten > 0)
-                {
-                    UpdateVarsMessage varsMessage = new UpdateVarsMessage
-                    {
-                        netId = netId
-                    };
+                _hasSyncVarOwnerMessage = true;
+                _syncVarOwnerMessage = _syncVarOwnerWriter.ToArraySegment();
+            }
+            else
+            {
+                _syncVarOwnerWriter.Dispose();
+            }
 
-                    // send ownerWriter to owner
-                    // (only if we serialized anything for owner)
-                    // (only if there is a connection (e.g. if not a monster),
-                    //  and if connection is ready because we use SendToReady
-                    //  below too)
-                    if (ownerWritten > 0)
-                    {
-                        varsMessage.payload = ownerWriter.ToArraySegment();
-                        if (connectionToClient != null && connectionToClient.isReady)
-                            NetworkServer.SendToClientOfPlayer(this, varsMessage);
-                    }
 
-                    // send observersWriter to everyone but owner
-                    // (only if we serialized anything for observers)
-                    if (observersWritten > 0)
-                    {
-                        varsMessage.payload = observersWriter.ToArraySegment();
-                        NetworkServer.SendToReady(this, varsMessage, false);
-                    }
-
-                    // clear dirty bits only for the components that we serialized
-                    // DO NOT clean ALL component's dirty bits, because
-                    // components can have different syncIntervals and we don't
-                    // want to reset dirty bits for the ones that were not
-                    // synced yet.
-                    // (we serialized only the IsDirty() components, or all of
-                    //  them if initialState. clearing the dirty ones is enough.)
-                    ClearDirtyComponentsDirtyBits();
-                }
+            if (observersWritten > 0)
+            {
+                _hasSyncVarObserverMessage = true;
+                _syncVarObserverMessage = _syncVarObserverWriter.ToArraySegment();
+            }
+            else
+            {
+                _syncVarObserverWriter.Dispose();
             }
         }
 
@@ -1497,6 +1545,7 @@ namespace Mirror
         /// Clear only dirty component's dirty bits. ignores components which
         /// may be dirty but not ready to be synced yet (because of syncInterval)
         /// </summary>
+        [System.Obsolete("Make Component clear their own dirty bits after writing")]
         internal void ClearDirtyComponentsDirtyBits()
         {
             foreach (NetworkBehaviour comp in NetworkBehaviours)
