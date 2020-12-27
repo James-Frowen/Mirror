@@ -488,11 +488,15 @@ namespace Mirror
                         }
                     }
 
-                    SyncVarGroupMessage msg = new SyncVarGroupMessage
+                    // only send message if written
+                    if (writer.Length > 0)
                     {
-                        payload = writer.ToArraySegment()
-                    };
-                    conn.Send(msg);
+                        SyncVarGroupMessage msg = new SyncVarGroupMessage
+                        {
+                            payload = writer.ToArraySegment()
+                        };
+                        conn.Send(msg);
+                    }
                 }
             }
 
