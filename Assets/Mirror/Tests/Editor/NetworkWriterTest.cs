@@ -1151,7 +1151,7 @@ namespace Mirror.Tests
         [TestCase(null)]
         [TestCase(true)]
         [TestCase(false)]
-        public void NullableInt(bool? value)
+        public void NullableBool(bool? value)
         {
             NetworkWriter writer = new NetworkWriter();
             writer.Write<bool?>(value);
@@ -1168,7 +1168,7 @@ namespace Mirror.Tests
         [TestCase(null)]
         [TestCase(0ul)]
         [TestCase(20202020ul)]
-        public void NullableInt(ulong? value)
+        public void NullableUlong(ulong? value)
         {
             NetworkWriter writer = new NetworkWriter();
             writer.Write<ulong?>(value);
