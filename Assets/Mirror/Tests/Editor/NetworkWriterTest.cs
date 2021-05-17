@@ -1129,5 +1129,55 @@ namespace Mirror.Tests
                 GameObject.DestroyImmediate(gameObject);
             }
         }
+
+        [Test]
+        [TestCase(null)]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(1234)]
+        public void NullableInt(int? value)
+        {
+            NetworkWriter writer = new NetworkWriter();
+            writer.Write<int?>(value);
+            NetworkReader reader = new NetworkReader(writer.ToArray());
+            int? unpacked = reader.Read<int?>();
+
+            Assert.That(unpacked, Is.EqualTo(value));
+        }
+        // use networkmessage to make sure writer is generated
+        public struct NullableIntMessage : NetworkMessage { public int? value; }
+
+        [Test]
+        [TestCase(null)]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void NullableInt(bool? value)
+        {
+            NetworkWriter writer = new NetworkWriter();
+            writer.Write<bool?>(value);
+            NetworkReader reader = new NetworkReader(writer.ToArray());
+            bool? unpacked = reader.Read<bool?>();
+
+            Assert.That(unpacked, Is.EqualTo(value));
+        }
+        // use networkmessage to make sure writer is generated
+        public struct NullableBoolMessage : NetworkMessage { public bool? value; }
+
+
+        [Test]
+        [TestCase(null)]
+        [TestCase(0ul)]
+        [TestCase(20202020ul)]
+        public void NullableInt(ulong? value)
+        {
+            NetworkWriter writer = new NetworkWriter();
+            writer.Write<ulong?>(value);
+            NetworkReader reader = new NetworkReader(writer.ToArray());
+            ulong? unpacked = reader.Read<ulong?>();
+
+            Assert.That(unpacked, Is.EqualTo(value));
+        }
+        // use networkmessage to make sure writer is generated
+        public struct NullableUlongMessage : NetworkMessage { public ulong? value; }
     }
 }

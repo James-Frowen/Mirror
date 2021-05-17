@@ -447,5 +447,15 @@ namespace Mirror
                 writer.Write(segment.Array[segment.Offset + i]);
             }
         }
+
+        public static void WriteNullable<T>(this NetworkWriter writer, T? nullable) where T : struct
+        {
+            bool hasValue = nullable.HasValue;
+            writer.WriteBoolean(hasValue);
+            if (hasValue)
+            {
+                writer.Write(nullable.Value);
+            }
+        }
     }
 }

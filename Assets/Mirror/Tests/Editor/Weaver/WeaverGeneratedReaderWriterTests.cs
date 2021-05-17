@@ -214,5 +214,11 @@ namespace Mirror.Weaver.Tests
             HasWarning($"Registering a Read method for {typeName} when one already exists",
                 "GeneratedReaderWriter.GivesWarningWhenRegisteringExistingExtensionMethod.MyType GeneratedReaderWriter.GivesWarningWhenRegisteringExistingExtensionMethod.ReadWriteExtension::ReadMyType2(Mirror.NetworkReader)");
         }
+
+        [Test]
+        public void CreatesForNullable()
+        {
+            IsSuccess();
+        }
     }
 }

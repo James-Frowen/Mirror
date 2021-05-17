@@ -373,5 +373,18 @@ namespace Mirror
         {
             return new Uri(reader.ReadString());
         }
+
+        public static T? ReadNullable<T>(this NetworkReader reader) where T : struct
+        {
+            bool hasValue = reader.ReadBoolean();
+            if (hasValue)
+            {
+                return reader.Read<T>();
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

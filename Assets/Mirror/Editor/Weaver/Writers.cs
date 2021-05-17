@@ -80,7 +80,7 @@ namespace Mirror.Weaver
                     throw new GenerateWriterException($"{variableReference.Name} is an unsupported type. Multidimensional arrays are not supported", variableReference);
                 }
                 TypeReference elementType = variableReference.GetElementType();
-                return GenerateCollectionWriter(variableReference, elementType, nameof(NetworkWriterExtensions.WriteArray));
+                return GenerateGenericWriter(variableReference, elementType, nameof(NetworkWriterExtensions.WriteArray));
             }
 
             if (variableReference.Resolve()?.IsEnum ?? false)
@@ -89,20 +89,27 @@ namespace Mirror.Weaver
                 return GenerateEnumWriteFunc(variableReference);
             }
 
-            // check for collections
+            // check for collections or nullable
+            if (variableReference.Is(typeof(Nullable<>)))
+            {
+                GenericInstanceType genericInstance = (GenericInstanceType)variableReference;
+                TypeReference elementType = genericInstance.GenericArguments[0];
+
+                return GenerateGenericWriter(variableReference, elementType, nameof(NetworkWriterExtensions.WriteNullable));
+            }
             if (variableReference.Is(typeof(ArraySegment<>)))
             {
                 GenericInstanceType genericInstance = (GenericInstanceType)variableReference;
                 TypeReference elementType = genericInstance.GenericArguments[0];
 
-                return GenerateCollectionWriter(variableReference, elementType, nameof(NetworkWriterExtensions.WriteArraySegment));
+                return GenerateGenericWriter(variableReference, elementType, nameof(NetworkWriterExtensions.WriteArraySegment));
             }
             if (variableReference.Is(typeof(List<>)))
             {
                 GenericInstanceType genericInstance = (GenericInstanceType)variableReference;
                 TypeReference elementType = genericInstance.GenericArguments[0];
 
-                return GenerateCollectionWriter(variableReference, elementType, nameof(NetworkWriterExtensions.WriteList));
+                return GenerateGenericWriter(variableReference, elementType, nameof(NetworkWriterExtensions.WriteList));
             }
 
             if (variableReference.IsDerivedFrom<NetworkBehaviour>())
@@ -264,7 +271,7 @@ namespace Mirror.Weaver
             return true;
         }
 
-        static MethodDefinition GenerateCollectionWriter(TypeReference variable, TypeReference elementType, string writerFunction)
+        static MethodDefinition GenerateGenericWriter(TypeReference variable, TypeReference elementType, string writerFunction)
         {
 
             MethodDefinition writerFunc = GenerateWriterFunc(variable);
@@ -280,10 +287,10 @@ namespace Mirror.Weaver
             }
 
             ModuleDefinition module = Weaver.CurrentAssembly.MainModule;
-            TypeReference readerExtensions = module.ImportReference(typeof(NetworkWriterExtensions));
-            MethodReference collectionWriter = Resolvers.ResolveMethod(readerExtensions, Weaver.CurrentAssembly, writerFunction);
+            TypeReference writerExtensions = module.ImportReference(typeof(NetworkWriterExtensions));
+            MethodReference genericWriter = Resolvers.ResolveMethod(writerExtensions, Weaver.CurrentAssembly, writerFunction);
 
-            GenericInstanceMethod methodRef = new GenericInstanceMethod(collectionWriter);
+            GenericInstanceMethod methodRef = new GenericInstanceMethod(genericWriter);
             methodRef.GenericArguments.Add(elementType);
 
             // generates
@@ -291,7 +298,7 @@ namespace Mirror.Weaver
 
             ILProcessor worker = writerFunc.Body.GetILProcessor();
             worker.Append(worker.Create(OpCodes.Ldarg_0)); // writer
-            worker.Append(worker.Create(OpCodes.Ldarg_1)); // collection
+            worker.Append(worker.Create(OpCodes.Ldarg_1)); // genericValue
 
             worker.Append(worker.Create(OpCodes.Call, methodRef)); // WriteArray
 
