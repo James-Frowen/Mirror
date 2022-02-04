@@ -3,15 +3,19 @@
         {
             "src": [
                 {
+                    "src": "../",
                     "files": [
-                        "doc.csproj"
+                        "*.sln"
+                    ],
+                    "exclude": [
+                        "**/Tests/**",
+                        "**/Examples/**"
                     ]
                 }
             ],
             "dest": "api",
             "disableGitFeatures": false,
-            "disableDefaultFilter": false,
-            "filter": "filterConfig.yml"
+            "disableDefaultFilter": false
         }
     ],
     "build": {
@@ -65,6 +69,9 @@
         ],
         "xrefService": [
             "https://xref.docs.microsoft.com/query?uid={uid}"
+        ],
+        "xref": [
+            "https://normanderwan.github.io/DocFxForUnity/Unity/2019.4/xrefmap.yml"
         ],
         "postProcessors": [],
         "markdownEngineName": "markdig",

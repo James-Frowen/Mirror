@@ -1,0 +1,67 @@
+name: Docs
+
+on: push
+
+jobs:
+
+  Docs:
+    name: Build docs
+    runs-on: ubuntu-latest
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+    if: true
+    steps:
+  
+      # Checkout repository (required to test local actions)
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+   
+      - name: Activate license
+        uses: MirrorNG/unity-runner@2.0.0
+        with:
+          entrypoint: /activate.sh
+          
+      - name: Generate Solution
+        uses: MirrorNG/unity-runner@2.0.0
+        with:
+          # Arguments to pass to unity
+          args: -buildTarget StandaloneWindows64 -customBuildName MirrorNG -customBuildPath ./build/StandaloneWindows64 -projectPath . -executeMethod  UnityEditor.SyncVS.SyncSolution -quit
+      
+      - name: docfx metadata
+        uses: nikeee/docfx-action@v1.0.0
+        with:
+          args: metadata doc/docfx.json --logLevel Warning --warningsAsErrors
+
+      - name: docfx build
+        if: always()
+        uses: nikeee/docfx-action@v1.0.0
+        with:
+          args: build doc/docfx.json --logLevel Warning --warningsAsErrors
+
+      # - name: install docfx
+
+      # - name: docfx metadata
+      #   run: docfx metadata doc/docfx.json --logLevel Warning --warningsAsErrors
+
+      # - name: docfx build
+      #   run: docfx metadata doc/docfx.json --logLevel Warning --warningsAsErrors
+
+      # upload using ftp
+      # - name: upload
+      #   if: github.ref == 'refs/heads/master'
+
+      - name: GitHub Pages
+        if: always()
+        uses: crazy-max/ghaction-github-pages@v1.2.5
+        # if: github.ref == 'refs/heads/master'
+        with:
+          # Create incremental commit instead of doing push force
+          keep_history: true
+          # Allow an empty commit to be created
+          allow_empty_commit: False
+          # Build directory to deploy
+          build_dir: doc/_site
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
