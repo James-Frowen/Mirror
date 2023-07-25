@@ -1,13 +1,22 @@
 #!/bin/bash
 
+# reset to upstream to get all commits
 git remote add upstream https://github.com/MirrorNetworking/Mirror.git
-rm -r Assets/Tests
-rm -r Assets/Mirror/Samples~
-git checkout upstream/master -- Assets/
+git reset --hard upstream/master
+# reset files back to origin
+git checkout origin/master -- .github/workflows/CreatePackage.yml
+git checkout origin/master -- PrepareForPackageManager.sh
+git checkout origin/master -- README.md
+git checkout origin/master -- Assets/Mirror/CHANGELOG.md
+git checkout origin/master -- Assets/Mirror/package.json.meta
+
+git commit -m "Adding package workflow"
+
+# move files and create package.json
 mv Assets/Mirror/Tests Assets/Tests
 mv Assets/Mirror/Examples Assets/Mirror/Samples~
 
-sample_array='['
+sample_array=''
 
 # Find all directories in the samples directory
 for dir in $(find Assets/Mirror/Samples~ -type d -maxdepth 1 -mindepth 1)
@@ -24,7 +33,6 @@ done
 sample_array="${sample_array%,}"
 
 # Close the JSON array
-sample_array+=']'
 
 echo '{
     "name": "com.mirrornetworking.mirror",
