@@ -1,0 +1,32 @@
+name: Create Package
+
+on:
+  - workflow_dispatch
+
+jobs:
+  build:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      # - name: Install packages
+      #   # need upgrade git for git-lfs
+      #   run: |
+      #     apt-get update
+      #     apt-get install -y software-properties-common
+      #     add-apt-repository -y ppa:git-core/ppa
+      #     apt-get update
+      #     apt-get install -y zip unzip git
+
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Prepare git
+        run: |
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git config --global user.name 'GitHub Action'
+          git config --global --add safe.directory /__w/Mirror/Mirror
+
+      - name: Create Package
+        run: sh ./PrepareForPackageManager.sh
