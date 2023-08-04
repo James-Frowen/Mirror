@@ -188,7 +188,7 @@ namespace Mirror
             if (!Application.isPlaying) return;
 
             //Debug.Log($"NetworkEarlyUpdate {Time.time}");
-            NetworkServer.NetworkEarlyUpdate();
+            //NetworkServer.NetworkEarlyUpdate();
             NetworkClient.NetworkEarlyUpdate();
             // invoke event after mirror has done it's early updating.
             OnEarlyUpdate?.Invoke();
@@ -203,7 +203,7 @@ namespace Mirror
             //Debug.Log($"NetworkLateUpdate {Time.time}");
             // invoke event before mirror does its final late updating.
             OnLateUpdate?.Invoke();
-            NetworkServer.NetworkLateUpdate();
+            //NetworkServer.NetworkLateUpdate();
             NetworkClient.NetworkLateUpdate();
         }
     }

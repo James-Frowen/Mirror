@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using JamesFrowen.Benchmarker;
 using UnityEngine;
 
 namespace Mirror
@@ -172,6 +173,7 @@ namespace Mirror
         /// <summary>Set as dirty so that it's synced to clients again.</summary>
         // these are masks, not bit numbers, ie. 110011b not '2' for 2nd bit.
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //[BenchmarkMethod]
         public void SetSyncVarDirtyBit(ulong dirtyBit)
         {
             bool clean = syncObjectDirtyBits == 0;
@@ -1105,6 +1107,7 @@ namespace Mirror
         //
         // initialState is true for full spawns, false for delta syncs.
         //   note: SyncVar hooks are only called when inital=false
+        [BenchmarkMethod("Behaviour.OnSerialize")]
         public virtual void OnSerialize(NetworkWriter writer, bool initialState)
         {
             SerializeSyncObjects(writer, initialState);
@@ -1222,6 +1225,7 @@ namespace Mirror
         // on other entities would be mismatched, causing the weirdest errors.
         //
         // reads <<len, payload, len, payload, ...>> for 100% safety.
+        [BenchmarkMethod("Behaviour.OnSerialize wrapper")]
         internal void Serialize(NetworkWriter writer, bool initialState)
         {
             // reserve length header to ensure the correct amount will be read.

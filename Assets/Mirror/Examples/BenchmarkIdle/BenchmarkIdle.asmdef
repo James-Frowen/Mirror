@@ -1,13 +1,13 @@
 {
-    "name": "Mirror",
+    "name": "BenchmarkIdle",
     "rootNamespace": "",
     "references": [
-        "GUID:325984b52e4128546bc7558552f8b1d2",
+        "GUID:30817c1a0e6d646d99c048fc403f5979",
         "GUID:2353400444788674ab8945effbb8b282"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": true,
+    "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,

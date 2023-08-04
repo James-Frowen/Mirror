@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using JamesFrowen.Benchmarker;
+using JamesFrowen.Benchmarker.Weaver;
 using Mirror.RemoteCalls;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -1667,8 +1669,11 @@ namespace Mirror
             return null;
         }
 
+        [BenchmarkMethod("SyncVarSender.Update", description: "BroadcastDirtySpawned")]
         static void BroadcastDirtySpawned()
         {
+            //var timestamp = BenchmarkHelper.GetTimestamp();
+
             // PULL-Broadcasting vs. PUSH-Broadcasting:
             //
             // - Pull: foreach connection: foreach observing: send
@@ -1701,64 +1706,79 @@ namespace Mirror
                     // (which can happen if someone uses
                     //  GameObject.Destroy instead of
                     //  NetworkServer.Destroy)
-                    if (identity != null)
+                    if (identity == null)
                     {
-                        // only serialize if it has any observers
-                        // TODO only set dirty if has observers? would be easiest.
-                        if (identity.observers.Count > 0)
-                        {
-                            // serialize for owner & observers
-                            ownerWriter.Position = 0;
-                            observersWriter.Position = 0;
-                            identity.SerializeServer(false, ownerWriter, observersWriter, out bool pendingDirty);
-
-                            // broadcast to each observer connection
-                            foreach (NetworkConnectionToClient connection in identity.observers.Values)
-                            {
-                                // has this connection joined the world yet?
-                                if (connection.isReady)
-                                {
-                                    // is this entity owned by this connection?
-                                    bool owned = identity.connectionToClient == connection;
-
-                                    // get serialization for this entity viewed by this connection
-                                    // (if anything was serialized this time)
-                                    NetworkWriter serialization = SerializeForConnection(owned, ownerWriter, observersWriter);
-                                    if (serialization != null)
-                                    {
-                                        EntityStateMessage message = new EntityStateMessage
-                                        {
-                                            netId = identity.netId,
-                                            payload = serialization.ToArraySegment()
-                                        };
-                                        connection.Send(message);
-                                    }
-                                }
-                            }
-
-                            // if there are no more dirty components pending,
-                            // then remove this in place
-                            if (!pendingDirty)
-                            {
-                                // List.RemoveAt(i) is O(N).
-                                // instead, use O(1) swap-remove from Rust.
-                                // dirtySpawned.RemoveAt(i);
-
-                                dirtySpawned.SwapRemove(i);
-
-                                // the last element was moved to 'i'.
-                                // count was reduced by 1.
-                                // our for-int loop checks .Count, nothing more to do here.
-                            }
-                        }
+                        Debug.LogWarning($"Found 'null' entry in dirtySpawned. Please call NetworkServer.Destroy to destroy networked objects. Don't use GameObject.Destroy.");
+                        continue;
                     }
+
+
                     // spawned list should have no null entries because we
                     // always call Remove in OnObjectDestroy everywhere.
                     // if it does have null then someone used
                     // GameObject.Destroy instead of NetworkServer.Destroy.
-                    else Debug.LogWarning($"Found 'null' entry in dirtySpawned. Please call NetworkServer.Destroy to destroy networked objects. Don't use GameObject.Destroy.");
+
+                    // only serialize if it has any observers
+                    // TODO only set dirty if has observers? would be easiest.
+                    if (identity.observers.Count <= 0)
+                        continue;
+
+                    bool pendingDirty = SendUpdateVarsMessage(ownerWriter, observersWriter, identity);
+
+                    // if there are no more dirty components pending,
+                    // then remove this in place
+                    if (!pendingDirty)
+                    {
+                        // List.RemoveAt(i) is O(N).
+                        // instead, use O(1) swap-remove from Rust.
+                        // dirtySpawned.RemoveAt(i);
+
+                        dirtySpawned.SwapRemove(i);
+                        i--;
+
+                        // the last element was moved to 'i'.
+                        // count was reduced by 1.
+                        // our for-int loop checks .Count, nothing more to do here.
+                    }
+
                 }
             }
+        }
+
+        [BenchmarkMethod("SyncVarSender.SendUpdateVarsMessage")]
+        private static bool SendUpdateVarsMessage(NetworkWriterPooled ownerWriter, NetworkWriterPooled observersWriter, NetworkIdentity identity)
+        {
+
+            // serialize for owner & observers
+            ownerWriter.Position = 0;
+            observersWriter.Position = 0;
+            identity.SerializeServer(false, ownerWriter, observersWriter, out bool pendingDirty);
+
+            // broadcast to each observer connection
+            foreach (NetworkConnectionToClient connection in identity.observers.Values)
+            {
+                // has this connection joined the world yet?
+                if (connection.isReady)
+                {
+                    // is this entity owned by this connection?
+                    bool owned = identity.connectionToClient == connection;
+
+                    // get serialization for this entity viewed by this connection
+                    // (if anything was serialized this time)
+                    NetworkWriter serialization = SerializeForConnection(owned, ownerWriter, observersWriter);
+                    if (serialization != null)
+                    {
+                        EntityStateMessage message = new EntityStateMessage
+                        {
+                            netId = identity.netId,
+                            payload = serialization.ToArraySegment()
+                        };
+                        connection.Send(message);
+                    }
+                }
+            }
+
+            return pendingDirty;
         }
 
         // helper function to check a connection for inactivity and disconnect if necessary
@@ -1814,6 +1834,7 @@ namespace Mirror
             new List<NetworkConnectionToClient>();
 
         static Stopwatch watch = new Stopwatch();
+        [BenchmarkMethod]
         static void Broadcast()
         {
             // copy all connections into a helper collection so that
@@ -1865,7 +1886,7 @@ namespace Mirror
         // update //////////////////////////////////////////////////////////////
         // NetworkEarlyUpdate called before any Update/FixedUpdate
         // (we add this to the UnityEngine in NetworkLoop)
-        internal static void NetworkEarlyUpdate()
+        public static void NetworkEarlyUpdate()
         {
             // measure update time for profiling.
             if (active)
@@ -1885,7 +1906,7 @@ namespace Mirror
             if (active) earlyUpdateDuration.End();
         }
 
-        internal static void NetworkLateUpdate()
+        public static void NetworkLateUpdate()
         {
             if (active)
             {
@@ -1913,8 +1934,7 @@ namespace Mirror
 
             // process all outgoing messages after updating the world
             // (even if not active. still want to process disconnects etc.)
-            if (Transport.active != null)
-                Transport.active.ServerLateUpdate();
+            UpdateTransport();
 
             // measure actual tick rate every second.
             if (active)
@@ -1937,6 +1957,13 @@ namespace Mirror
                 lateUpdateDuration.End();
                 fullUpdateDuration.End();
             }
+        }
+
+        [BenchmarkMethod("UpdateTransport")]
+        private static void UpdateTransport()
+        {
+            if (Transport.active != null)
+                Transport.active.ServerLateUpdate();
         }
 
         // calls OnStartClient for all SERVER objects in host mode once.
