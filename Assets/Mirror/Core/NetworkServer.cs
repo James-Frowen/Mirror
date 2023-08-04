@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JamesFrowen.Benchmarker;
+using JamesFrowen.Benchmarker.Weaver;
 using Mirror.RemoteCalls;
 using UnityEngine;
 
@@ -1626,6 +1628,7 @@ namespace Mirror
 
         // broadcasting ////////////////////////////////////////////////////////
         // helper function to get the right serialization for a connection
+        [BenchmarkMethod()]
         static NetworkWriter SerializeForConnection(NetworkIdentity identity, NetworkConnectionToClient connection)
         {
             // get serialization for this entity (cached)
@@ -1656,6 +1659,7 @@ namespace Mirror
         }
 
         // helper function to broadcast the world to a connection
+        [BenchmarkMethod()]
         static void BroadcastToConnection(NetworkConnectionToClient connection)
         {
             // for each entity that this connection is seeing
@@ -1709,6 +1713,7 @@ namespace Mirror
         internal static readonly List<NetworkConnectionToClient> connectionsCopy =
             new List<NetworkConnectionToClient>();
 
+        [BenchmarkMethod()]
         static void Broadcast()
         {
             // copy all connections into a helper collection so that
@@ -1781,7 +1786,7 @@ namespace Mirror
         // update //////////////////////////////////////////////////////////////
         // NetworkEarlyUpdate called before any Update/FixedUpdate
         // (we add this to the UnityEngine in NetworkLoop)
-        internal static void NetworkEarlyUpdate()
+        public static void NetworkEarlyUpdate()
         {
             // measure update time for profiling.
             if (active)
@@ -1801,7 +1806,7 @@ namespace Mirror
             if (active) earlyUpdateDuration.End();
         }
 
-        internal static void NetworkLateUpdate()
+        public static void NetworkLateUpdate()
         {
             if (active)
             {
@@ -1829,8 +1834,7 @@ namespace Mirror
 
             // process all outgoing messages after updating the world
             // (even if not active. still want to process disconnects etc.)
-            if (Transport.active != null)
-                Transport.active.ServerLateUpdate();
+            UpdateTransport();
 
             // measure actual tick rate every second.
             if (active)
@@ -1853,6 +1857,13 @@ namespace Mirror
                 lateUpdateDuration.End();
                 fullUpdateDuration.End();
             }
+        }
+
+        [BenchmarkMethod("UpdateTransport")]
+        private static void UpdateTransport()
+        {
+            if (Transport.active != null)
+                Transport.active.ServerLateUpdate();
         }
 
         // calls OnStartClient for all SERVER objects in host mode once.

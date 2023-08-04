@@ -1,4 +1,4 @@
-﻿// idle object that rarely gets dirty
+// idle object that rarely gets dirty
 using UnityEngine;
 
 namespace Mirror.Examples.BenchmarkIdle
@@ -28,8 +28,7 @@ namespace Mirror.Examples.BenchmarkIdle
             rend.material.color = sleeping ? sleepingColor : activeColor;
         }
 
-        [ServerCallback]
-        void Update()
+        public void Update_SetSyncVar()
         {
             // set dirty if not sleeping.
             // only counts as dirty every 'syncInterval'.

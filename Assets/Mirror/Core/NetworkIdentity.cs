@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using Mirror.RemoteCalls;
 using UnityEngine;
 using UnityEngine.Serialization;
+using JamesFrowen.Benchmarker;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -906,6 +907,7 @@ namespace Mirror
         // check ownerWritten/observersWritten to know if anything was written
         // We pass dirtyComponentsMask into this function so that we can check
         // if any Components are dirty before creating writers
+        [BenchmarkMethod("Identity.OnSerializeAll")]
         internal void SerializeServer(bool initialState, NetworkWriter ownerWriter, NetworkWriter observersWriter)
         {
             // ensure NetworkBehaviours are valid before usage
