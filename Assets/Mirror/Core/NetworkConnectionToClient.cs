@@ -121,7 +121,7 @@ namespace Mirror
 
         // Send stage three: hand off to transport
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected override void SendToTransport(ArraySegment<byte> segment, int channelId = Channels.Reliable) =>
+        protected internal override void SendToTransport(ArraySegment<byte> segment, int channelId = Channels.Reliable) =>
             Transport.active.ServerSend(connectionId, segment, channelId);
 
         protected virtual void UpdatePing()

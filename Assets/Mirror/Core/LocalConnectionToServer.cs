@@ -41,12 +41,7 @@ namespace Mirror
             // local connection to server always invokes immediately.
             using (NetworkWriterPooled writer = NetworkWriterPool.Get())
             {
-                // make a batch with our local time (double precision)
-                if (batcher.GetBatch(writer))
-                {
-                    NetworkServer.OnTransportData(connectionId, writer.ToArraySegment(), channelId);
-                }
-                else Debug.LogError("Local connection failed to make batch. This should never happen.");
+                batcher.Flush();
             }
         }
 
@@ -75,11 +70,7 @@ namespace Mirror
 
                 using (NetworkWriterPooled batchWriter = NetworkWriterPool.Get())
                 {
-                    // make a batch with our local time (double precision)
-                    if (batcher.GetBatch(batchWriter))
-                    {
-                        NetworkClient.OnTransportData(batchWriter.ToArraySegment(), Channels.Reliable);
-                    }
+                    batcher.Flush();
                 }
 
                 NetworkWriterPool.Return(writer);

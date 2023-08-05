@@ -160,7 +160,8 @@ namespace Mirror.Examples.BenchmarkIdle
                 $"NO_DIRTY_LIST",
 #endif
                 "No_interval",
-                "Nanosocket"
+                //"Nanosocket"
+                "BatcherFlush"
             };
 
 

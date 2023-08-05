@@ -85,7 +85,7 @@ namespace Mirror
                 int threshold = Transport.active.GetBatchThreshold(channelId);
 
                 // create batcher
-                batch = new Batcher(threshold);
+                batch = new Batcher(threshold, channelId, this);
                 batches[channelId] = batch;
             }
             return batch;
@@ -147,7 +147,7 @@ namespace Mirror
         }
 
         // Send stage three: hand off to transport
-        protected abstract void SendToTransport(ArraySegment<byte> segment, int channelId = Channels.Reliable);
+        protected internal abstract void SendToTransport(ArraySegment<byte> segment, int channelId = Channels.Reliable);
 
         // flush batched messages at the end of every Update.
         internal virtual void Update()
@@ -156,25 +156,7 @@ namespace Mirror
             // foreach ((int key, Batcher batcher) in batches) // Unity 2020 doesn't support deconstruct yet
             foreach (KeyValuePair<int, Batcher> kvp in batches)
             {
-                // make and send as many batches as necessary from the stored
-                // messages.
-                using (NetworkWriterPooled writer = NetworkWriterPool.Get())
-                {
-                    // make a batch with our local time (double precision)
-                    while (kvp.Value.GetBatch(writer))
-                    {
-                        // message size is validated in Send<T>, with test coverage.
-                        // we can send directly without checking again.
-                        ArraySegment<byte> segment = writer.ToArraySegment();
-
-                        // send to transport
-                        SendToTransport(segment, kvp.Key);
-                        //UnityEngine.Debug.Log($"sending batch of {writer.Position} bytes for channel={kvp.Key} connId={connectionId}");
-
-                        // reset writer for each new batch
-                        writer.Position = 0;
-                    }
-                }
+                kvp.Value.Flush();
             }
         }
 

@@ -1,4 +1,4 @@
-﻿// batching functionality encapsulated into one class.
+// batching functionality encapsulated into one class.
 // -> less complexity
 // -> easy to test
 //
@@ -28,6 +28,8 @@ namespace Mirror
         //    timestamp, then large messages have to be a batch too. otherwise
         //    they would not contain a timestamp
         readonly int threshold;
+        private readonly int channel;
+        private readonly NetworkConnection connection;
 
         // TimeStamp header size. each batch has one.
         public const int TimestampSize = sizeof(double);
@@ -47,14 +49,17 @@ namespace Mirror
         //        it would allocate too many writers.
         //        https://github.com/vis2k/Mirror/pull/3127
         // => best to build batches on the fly.
-        readonly Queue<NetworkWriterPooled> batches = new Queue<NetworkWriterPooled>();
+        //readonly Queue<NetworkWriterPooled> batches = new Queue<NetworkWriterPooled>();
 
         // current batch in progress
-        NetworkWriterPooled batch;
+        readonly NetworkWriter batch = new NetworkWriter();
+        bool hasBatch;
 
-        public Batcher(int threshold)
+        public Batcher(int threshold, int channel, NetworkConnection connection)
         {
             this.threshold = threshold;
+            this.channel = channel;
+            this.connection = connection;
         }
 
         // add a message for batching
@@ -71,18 +76,18 @@ namespace Mirror
             // => less than or exactly threshold is fine.
             //    GetBatch() will finalize it.
             // => see unit tests.
-            if (batch != null &&
+            if (hasBatch &&
                 batch.Position + neededSize > threshold)
             {
-                batches.Enqueue(batch);
-                batch = null;
+                Flush();
             }
 
             // initialize a new batch if necessary
-            if (batch == null)
+            if (!hasBatch)
             {
+                hasBatch = true;
                 // borrow from pool. we return it in GetBatch.
-                batch = NetworkWriterPool.Get();
+                //batch = NetworkWriterPool.Get();
 
                 // write timestamp first.
                 // -> double precision for accuracy over long periods of time
@@ -108,43 +113,16 @@ namespace Mirror
             batch.WriteBytes(message.Array, message.Offset, message.Count);
         }
 
-        // helper function to copy a batch to writer and return it to pool
-        static void CopyAndReturn(NetworkWriterPooled batch, NetworkWriter writer)
+        public void Flush()
         {
-            // make sure the writer is fresh to avoid uncertain situations
-            if (writer.Position != 0)
-                throw new ArgumentException($"GetBatch needs a fresh writer!");
-
-            // copy to the target writer
-            ArraySegment<byte> segment = batch.ToArraySegment();
-            writer.WriteBytes(segment.Array, segment.Offset, segment.Count);
-
-            // return batch to pool for reuse
-            NetworkWriterPool.Return(batch);
-        }
-
-        // get the next batch which is available for sending (if any).
-        // TODO safely get & return a batch instead of copying to writer?
-        // TODO could return pooled writer & use GetBatch in a 'using' statement!
-        public bool GetBatch(NetworkWriter writer)
-        {
-            // get first batch from queue (if any)
-            if (batches.TryDequeue(out NetworkWriterPooled first))
+            if (hasBatch)
             {
-                CopyAndReturn(first, writer);
-                return true;
-            }
+                connection.SendToTransport(batch.ToArraySegment(), channel);
+                batch.Reset();
+                hasBatch = false;
 
-            // if queue was empty, we can send the batch in progress.
-            if (batch != null)
-            {
-                CopyAndReturn(batch, writer);
-                batch = null;
-                return true;
+                //Transport.active.ServerLateUpdate();
             }
-
-            // nothing was written
-            return false;
         }
     }
 }
