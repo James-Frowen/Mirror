@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using JamesFrowen.Mirage.DebugScripts;
 using Mirage.SocketLayer;
 using Mirage.Sockets.Udp;
 using NanoSockets;
@@ -29,7 +30,7 @@ namespace kcp2k
         protected readonly KcpConfig config;
 
         // state
-        protected NanoSocket socket;
+        protected ISocket socket;
         IEndPoint newClientEP;
 
         // raw receive buffer always needs to be of 'MTU' size, even if
@@ -65,11 +66,13 @@ namespace kcp2k
 
         public virtual bool IsActive() => socket != null;
 
-        NanoSocket CreateServerSocket(bool DualMode, ushort port)
+        ISocket CreateServerSocket(bool DualMode, ushort port)
         {
             var socket = new NanoSocket(config.RecvBufferSize, config.SendBufferSize);
-            socket.Bind(newClientEP);
-            return socket;
+            var lagSocket = new LagSocket(socket, new LagSettings());
+
+            lagSocket.Bind(newClientEP);
+            return lagSocket;
 
             //if (DualMode)
             //{
