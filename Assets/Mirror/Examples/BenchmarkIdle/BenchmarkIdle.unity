@@ -281,9 +281,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1282001518}
   - component: {fileID: 1282001520}
-  - component: {fileID: 1282001523}
-  - component: {fileID: 1282001519}
   - component: {fileID: 1282001521}
+  - component: {fileID: 1282001519}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -380,6 +379,7 @@ MonoBehaviour:
   timeInterpolationGui: 0
   PlayerCount: 4
   spawnAmount: 10000
+  FrameCount: 600
   interleave: 2
   spawnPrefab: {fileID: 449802645721213856, guid: 0ea79775d59804682a8cdd46b3811344,
     type: 3}
@@ -398,34 +398,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Manager: {fileID: 1282001520}
   editorArgs: -server -count 4
---- !u!114 &1282001523
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1282001517}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d7da4e566d24ea7b0e12178d934b648, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  clientIntervalReceivedPackets: 0
-  clientIntervalReceivedBytes: 0
-  clientIntervalSentPackets: 0
-  clientIntervalSentBytes: 0
-  clientReceivedPacketsPerSecond: 0
-  clientReceivedBytesPerSecond: 0
-  clientSentPacketsPerSecond: 0
-  clientSentBytesPerSecond: 0
-  serverIntervalReceivedPackets: 0
-  serverIntervalReceivedBytes: 0
-  serverIntervalSentPackets: 0
-  serverIntervalSentBytes: 0
-  serverReceivedPacketsPerSecond: 0
-  serverReceivedBytesPerSecond: 0
-  serverSentPacketsPerSecond: 0
-  serverSentBytesPerSecond: 0
 --- !u!1 &2054208274
 GameObject:
   m_ObjectHideFlags: 0

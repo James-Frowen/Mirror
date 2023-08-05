@@ -13,6 +13,7 @@ namespace Mirror.Examples.BenchmarkIdle
         public int PlayerCount = 4;
 
         public int spawnAmount = 10_000;
+        public int FrameCount = 600;
         public float interleave = 1;
         public GameObject spawnPrefab;
 
@@ -127,8 +128,9 @@ namespace Mirror.Examples.BenchmarkIdle
             yield return new WaitForSeconds(1);
 
             BenchmarkRunner.ResultName = "Results-Mirror";
-            BenchmarkRunner.ResultFolder = "../Mirage/Results";
-            BenchmarkRunner.StartRecording(3000, true, true);
+          
+            BenchmarkRunner.ResultFolder = "Assets/Plugins/Benchmarker/Results~";
+            BenchmarkRunner.StartRecording(FrameCount, true, true);
             BenchmarkRunner.MetaData = new List<string>()
             {
                 $"PlayerCount:{PlayerCount}",
@@ -157,8 +159,8 @@ namespace Mirror.Examples.BenchmarkIdle
 #if NO_DIRTY_LIST
                 $"NO_DIRTY_LIST",
 #endif
-                "SyncVarSender.Update Self Only",
-                "No_interval"
+                "No_interval",
+                "Nanosocket"
             };
 
 
