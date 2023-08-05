@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
+using Mirage.Sockets.Udp;
 
 namespace kcp2k
 {
@@ -58,7 +59,7 @@ namespace kcp2k
         //
         // => using only newClientEP.Port wouldn't work, because
         //    different connections can have the same port.
-        public static int ConnectionHash(EndPoint endPoint) =>
+        public static int ConnectionHash(NanoEndPoint endPoint) =>
             endPoint.GetHashCode();
 
         // cookies need to be generated with a secure random generator.

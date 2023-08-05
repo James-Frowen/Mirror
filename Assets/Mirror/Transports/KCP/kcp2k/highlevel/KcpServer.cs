@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using Mirage.SocketLayer;
+using Mirage.Sockets.Udp;
+using NanoSockets;
 
 namespace kcp2k
 {
@@ -26,8 +29,8 @@ namespace kcp2k
         protected readonly KcpConfig config;
 
         // state
-        protected Socket socket;
-        EndPoint newClientEP;
+        protected NanoSocket socket;
+        IEndPoint newClientEP;
 
         // raw receive buffer always needs to be of 'MTU' size, even if
         // MaxMessageSize is larger. kcp always sends in MTU segments and having
@@ -43,7 +46,8 @@ namespace kcp2k
                          Action<int, ArraySegment<byte>, KcpChannel> OnData,
                          Action<int> OnDisconnected,
                          Action<int, ErrorCode, string> OnError,
-                         KcpConfig config)
+                         KcpConfig config,
+                         ushort port)
         {
             // initialize callbacks first to ensure they can be used safely.
             this.OnConnected = OnConnected;
@@ -56,41 +60,43 @@ namespace kcp2k
             rawReceiveBuffer = new byte[config.Mtu];
 
             // create newClientEP either IPv4 or IPv6
-            newClientEP = config.DualMode
-                          ? new IPEndPoint(IPAddress.IPv6Any, 0)
-                          : new IPEndPoint(IPAddress.Any,     0);
+            newClientEP = new NanoEndPoint("::0", port);
         }
 
         public virtual bool IsActive() => socket != null;
 
-        static Socket CreateServerSocket(bool DualMode, ushort port)
+        NanoSocket CreateServerSocket(bool DualMode, ushort port)
         {
-            if (DualMode)
-            {
-                // IPv6 socket with DualMode @ "::" : port
-                Socket socket = new Socket(AddressFamily.InterNetworkV6, SocketType.Dgram, ProtocolType.Udp);
-                // settings DualMode may throw:
-                // https://learn.microsoft.com/en-us/dotnet/api/System.Net.Sockets.Socket.DualMode?view=net-7.0
-                // attempt it, otherwise log but continue
-                // fixes: https://github.com/MirrorNetworking/Mirror/issues/3358
-                try
-                {
-                    socket.DualMode = true;
-                }
-                catch (NotSupportedException e)
-                {
-                    Log.Warning($"Failed to set Dual Mode, continuing with IPv6 without Dual Mode. Error: {e}");
-                }
-                socket.Bind(new IPEndPoint(IPAddress.IPv6Any, port));
-                return socket;
-            }
-            else
-            {
-                // IPv4 socket @ "0.0.0.0" : port
-                Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-                socket.Bind(new IPEndPoint(IPAddress.Any, port));
-                return socket;
-            }
+            var socket = new NanoSocket(config.RecvBufferSize, config.SendBufferSize);
+            socket.Bind(newClientEP);
+            return socket;
+
+            //if (DualMode)
+            //{
+            //    // IPv6 socket with DualMode @ "::" : port
+            //    Socket socket = new Socket(AddressFamily.InterNetworkV6, SocketType.Dgram, ProtocolType.Udp);
+            //    // settings DualMode may throw:
+            //    // https://learn.microsoft.com/en-us/dotnet/api/System.Net.Sockets.Socket.DualMode?view=net-7.0
+            //    // attempt it, otherwise log but continue
+            //    // fixes: https://github.com/MirrorNetworking/Mirror/issues/3358
+            //    try
+            //    {
+            //        socket.DualMode = true;
+            //    }
+            //    catch (NotSupportedException e)
+            //    {
+            //        Log.Warning($"Failed to set Dual Mode, continuing with IPv6 without Dual Mode. Error: {e}");
+            //    }
+            //    socket.Bind(new IPEndPoint(IPAddress.IPv6Any, port));
+            //    return socket;
+            //}
+            //else
+            //{
+            //    // IPv4 socket @ "0.0.0.0" : port
+            //    Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            //    socket.Bind(new IPEndPoint(IPAddress.Any, port));
+            //    return socket;
+            //}
         }
 
         public virtual void Start(ushort port)
@@ -108,10 +114,10 @@ namespace kcp2k
             // recv & send are called from main thread.
             // need to ensure this never blocks.
             // even a 1ms block per connection would stop us from scaling.
-            socket.Blocking = false;
+            //socket.Blocking = false;
 
             // configure buffer sizes
-            Common.ConfigureSocketBuffers(socket, config.RecvBufferSize, config.SendBufferSize);
+            //Common.ConfigureSocketBuffers(socket, );
         }
 
         public void Send(int connectionId, ArraySegment<byte> segment, KcpChannel channel)
@@ -153,10 +159,11 @@ namespace kcp2k
 
             try
             {
-                if (socket.ReceiveFromNonBlocking(rawReceiveBuffer, out segment, ref newClientEP))
+                if (socket.Poll())
                 {
-                    // set connectionId to hash from endpoint
-                    connectionId = Common.ConnectionHash(newClientEP);
+                    int size = socket.Receive(rawReceiveBuffer, out newClientEP);
+                    segment = new ArraySegment<byte>(rawReceiveBuffer, 0, size);
+                    connectionId = newClientEP.GetHashCode();
                     return true;
                 }
             }
@@ -186,7 +193,7 @@ namespace kcp2k
 
             try
             {
-                socket.SendToNonBlocking(data, connection.remoteEndPoint);
+                socket.Send(connection.remoteEndPoint, data.Array, data.Count);
             }
             catch (SocketException e)
             {
@@ -203,7 +210,7 @@ namespace kcp2k
             // create empty connection without peer first.
             // we need it to set up peer callbacks.
             // afterwards we assign the peer.
-            KcpServerConnection connection = new KcpServerConnection(newClientEP);
+            KcpServerConnection connection = new KcpServerConnection(newClientEP.CreateCopy());
 
             // generate a random cookie for this connection to avoid UDP spoofing.
             // needs to be random, but without allocations to avoid GC.

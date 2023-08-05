@@ -1,6 +1,7 @@
 // server needs to store a separate KcpPeer for each connection.
 // as well as remoteEndPoint so we know where to send data to.
 using System.Net;
+using Mirage.SocketLayer;
 
 namespace kcp2k
 {
@@ -11,9 +12,9 @@ namespace kcp2k
         // because peer callbacks need to know 'connection'.
         // see KcpServer.CreateConnection.
         public KcpPeer peer;
-        public readonly EndPoint remoteEndPoint;
+        public readonly IEndPoint remoteEndPoint;
 
-        public KcpServerConnection(EndPoint remoteEndPoint)
+        public KcpServerConnection(IEndPoint remoteEndPoint)
         {
             peer = null;
             this.remoteEndPoint = remoteEndPoint;

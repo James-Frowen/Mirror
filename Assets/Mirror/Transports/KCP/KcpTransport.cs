@@ -127,7 +127,8 @@ namespace kcp2k
                 (connectionId, message, channel) => OnServerDataReceived.Invoke(connectionId, message, FromKcpChannel(channel)),
                 (connectionId) => OnServerDisconnected.Invoke(connectionId),
                 (connectionId, error, reason) => OnServerError.Invoke(connectionId, ToTransportError(error), reason),
-                config
+                config,
+                port
             );
 
             if (statisticsLog)
